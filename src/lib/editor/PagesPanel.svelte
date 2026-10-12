@@ -148,7 +148,10 @@
 
 	.add {
 		min-height: 38px;
-		font-size: 0.9rem;
+		padding-inline: 0.6em;
+		font-size: 0.88rem;
 		border-style: dashed;
+		white-space: normal;
+		text-align: left;
 	}
 </style>
