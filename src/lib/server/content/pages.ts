@@ -21,8 +21,8 @@ export const home: Record<Lang, HomeContent> = {
 				text: 'Most online PDF services send your file to their servers. Here, the PDF is processed by code running in your browser tab, so it never travels over the internet.'
 			},
 			{
-				title: 'Works offline',
-				text: 'Once a tool has loaded you can disconnect from the network and it keeps working — a simple way to check that nothing is sent anywhere.'
+				title: 'Easy to verify',
+				text: 'Open your browser’s developer tools and watch the Network tab while you work: the page only loads its own code and fonts — your document is never sent.'
 			},
 			{
 				title: 'Built on proven open-source engines',
@@ -72,8 +72,8 @@ export const home: Record<Lang, HomeContent> = {
 				text: 'Většina online služeb pro PDF posílá soubor na své servery. Tady PDF zpracuje kód běžící ve vaší záložce prohlížeče, takže soubor nikdy necestuje internetem.'
 			},
 			{
-				title: 'Funguje offline',
-				text: 'Po načtení nástroje se můžete odpojit od sítě a nástroj funguje dál — jednoduchý důkaz, že se nic nikam neposílá.'
+				title: 'Snadno si to ověříte',
+				text: 'Otevřete vývojářské nástroje prohlížeče a sledujte záložku Síť: stránka načítá jen vlastní kód a písma — váš dokument se nikam neodesílá.'
 			},
 			{
 				title: 'Postaveno na ověřených open-source knihovnách',

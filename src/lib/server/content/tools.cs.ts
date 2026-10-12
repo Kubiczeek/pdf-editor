@@ -50,7 +50,7 @@ export const toolsCs: Record<ToolId, ToolContent> = {
 			},
 			{
 				q: 'Nahrávají se moje soubory na server?',
-				a: 'Ne. PDF otevírá i ukládá JavaScript ve vašem prohlížeči. Po načtení stránky se můžete dokonce odpojit od internetu a pokračovat v úpravách.'
+				a: 'Ne. PDF otevírá i ukládá JavaScript ve vašem prohlížeči. Ověřit si to můžete na záložce Síť ve vývojářských nástrojích: soubor se nikam neodesílá.'
 			},
 			{
 				q: 'Funguje čeština a další jazyky?',

@@ -39,7 +39,7 @@
 </script>
 
 {#if suggested && alternates[suggested]}
-	<div class="suggest" lang={suggested}>
+	<aside class="suggest" lang={suggested} aria-label={ui[suggested].nav.language}>
 		<div class="wrap row">
 			<Icon name="globe" size={18} />
 			<p>
@@ -52,7 +52,7 @@
 				<Icon name="x" size={18} />
 			</button>
 		</div>
-	</div>
+	</aside>
 {/if}
 
 <style>

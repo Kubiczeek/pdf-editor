@@ -62,7 +62,6 @@
 				class:selected={isSelected}
 				disabled={!selectable}
 				aria-pressed={selectable ? isSelected : undefined}
-				aria-label={fmt(i18n.t.common.page, { n: index + 1 })}
 				onclick={(event) => toggle(index, event)}
 			>
 				<span class="paper">
@@ -79,8 +78,9 @@
 					{/if}
 				</span>
 				<span class="label">
-					{index + 1}
-					{#if badge}{@render badge(index)}{/if}
+					<span class="visually-hidden">{fmt(i18n.t.common.page, { n: index + 1 })}</span>
+					<span aria-hidden="true">{index + 1}</span>
+					{#if badge}<span aria-hidden="true">{@render badge(index)}</span>{/if}
 				</span>
 			</button>
 		</li>

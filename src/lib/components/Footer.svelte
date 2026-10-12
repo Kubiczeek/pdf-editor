@@ -127,6 +127,11 @@
 		gap: 8px;
 	}
 
+	.bottom a {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
 	.bottom {
 		display: flex;
 		flex-wrap: wrap;

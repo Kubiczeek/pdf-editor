@@ -12,7 +12,7 @@
 
 	const i18n = useI18n();
 	const alternates = { en: homePath('en'), cs: homePath('cs') };
-	const privacyIcons = ['shield', 'globe', 'sparkle'] as const;
+	const privacyIcons = ['shield', 'eye', 'sparkle'] as const;
 
 	const grouped = $derived(
 		CATEGORY_ORDER.map((category) => ({

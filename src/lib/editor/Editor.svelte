@@ -4,6 +4,7 @@
 	import { useI18n, fmt } from '#lib/i18n/index.ts';
 	import { uid } from '#lib/pdf/files.ts';
 	import { ensureFontFaces } from '#lib/pdf/fonts.ts';
+	import { loadPdfLib, loadFontkit } from '#lib/pdf/pdflib.ts';
 	import { SinglePdfTool } from '#lib/tools-ui/single.svelte.ts';
 	import { describeError, type LoadedPdf } from '#lib/tools-ui/shared.ts';
 	import FileDrop from '#lib/components/FileDrop.svelte';
@@ -54,6 +55,8 @@
 			state.initialValues = { ...values };
 			if (toolId === 'fill-form' && fields.length === 0) state.tool = 'text';
 			editor = state;
+			// Warm up the PDF writer and font engine so the first save is quick.
+			void Promise.all([loadPdfLib(), loadFontkit()]).catch(() => undefined);
 		} catch (error) {
 			loader.fail(describeError(i18n.t, error));
 			await loader.reset();

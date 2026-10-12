@@ -50,7 +50,7 @@ export const toolsEn: Record<ToolId, ToolContent> = {
 			},
 			{
 				q: 'Are my files uploaded to a server?',
-				a: 'No. The PDF is opened and saved by JavaScript running in your browser. You can even disconnect from the internet after the page has loaded and keep editing.'
+				a: 'No. The PDF is opened and saved by JavaScript running in your browser. You can check in the Network tab of your browser’s developer tools: the file is never sent anywhere.'
 			},
 			{
 				q: 'Which characters and languages are supported?',
@@ -690,7 +690,7 @@ export const toolsEn: Record<ToolId, ToolContent> = {
 	'pdf-to-text': {
 		title: 'PDF to Text Online Free – Extract Text from PDF',
 		description:
-			'Extract all text from a PDF and copy it or download it as a .txt file. Keeps line breaks, works offline in your browser. Free, no upload.',
+			'Extract all text from a PDF and copy it or download it as a .txt file. Keeps line breaks and runs in your browser. Free, no upload.',
 		h1: 'Convert PDF to text',
 		lead: 'Pull the text out of a PDF to copy it into an email, a document or a translator.',
 		stepsTitle: 'How to extract text from a PDF',

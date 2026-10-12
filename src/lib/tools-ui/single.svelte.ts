@@ -1,5 +1,6 @@
 import type { UiDict } from '#lib/i18n/index.ts';
 import { closePdf } from '#lib/pdf/pdfjs.ts';
+import { loadPdfLib } from '#lib/pdf/pdflib.ts';
 import { takeHandoff } from '#lib/stores/handoff.ts';
 import type { ResultFile } from '#lib/components/ResultPanel.svelte';
 import {
@@ -47,6 +48,8 @@ export class SinglePdfTool {
 			const loaded = await openPdfFile(file, t);
 			await this.close();
 			this.pdf = loaded;
+			// Warm up the PDF writer while the user picks options.
+			void loadPdfLib().catch(() => undefined);
 			return true;
 		} catch (error) {
 			this.error = describeError(t, error);

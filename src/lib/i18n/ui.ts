@@ -66,6 +66,7 @@ const en = {
 	nav: {
 		skip: 'Skip to content',
 		allTools: 'All tools',
+		popular: 'Popular tools',
 		menu: 'Menu',
 		close: 'Close',
 		home: 'Home',
@@ -494,6 +495,7 @@ const cs: UiDict = {
 	nav: {
 		skip: 'Přejít na obsah',
 		allTools: 'Všechny nástroje',
+		popular: 'Oblíbené nástroje',
 		menu: 'Menu',
 		close: 'Zavřít',
 		home: 'Domů',

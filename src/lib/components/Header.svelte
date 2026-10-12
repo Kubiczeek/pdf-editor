@@ -53,7 +53,7 @@
 			<span>{SITE_NAME}</span>
 		</a>
 
-		<nav class="quick" aria-label={i18n.t.nav.allTools}>
+		<nav class="quick" aria-label={i18n.t.nav.popular}>
 			{#each quick as id (id)}
 				<a href={toolPath(i18n.lang, id)}>{i18n.t.tools[id].name}</a>
 			{/each}
