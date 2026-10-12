@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PDFDocument, degrees } from '@cantoo/pdf-lib';
+import { PDFDocument, PDFName, degrees } from '@cantoo/pdf-lib';
 import { openWithPdfjs, makeFixture, pageTextItems, allText } from './helpers.ts';
 import { parseRanges, parsePageSet, formatPageSet, chunkPages } from '#lib/pdf/ranges.ts';
 import { pageFrame, applyMatrix, invert } from '#lib/pdf/geometry.ts';
@@ -284,6 +284,54 @@ describe('security', () => {
 		expect(allText(plain.items)).toContain('Secret page');
 		const reloaded = await PDFDocument.load(unlocked);
 		expect(reloaded.isEncrypted).toBe(false);
+	});
+});
+
+describe('security edge cases', () => {
+	it('removes restrictions from a PDF that opens without a password', async () => {
+		const src = await PDFDocument.create();
+		src.addPage([300, 300]);
+		src.encrypt({
+			userPassword: '',
+			ownerPassword: 'owner-only',
+			permissions: { printing: false, copying: false }
+		});
+		const restricted = await src.save();
+		const probe = await PDFDocument.load(restricted, { ignoreEncryption: true });
+		expect(probe.isEncrypted).toBe(true);
+		const unlocked = await unlockPdf(input(restricted));
+		const reloaded = await PDFDocument.load(unlocked);
+		expect(reloaded.isEncrypted).toBe(false);
+	});
+});
+
+describe('image watermark', () => {
+	it('stamps a PNG logo behind the content of every page', async () => {
+		const { default: sharp } = await import('sharp');
+		const png = new Uint8Array(
+			await sharp({ create: { width: 8, height: 4, channels: 4, background: '#c42b3dcc' } })
+				.png()
+				.toBuffer()
+		);
+		const a = await makeFixture([
+			{ size: A4, label: 'P1' },
+			{ size: A4, label: 'P2', rotate: 90 }
+		]);
+		const out = await addWatermark(input(a), {
+			mark: { kind: 'image', bytes: png, mime: 'image/png', scale: 0.3 },
+			position: 'center',
+			angle: 0,
+			opacity: 0.5,
+			behind: true,
+			pages: null
+		});
+		const doc = await PDFDocument.load(out);
+		expect(doc.getPageCount()).toBe(2);
+		for (const page of doc.getPages()) {
+			const xobjects = page.node.Resources()?.lookup(PDFName.of('XObject'));
+			expect(xobjects?.toString()).toMatch(/Image/);
+		}
+		expect(allText((await pageTextItems(out, 1)).items)).toContain('P1');
 	});
 });
 

@@ -111,7 +111,7 @@ Requires **Node.js 22+** (`.node-version` / `.nvmrc` pin it for hosting provider
 ```bash
 npm install
 npm run dev        # http://localhost:5173 (copies pdf.js assets first)
-npm test           # 113 tests: PDF operations, rotation geometry, encryption, editor saving, SEO copy
+npm test           # 115 tests: PDF operations, rotation geometry, encryption, editor saving, SEO copy
 npm run check      # svelte-check / TypeScript
 npm run build      # static site in ./build
 npm run serve      # serve ./build at http://localhost:4173 with production headers and CSP
