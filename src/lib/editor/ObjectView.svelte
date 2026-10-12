@@ -7,6 +7,7 @@
 	import {
 		bounds,
 		moved,
+		objectRotation,
 		inkPaths,
 		inkWidth,
 		ellipsePath,
@@ -30,6 +31,7 @@
 		editor.tool === 'select' || (editor.tool === 'editText' && obj.type === 'text')
 	);
 	const box = $derived(bounds(obj));
+	const rotation = $derived('rot' in obj ? objectRotation(obj) : 0);
 	const isVector = $derived(
 		obj.type === 'ink' ||
 			obj.type === 'rect' ||
@@ -81,7 +83,13 @@
 			const h = el.offsetHeight / zoom;
 			const current = editor.objects.find((o) => o.id === id);
 			if (current && current.type === 'text' && (Math.abs(current.w - w) > 0.01 || Math.abs(current.h - h) > 0.01)) {
-				editor.patch(id, { w, h });
+				// Keep the start of the text (its unrotated top-left) fixed on the page while it grows.
+				const dw = w - current.w;
+				const dh = h - current.h;
+				const rot = objectRotation(current);
+				const dx = rot === 90 ? -dh : rot === 180 ? -dw : 0;
+				const dy = rot === 180 ? -dh : rot === 270 ? -dw : 0;
+				editor.patch(id, { w, h, x: current.x + dx, y: current.y + dy });
 			}
 		};
 		const observer = new ResizeObserver(measure);
@@ -195,12 +203,15 @@
 					if (handle === 'p1') editor.patch(obj.id, { x1: start.x1 + dx, y1: start.y1 + dy });
 					else editor.patch(obj.id, { x2: start.x2 + dx, y2: start.y2 + dy });
 				} else if (start.type === 'text') {
-					const scale = Math.max(0.1, (start.w + dx) / Math.max(1, start.w));
+					const width = Math.max(1, bounds(start).w);
+					const scale = Math.max(0.1, (width + dx) / width);
 					editor.patch(obj.id, { size: Math.min(300, Math.max(4, Math.round(start.size * scale * 10) / 10)) });
 				} else if (start.type !== 'note') {
-					const lock = start.type === 'image' || start.type === 'ink' || start.type === 'check' || start.type === 'cross';
-					const next = resizeBox({ x: start.x, y: start.y, w: start.w, h: start.h }, handle, dx, dy, lock !== e.shiftKey);
-					editor.patch(obj.id, next);
+					const rotatable = start.type === 'image' || start.type === 'ink' || start.type === 'check' || start.type === 'cross';
+					const next = resizeBox(bounds(start), handle, dx, dy, rotatable !== e.shiftKey);
+					// The box is in page space; rotated content stores its unrotated size.
+					const swap = rotatable && objectRotation(start) % 180 !== 0;
+					editor.patch(obj.id, { x: next.x, y: next.y, w: swap ? next.h : next.w, h: swap ? next.w : next.h });
 				}
 			}
 		});
@@ -237,8 +248,12 @@
 		class:selected
 		class:editing
 		class:interactive
+		class:rotated={rotation !== 0}
 		style:left={`${obj.x * z}px`}
 		style:top={`${obj.y * z}px`}
+		style:width={rotation !== 0 ? `${box.w * z}px` : undefined}
+		style:height={rotation !== 0 ? `${box.h * z}px` : undefined}
+		style:--rot={`${rotation}deg`}
 		style:opacity={obj.opacity}
 		onpointerdown={onPointerDown}
 		ondblclick={() => interactive && beginEdit()}
@@ -273,15 +288,24 @@
 		class="obj box"
 		class:selected
 		class:interactive
-		style:left={`${obj.x * z}px`}
-		style:top={`${obj.y * z}px`}
-		style:width={`${obj.w * z}px`}
-		style:height={`${obj.h * z}px`}
+		style:left={`${box.x * z}px`}
+		style:top={`${box.y * z}px`}
+		style:width={`${box.w * z}px`}
+		style:height={`${box.h * z}px`}
 		style:opacity={obj.opacity}
 		onpointerdown={onPointerDown}
 		role="presentation"
 	>
-		{#if asset}<img src={asset.url} alt="" draggable="false" />{/if}
+		{#if asset}
+			<img
+				src={asset.url}
+				alt=""
+				draggable="false"
+				style:width={`${obj.w * z}px`}
+				style:height={`${obj.h * z}px`}
+				style:transform={`translate(-50%, -50%) rotate(${rotation}deg)`}
+			/>
+		{/if}
 	</div>
 {:else if obj.type === 'note'}
 	<div
@@ -408,6 +432,13 @@
 		background: rgb(255 255 255 / 0.4);
 	}
 
+	.text.rotated .text-body {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%) rotate(var(--rot));
+	}
+
 	.text-body {
 		min-width: 4px;
 		white-space: pre;
@@ -431,9 +462,10 @@
 	}
 
 	.box img {
+		position: absolute;
+		left: 50%;
+		top: 50%;
 		display: block;
-		width: 100%;
-		height: 100%;
 		max-width: none;
 		user-select: none;
 		-webkit-user-drag: none;

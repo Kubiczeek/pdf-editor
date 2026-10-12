@@ -4,6 +4,7 @@ import { openWithPdfjs, pageTextItems } from './helpers.ts';
 import { EditorState } from '#lib/editor/state.svelte.ts';
 import { saveEdits } from '#lib/editor/save.ts';
 import { loadFormFields } from '#lib/editor/forms.ts';
+import { uprightRotation } from '#lib/editor/geometry.ts';
 import type { PageModel } from '#lib/editor/types.ts';
 
 async function editorFor(bytes: Uint8Array) {
@@ -71,6 +72,40 @@ describe('editor save', () => {
 			// Baseline: top + line-height/2 + (ascent - descent) * size / 2 = 200 + 12.5 + 7.76
 			expect(item!.y).toBeCloseTo(220.26, 0);
 		}
+	});
+
+	it('keeps content added after rotating a page in the editor upright', async () => {
+		const src = await PDFDocument.create();
+		src.addPage([595, 842]);
+		const bytes = await src.save();
+		const { state, doc } = await editorFor(bytes);
+		state.pages[0].rotation = 90;
+		state.objects.push({
+			id: 'rotated-text',
+			type: 'text',
+			page: state.pages[0].key,
+			x: 300,
+			y: 100,
+			text: 'Upright',
+			family: 'sans',
+			size: 18,
+			bold: false,
+			italic: false,
+			color: '#000000',
+			align: 'left',
+			w: 60,
+			h: 22.5,
+			opacity: 1,
+			rot: uprightRotation(90)
+		});
+		const out = await saveEdits(state);
+		await doc.loadingTask.destroy();
+		const page = await pageTextItems(out, 1);
+		expect(page.rotate).toBe(90);
+		const item = page.items.find((i) => i.str === 'Upright');
+		expect(item).toBeDefined();
+		expect(item!.a).toBeGreaterThan(0);
+		expect(Math.abs(item!.b)).toBeLessThan(0.001);
 	});
 
 	it('fills form fields with readable appearances', async () => {

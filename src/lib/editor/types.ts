@@ -48,6 +48,8 @@ export interface TextObject extends BaseObject {
 	cover?: { x: number; y: number; w: number; h: number; color: string };
 	/** Id of the original text line this object replaces (Edit text mode). */
 	sourceLine?: string;
+	/** Clockwise rotation of the content inside its box (0/90/180/270), relative to the page. */
+	rot?: number;
 }
 
 export interface ImageObject extends BaseObject {
@@ -57,6 +59,8 @@ export interface ImageObject extends BaseObject {
 	w: number;
 	h: number;
 	asset: string;
+	/** Clockwise rotation of the content inside its box (0/90/180/270), relative to the page. */
+	rot?: number;
 }
 
 /** Freehand strokes (drawing or a drawn signature), normalised to the box (0–1). */
@@ -71,6 +75,8 @@ export interface InkObject extends BaseObject {
 	/** Stroke width in points at the box width `refW`; scales with the box. */
 	width: number;
 	refW: number;
+	/** Clockwise rotation of the content inside its box (0/90/180/270), relative to the page. */
+	rot?: number;
 }
 
 export interface BoxShapeObject extends BaseObject {
@@ -103,6 +109,8 @@ export interface SymbolObject extends BaseObject {
 	w: number;
 	h: number;
 	color: string;
+	/** Clockwise rotation of the content inside its box (0/90/180/270), relative to the page. */
+	rot?: number;
 }
 
 export interface NoteObject extends BaseObject {

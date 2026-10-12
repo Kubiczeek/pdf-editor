@@ -1,7 +1,15 @@
 import type { PDFDocument, PDFPage, PDFImage } from '@cantoo/pdf-lib';
 import { loadDoc, saveDoc, loadPdfLib } from '#lib/pdf/pdflib.ts';
 import { embedFont, baselineOffset, fieldFontSize, daFontSize } from '#lib/pdf/fonts.ts';
-import { pageFrame, normalizeBox, localFrame, displayRectToPdfBox, normalizeRotation, type PageFrame } from '#lib/pdf/geometry.ts';
+import {
+	pageFrame,
+	normalizeBox,
+	localFrame,
+	displayRectToPdfBox,
+	normalizeRotation,
+	multiply,
+	type PageFrame
+} from '#lib/pdf/geometry.ts';
 import { setPageOrder } from '#lib/pdf/structure.ts';
 import { withMatrix, hexToRgb01 } from '#lib/pdf/ops/draw.ts';
 import type { EditorState } from './state.svelte.ts';
@@ -15,7 +23,8 @@ import {
 	symbolPath,
 	symbolStroke,
 	NOTE_SIZE,
-	LINE_HEIGHT
+	LINE_HEIGHT,
+	contentMatrix
 } from './geometry.ts';
 
 type Lib = Awaited<ReturnType<typeof loadPdfLib>>;
@@ -84,7 +93,9 @@ async function drawText(lib: Lib, doc: PDFDocument, page: PDFPage, frame: PageFr
 	const width = Math.max(0, ...widths);
 	const height = lines.length * lineHeight;
 	const baseline = baselineOffset(obj.family, obj.size, lineHeight);
-	await withMatrix(page, localFrame(frame, obj.x, obj.y, height), () => {
+	// Local y-up frame of the (possibly rotated) text block.
+	const matrix = multiply(frame.toPdf, multiply(contentMatrix(obj, height), [1, 0, 0, -1, 0, height]));
+	await withMatrix(page, matrix, () => {
 		lines.forEach((line, i) => {
 			if (!line.trim()) return;
 			const x = obj.align === 'center' ? (width - widths[i]) / 2 : obj.align === 'right' ? width - widths[i] : 0;
@@ -193,7 +204,8 @@ export async function saveEdits(state: EditorState): Promise<Uint8Array> {
 						images.set(obj.asset, image);
 					}
 					const embedded = image;
-					await withMatrix(page, localFrame(frame, obj.x, obj.y, obj.h), () => {
+					const matrix = multiply(frame.toPdf, multiply(contentMatrix(obj), [1, 0, 0, -1, 0, obj.h]));
+					await withMatrix(page, matrix, () => {
 						page.drawImage(embedded, { x: 0, y: 0, width: obj.w, height: obj.h, opacity: obj.opacity });
 					});
 					break;

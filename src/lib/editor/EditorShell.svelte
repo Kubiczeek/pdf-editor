@@ -8,7 +8,7 @@
 	import type { EditorState } from './state.svelte.ts';
 	import { setEditor, blurActive } from './context.ts';
 	import { saveEdits } from './save.ts';
-	import { clientToBase, rotatedSize, moved, LINE_HEIGHT } from './geometry.ts';
+	import { clientToBase, rotatedSize, moved, bounds, uprightRotation, LINE_HEIGHT } from './geometry.ts';
 	import type { SignatureSpec, ToolName, EditorObject } from './types.ts';
 	import EditorPage from './EditorPage.svelte';
 	import PagesPanel from './PagesPanel.svelte';
@@ -147,11 +147,13 @@
 		const { page, x, y } = placementPoint();
 		const model = editor.pages[page];
 		const obj = build(model.key, x, y, model.width, model.height);
-		// Keep the new object on the page.
-		const box = 'w' in obj && 'h' in obj ? { w: obj.w, h: obj.h } : { w: 0, h: 0 };
-		if ('x' in obj && 'y' in obj) {
-			obj.x = Math.min(Math.max(0, obj.x), Math.max(0, model.width - box.w));
-			obj.y = Math.min(Math.max(0, obj.y), Math.max(0, model.height - box.h));
+		if (obj.type === 'text' || obj.type === 'image' || obj.type === 'ink') {
+			// Upright as seen on screen, even when the page was rotated in the editor.
+			obj.rot = uprightRotation(model.rotation);
+			const box = bounds(obj);
+			// Centre on the placement point and keep the object on the page.
+			obj.x = Math.min(Math.max(0, x - box.w / 2), Math.max(0, model.width - box.w));
+			obj.y = Math.min(Math.max(0, y - box.h / 2), Math.max(0, model.height - box.h));
 		}
 		editor.setTool('select');
 		editor.add(obj);

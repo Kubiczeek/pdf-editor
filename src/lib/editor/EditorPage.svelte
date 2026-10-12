@@ -16,7 +16,9 @@
 		ellipsePath,
 		linePaths,
 		LINE_HEIGHT,
-		NOTE_SIZE
+		NOTE_SIZE,
+		bounds,
+		uprightRotation
 	} from './geometry.ts';
 	import type { PageModel, TextObject, EditorObject } from './types.ts';
 	import ObjectView from './ObjectView.svelte';
@@ -189,26 +191,29 @@
 		const s = editor.style;
 		if (tool === 'text') {
 			const lineHeight = s.textSize * LINE_HEIGHT;
-			editor.add(
-				{
-					id: uid('obj'),
-					type: 'text',
-					page: page.key,
-					x,
-					y: Math.max(0, y - lineHeight / 2),
-					text: '',
-					family: s.textFamily,
-					size: s.textSize,
-					bold: s.textBold,
-					italic: s.textItalic,
-					color: s.textColor,
-					align: 'left',
-					w: 0,
-					h: lineHeight,
-					opacity: 1
-				},
-				{ edit: true }
-			);
+			const text: TextObject = {
+				id: uid('obj'),
+				type: 'text',
+				page: page.key,
+				x,
+				y,
+				text: '',
+				family: s.textFamily,
+				size: s.textSize,
+				bold: s.textBold,
+				italic: s.textItalic,
+				color: s.textColor,
+				align: 'left',
+				w: 0,
+				h: lineHeight,
+				opacity: 1,
+				rot: uprightRotation(page.rotation)
+			};
+			// Put the start of the first line at the click point.
+			const box = bounds(text);
+			text.x = x - box.w / 2;
+			text.y = y - box.h / 2;
+			editor.add(text, { edit: true });
 			editor.tool = 'select';
 			return;
 		}
@@ -241,7 +246,8 @@
 					w: sizePt,
 					h: sizePt,
 					color: s.symbolColor,
-					opacity: 1
+					opacity: 1,
+					rot: uprightRotation(page.rotation)
 				},
 				{ select: false }
 			);
