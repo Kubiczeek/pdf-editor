@@ -63,6 +63,7 @@
 			<button
 				bind:this={toggleEl}
 				class="menu-toggle"
+				aria-label={i18n.t.nav.allTools}
 				aria-expanded={open}
 				aria-controls="tools-menu"
 				onclick={() => (open = !open)}

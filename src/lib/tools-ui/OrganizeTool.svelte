@@ -218,17 +218,37 @@
 		{:else}
 			<Workspace {busy} {progress}>
 				{#snippet toolbar()}
-					<button class="btn" onclick={() => rotate(-90)} title={i18n.t.common.rotateLeft}>
+					<button
+						class="btn"
+						onclick={() => rotate(-90)}
+						title={i18n.t.common.rotateLeft}
+						aria-label={i18n.t.common.rotateLeft}
+					>
 						<Icon name="rotateLeft" size={18} /><span class="lbl">{i18n.t.common.rotateLeft}</span>
 					</button>
-					<button class="btn" onclick={() => rotate(90)} title={i18n.t.common.rotateRight}>
+					<button
+						class="btn"
+						onclick={() => rotate(90)}
+						title={i18n.t.common.rotateRight}
+						aria-label={i18n.t.common.rotateRight}
+					>
 						<Icon name="rotateRight" size={18} /><span class="lbl">{i18n.t.common.rotateRight}</span
 						>
 					</button>
-					<button class="btn" onclick={duplicate} disabled={!selected.size}>
+					<button
+						class="btn"
+						onclick={duplicate}
+						disabled={!selected.size}
+						aria-label={i18n.t.common.duplicate}
+					>
 						<Icon name="copy" size={18} /><span class="lbl">{i18n.t.common.duplicate}</span>
 					</button>
-					<button class="btn btn-danger" onclick={() => remove()} disabled={!selected.size}>
+					<button
+						class="btn btn-danger"
+						onclick={() => remove()}
+						disabled={!selected.size}
+						aria-label={i18n.t.common.delete}
+					>
 						<Icon name="trash" size={18} /><span class="lbl">{i18n.t.common.delete}</span>
 					</button>
 					<span class="sep"></span>

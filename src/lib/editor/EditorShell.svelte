@@ -485,7 +485,12 @@
 				<Icon name="fit" size={20} />
 			</button>
 		</div>
-		<button class="btn btn-primary save" onclick={save} disabled={saving}>
+		<button
+			class="btn btn-primary save"
+			onclick={save}
+			disabled={saving}
+			aria-label={saving ? t.saving : t.save}
+		>
 			<Icon name="download" size={18} />
 			<span>{saving ? t.saving : t.save}</span>
 		</button>
