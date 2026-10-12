@@ -10,7 +10,13 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter()
+			// Plain static output in ./build for every host (Cloudflare Pages, Vercel, …).
+			// 404.html is an app shell that renders the error page for unknown URLs.
+			adapter: adapter({ pages: 'build', assets: 'build', fallback: '404.html' })
 		})
-	]
+	],
+	build: {
+		// pdf.js and pdf-lib are large but only loaded on demand.
+		chunkSizeWarningLimit: 700
+	}
 });

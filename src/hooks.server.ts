@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import { langFromPath } from '#lib/i18n/index.ts';
 
 /** Sets <html lang> per page, since app.html is shared by both languages. */

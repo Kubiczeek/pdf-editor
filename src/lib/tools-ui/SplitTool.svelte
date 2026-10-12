@@ -11,8 +11,7 @@
 	import PagePicker from '#lib/components/PagePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 
-	let { toolId }: ToolProps = $props();
-	void toolId;
+	let _props: ToolProps = $props();
 	const i18n = useI18n();
 	const tool = new SinglePdfTool(() => i18n.t);
 

@@ -272,7 +272,18 @@ const en = {
 		behindHint: 'Behind content the mark may be hidden by images or scanned pages.',
 		action: 'Add watermark',
 		noImage: 'Choose an image for the watermark.',
-		noText: 'Type the watermark text.'
+		noText: 'Type the watermark text.',
+		positions: {
+			'top-left': 'Top left',
+			'top-center': 'Top centre',
+			'top-right': 'Top right',
+			'middle-left': 'Middle left',
+			center: 'Centre',
+			'middle-right': 'Middle right',
+			'bottom-left': 'Bottom left',
+			'bottom-center': 'Bottom centre',
+			'bottom-right': 'Bottom right'
+		}
 	},
 	pageNumbers: {
 		format: 'Format',
@@ -683,7 +694,18 @@ const cs: UiDict = {
 		behindHint: 'Pod obsahem může vodoznak zakrýt obrázek nebo naskenovaná stránka.',
 		action: 'Přidat vodoznak',
 		noImage: 'Vyberte obrázek pro vodoznak.',
-		noText: 'Napište text vodoznaku.'
+		noText: 'Napište text vodoznaku.',
+		positions: {
+			'top-left': 'Nahoře vlevo',
+			'top-center': 'Nahoře uprostřed',
+			'top-right': 'Nahoře vpravo',
+			'middle-left': 'Uprostřed vlevo',
+			center: 'Uprostřed',
+			'middle-right': 'Uprostřed vpravo',
+			'bottom-left': 'Dole vlevo',
+			'bottom-center': 'Dole uprostřed',
+			'bottom-right': 'Dole vpravo'
+		}
 	},
 	pageNumbers: {
 		format: 'Formát',

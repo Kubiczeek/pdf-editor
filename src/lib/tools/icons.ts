@@ -1,4 +1,4 @@
-import type { IconName } from '#lib/components/Icon.svelte';
+import type { IconName } from '#lib/components/icons.ts';
 import type { ToolId } from './registry.ts';
 
 export const TOOL_ICONS: Record<ToolId, IconName> = {

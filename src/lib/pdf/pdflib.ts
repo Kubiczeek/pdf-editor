@@ -53,6 +53,13 @@ export async function loadDoc(bytes: Uint8Array, password?: string): Promise<PDF
 	}
 }
 
+/** Whether a file uses PDF encryption (an open password and/or permission restrictions). */
+export async function isEncrypted(bytes: Uint8Array): Promise<boolean> {
+	const { PDFDocument } = await loadPdfLib();
+	const doc = await PDFDocument.load(bytes, { ignoreEncryption: true, updateMetadata: false });
+	return doc.isEncrypted;
+}
+
 /** Creates an empty document with metadata defaults used by every tool. */
 export async function createDoc(): Promise<PDFDocument> {
 	const { PDFDocument } = await loadPdfLib();

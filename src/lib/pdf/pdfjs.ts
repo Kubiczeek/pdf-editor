@@ -55,7 +55,6 @@ export async function openPdf(bytes: Uint8Array, password?: string): Promise<PDF
 		standardFontDataUrl: '/pdfjs/standard_fonts/',
 		wasmUrl: '/pdfjs/wasm/',
 		iccUrl: '/pdfjs/iccs/',
-		isEvalSupported: false,
 		enableXfa: false
 	});
 	try {

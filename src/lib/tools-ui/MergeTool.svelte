@@ -16,8 +16,7 @@
 	import PageThumb from '#lib/components/PageThumb.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 
-	let { toolId }: ToolProps = $props();
-	void toolId;
+	let _props: ToolProps = $props();
 	const i18n = useI18n();
 
 	let files = $state<LoadedPdf[]>([]);

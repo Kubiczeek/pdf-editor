@@ -107,14 +107,16 @@ export async function writeMetadata(input: PdfInput, update: MetadataUpdate): Pr
 		}
 		return saveDoc(doc, { touchMetadata: false });
 	}
+	// pdf-lib joins keyword arrays with spaces; pass one string to keep the user's separators.
 	const keywords = update.keywords
 		.split(/[,;]/)
 		.map((k) => k.trim())
-		.filter(Boolean);
+		.filter(Boolean)
+		.join(', ');
 	doc.setTitle(update.title, { showInWindowTitleBar: Boolean(update.title) });
 	doc.setAuthor(update.author);
 	doc.setSubject(update.subject);
-	doc.setKeywords(keywords);
+	doc.setKeywords(keywords ? [keywords] : []);
 	doc.setCreator(update.creator);
 	return saveDoc(doc);
 }

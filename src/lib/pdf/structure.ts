@@ -3,7 +3,8 @@ import type {
 	PDFPage,
 	PDFObject,
 	PDFRef as PDFRefType,
-	PDFDict as PDFDictType
+	PDFDict as PDFDictType,
+	PDFFont
 } from '@cantoo/pdf-lib';
 import { loadPdfLib, type PdfLib } from './pdflib.ts';
 import { normalizeBox, visibleBox, pageFrame, type PageFrame, type Matrix } from './geometry.ts';
@@ -248,7 +249,7 @@ export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptio
 /** Generates missing appearance streams for form fields using an embedded Unicode font. */
 export async function refreshFormAppearances(
 	doc: PDFDocument,
-	font: Parameters<ReturnType<PDFDocument['getForm']>['updateFieldAppearances']>[0]
+	font: PDFFont
 ): Promise<void> {
 	const lib = await loadPdfLib();
 	try {

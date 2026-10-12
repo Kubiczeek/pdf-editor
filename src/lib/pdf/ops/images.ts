@@ -104,6 +104,15 @@ export function jpegOrientation(bytes: Uint8Array): number {
 	return 1;
 }
 
+export class UnsupportedImageError extends Error {
+	readonly fileName: string;
+	constructor(fileName: string) {
+		super(`Unsupported image: ${fileName}`);
+		this.name = 'UnsupportedImageError';
+		this.fileName = fileName;
+	}
+}
+
 interface PreparedImage {
 	bytes: Uint8Array;
 	kind: 'jpg' | 'png';
@@ -138,7 +147,7 @@ export async function prepareImage(file: File): Promise<PreparedImage> {
 	try {
 		canvas = await decodeToCanvas(file);
 	} catch {
-		throw new Error('UNSUPPORTED_IMAGE');
+		throw new UnsupportedImageError(file.name);
 	}
 	const transparent = !isJpeg && hasTransparency(canvas);
 	const blob = await canvasToBlob(canvas, transparent ? 'image/png' : 'image/jpeg', 0.92);

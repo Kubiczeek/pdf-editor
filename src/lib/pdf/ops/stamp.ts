@@ -27,6 +27,8 @@ export interface ImageWatermark {
 
 export type WatermarkPosition =
 	| 'center'
+	| 'middle-left'
+	| 'middle-right'
 	| 'top-left'
 	| 'top-center'
 	| 'top-right'
@@ -54,7 +56,7 @@ function rotatedFrame(toPdf: Matrix, cx: number, cy: number, angle: number): Mat
 	return multiply(toPdf, [cos, -sin, -sin, -cos, cx, cy]);
 }
 
-interface Sized {
+export interface Sized {
 	width: number;
 	height: number;
 }
@@ -70,7 +72,7 @@ function anchorPoint(
 	const hw = (Math.abs(box.width * Math.cos(rad)) + Math.abs(box.height * Math.sin(rad))) / 2;
 	const hh = (Math.abs(box.width * Math.sin(rad)) + Math.abs(box.height * Math.cos(rad))) / 2;
 	const margin = Math.min(page.width, page.height) * 0.05;
-	const [vertical, horizontal] = position === 'center' ? ['center', 'center'] : position.split('-');
+	const [vertical, horizontal] = position === 'center' ? ['middle', 'center'] : position.split('-');
 	const x =
 		horizontal === 'left'
 			? margin + hw
@@ -80,6 +82,35 @@ function anchorPoint(
 	const y =
 		vertical === 'top' ? margin + hh : vertical === 'bottom' ? page.height - margin - hh : page.height / 2;
 	return [x, y];
+}
+
+/**
+ * Centres (in display space) where the watermark box is drawn. Shared by the
+ * PDF writer and the on-screen preview so both match exactly.
+ */
+export function watermarkCenters(
+	position: WatermarkPosition,
+	page: Sized,
+	box: Sized,
+	angle: number
+): Array<[number, number]> {
+	if (position !== 'tile') return [anchorPoint(position, page, box, angle)];
+	const centers: Array<[number, number]> = [];
+	const stepX = box.width + Math.max(60, box.width * 0.6);
+	const stepY = box.height + Math.max(90, box.height * 2.5);
+	const reach = Math.hypot(page.width, page.height);
+	let row = 0;
+	for (let y = -reach / 2; y <= page.height + reach / 2; y += stepY, row++) {
+		const offset = row % 2 ? stepX / 2 : 0;
+		for (let x = -reach / 2 + offset; x <= page.width + reach / 2; x += stepX) {
+			// Only keep tiles whose centre can reach the page after rotation.
+			const pad = Math.max(box.width, box.height);
+			if (x > -pad && x < page.width + pad && y > -pad && y < page.height + pad) {
+				centers.push([x, y]);
+			}
+		}
+	}
+	return centers;
 }
 
 export async function addWatermark(
@@ -122,24 +153,7 @@ export async function addWatermark(
 			box = { width, height: (width * image!.height) / image!.width };
 		}
 
-		const centers: Array<[number, number]> = [];
-		if (options.position === 'tile') {
-			const stepX = box.width + Math.max(60, box.width * 0.6);
-			const stepY = box.height + Math.max(90, box.height * 2.5);
-			const reach = Math.hypot(frame.width, frame.height);
-			let row = 0;
-			for (let y = -reach / 2; y <= frame.height + reach / 2; y += stepY, row++) {
-				const offset = row % 2 ? stepX / 2 : 0;
-				for (let x = -reach / 2 + offset; x <= frame.width + reach / 2; x += stepX) {
-					// Only keep tiles whose centre can reach the page after rotation.
-					if (x > -box.width && x < frame.width + box.width && y > -box.width && y < frame.height + box.width) {
-						centers.push([x, y]);
-					}
-				}
-			}
-		} else {
-			centers.push(anchorPoint(options.position, frame, box, options.angle));
-		}
+		const centers = watermarkCenters(options.position, frame, box, options.angle);
 
 		for (const [cx, cy] of centers) {
 			await withMatrix(page, rotatedFrame(frame.toPdf, cx, cy, options.angle), () => {
