@@ -218,3 +218,23 @@ export function baselineOffset(family: FontFamilyId, fontSize: number, lineHeigh
 	const { ascent, descent } = fontFamily(family);
 	return lineHeight / 2 + ((ascent - descent) * fontSize) / 2;
 }
+
+/**
+ * Font size for form-field appearances drawn with Noto Sans, shared by the
+ * editor's inputs and the generated PDF appearances.
+ *
+ * `requested` is the size from the field's /DA (0 = automatic). pdf-lib centres
+ * only the ascent of the first line, so with Noto's metrics descenders stay
+ * inside the box only when size ≤ 0.6 × inner height; larger sizes are capped.
+ */
+export function fieldFontSize(height: number, multiline: boolean, requested: number): number {
+	const inner = Math.max(4, height - 4);
+	const fit = Math.max(4, Math.floor(inner * 0.6 * 2) / 2);
+	const wanted = requested > 0 ? requested : multiline ? 10 : Math.min(12, Math.round(height * 0.55 * 2) / 2);
+	return Math.max(4, Math.min(wanted, fit));
+}
+
+/** Reads the font size from a /DA string such as "/Helv 12 Tf 0 g" (0 when absent or automatic). */
+export function daFontSize(da: string | undefined): number {
+	return Number(/([\d.]+)\s+Tf/.exec(da ?? '')?.[1] ?? 0) || 0;
+}

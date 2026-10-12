@@ -1,6 +1,6 @@
 import type { PDFDocument, PDFPage, PDFImage } from '@cantoo/pdf-lib';
 import { loadDoc, saveDoc, loadPdfLib } from '#lib/pdf/pdflib.ts';
-import { embedFont, baselineOffset } from '#lib/pdf/fonts.ts';
+import { embedFont, baselineOffset, fieldFontSize, daFontSize } from '#lib/pdf/fonts.ts';
 import { pageFrame, normalizeBox, localFrame, displayRectToPdfBox, normalizeRotation, type PageFrame } from '#lib/pdf/geometry.ts';
 import { setPageOrder } from '#lib/pdf/structure.ts';
 import { withMatrix, hexToRgb01 } from '#lib/pdf/ops/draw.ts';
@@ -33,6 +33,14 @@ async function applyFormValues(lib: Lib, doc: PDFDocument, state: EditorState): 
 		try {
 			const field = form.getFieldMaybe(name);
 			if (!field) continue;
+			// Use a size that fits Noto's metrics (pdf-lib's automatic size clips descenders).
+			if (field instanceof lib.PDFTextField || field instanceof lib.PDFDropdown || field instanceof lib.PDFOptionList) {
+				const requested = daFontSize(field.acroField.getDefaultAppearance());
+				const height = field.acroField.getWidgets()[0]?.getRectangle().height ?? 20;
+				const multiline = field instanceof lib.PDFTextField && field.isMultiline();
+				const size = fieldFontSize(height, multiline, requested);
+				if (size !== requested) field.setFontSize(size);
+			}
 			if (field instanceof lib.PDFTextField) {
 				const text = String(value);
 				const max = field.getMaxLength();

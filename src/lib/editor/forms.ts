@@ -1,6 +1,8 @@
 import type { PDFDocumentProxy } from '#lib/pdf/pdfjs.ts';
 import type { FieldValue, FormFieldWidget, PageModel } from './types.ts';
 
+export { fieldFontSize } from '#lib/pdf/fonts.ts';
+
 interface WidgetData {
 	annotationType: number;
 	id: string;
@@ -25,6 +27,7 @@ interface WidgetData {
 }
 
 const WIDGET = 20;
+
 
 /** Reads fillable form widgets and their current values for the editor overlay. */
 export async function loadFormFields(

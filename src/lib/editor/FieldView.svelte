@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { useEditor } from './context.ts';
+	import { fieldFontSize } from './forms.ts';
 	import type { FormFieldWidget } from './types.ts';
 
 	let { field }: { field: FormFieldWidget } = $props();
@@ -7,9 +8,7 @@
 	const z = $derived(editor.zoom);
 	const value = $derived(editor.formValues[field.name]);
 	const active = $derived(editor.tool === 'select');
-	const fontSize = $derived(
-		(field.fontSize > 0 ? field.fontSize : Math.max(6, Math.min(field.multiline ? 11 : field.h * 0.62, 14))) * z
-	);
+	const fontSize = $derived(fieldFontSize(field.h, field.multiline, field.fontSize) * z);
 
 	let textDraft = $state<string | null>(null);
 

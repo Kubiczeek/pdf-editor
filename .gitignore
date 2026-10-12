@@ -24,3 +24,6 @@ vite.config.ts.timestamp-*
 
 # Generated pdf.js runtime assets (scripts/copy-pdfjs-assets.mjs)
 /static/pdfjs/
+
+# Local browser-test artefacts
+/.playwright-mcp/

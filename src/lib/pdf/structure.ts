@@ -8,6 +8,7 @@ import type {
 } from '@cantoo/pdf-lib';
 import { loadPdfLib, type PdfLib } from './pdflib.ts';
 import { normalizeBox, visibleBox, pageFrame, type PageFrame, type Matrix } from './geometry.ts';
+import { fieldFontSize, daFontSize } from './fonts.ts';
 
 function numberArray(lib: PdfLib, value: PDFObject | undefined, doc: PDFDocument): number[] | null {
 	const resolved = value instanceof lib.PDFRef ? doc.context.lookup(value) : value;
@@ -267,6 +268,14 @@ export async function refreshFormAppearances(
 					field instanceof lib.PDFOptionList ||
 					field instanceof lib.PDFButton
 				) {
+					if (!(field instanceof lib.PDFButton)) {
+						// Use a size that fits Noto's metrics (pdf-lib's automatic size clips descenders).
+						const requested = daFontSize(field.acroField.getDefaultAppearance());
+						const height = field.acroField.getWidgets()[0]?.getRectangle().height ?? 20;
+						const multiline = field instanceof lib.PDFTextField && field.isMultiline();
+						const size = fieldFontSize(height, multiline, requested);
+						if (size !== requested) field.setFontSize(size);
+					}
 					field.updateAppearances(font);
 				} else if (field instanceof lib.PDFCheckBox || field instanceof lib.PDFRadioGroup) {
 					field.updateAppearances();

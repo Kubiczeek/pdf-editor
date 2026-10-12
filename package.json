@@ -16,7 +16,8 @@
 		"test": "vitest run",
 		"lint": "prettier --check .",
 		"format": "prettier --write .",
-		"images": "node --experimental-strip-types --no-warnings scripts/generate-images.mjs"
+		"images": "node --experimental-strip-types --no-warnings scripts/generate-images.mjs",
+		"serve": "node scripts/serve.mjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^4.0.0",

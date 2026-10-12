@@ -127,15 +127,20 @@
 	.skip {
 		position: absolute;
 		left: 12px;
-		top: -60px;
+		top: 10px;
 		padding: 8px 14px;
 		background: var(--paper);
 		border-radius: var(--radius-s);
 		z-index: 60;
+		transform: translateY(-200%);
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.skip:focus {
-		top: 10px;
+		transform: none;
+		opacity: 1;
+		pointer-events: auto;
 	}
 
 	.bar {

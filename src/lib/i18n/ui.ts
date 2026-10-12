@@ -372,7 +372,7 @@ const en = {
 	},
 	home: {
 		dropTitle: 'Drop a PDF to begin',
-		dropSub: 'or choose a file — you’ll pick what to do next',
+		dropSub: 'or drag it here — then pick what to do with it',
 		pickTool: 'What do you want to do with “{name}”?',
 		pickToolMany: 'What do you want to do with these {n} files?',
 		other: 'Choose another file'
@@ -794,7 +794,7 @@ const cs: UiDict = {
 	},
 	home: {
 		dropTitle: 'Přetáhněte sem PDF',
-		dropSub: 'nebo vyberte soubor — co s ním udělat, zvolíte potom',
+		dropSub: 'nebo ho sem přetáhněte — pak vyberete, co s ním udělat',
 		pickTool: 'Co chcete udělat s „{name}“?',
 		pickToolMany: 'Co chcete udělat s těmito soubory ({n})?',
 		other: 'Vybrat jiný soubor'
