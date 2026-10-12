@@ -97,18 +97,30 @@
 </script>
 
 {#if result}
-	<ResultPanel files={result} onreset={reset} next={['compress', 'organize', 'page-numbers', 'protect']} />
+	<ResultPanel
+		files={result}
+		onreset={reset}
+		next={['compress', 'organize', 'page-numbers', 'protect']}
+	/>
 {:else}
 	<div class="stack">
 		{#each errors as error, index (index)}
-			<Notice kind="error" ondismiss={() => (errors = errors.filter((_, i) => i !== index))}>{error}</Notice>
+			<Notice kind="error" ondismiss={() => (errors = errors.filter((_, i) => i !== index))}
+				>{error}</Notice
+			>
 		{/each}
 		{#if files.length === 0 && opening === 0}
 			<FileDrop accepts="pdf" multiple onfiles={add} />
 		{:else}
 			<Workspace {busy} {progress}>
 				{#snippet toolbar()}
-					<FileDrop accepts="pdf" multiple compact onfiles={add} buttonLabel={i18n.t.common.addMore} />
+					<FileDrop
+						accepts="pdf"
+						multiple
+						compact
+						onfiles={add}
+						buttonLabel={i18n.t.common.addMore}
+					/>
 					<button class="btn btn-ghost" onclick={sortByName} disabled={files.length < 2}>
 						<Icon name="sort" size={18} />
 						{i18n.t.merge.sortName}
@@ -116,7 +128,10 @@
 				{/snippet}
 				{#snippet main()}
 					<p class="hint">{i18n.t.merge.hint}</p>
-					<ol class="files" use:sortable={{ onReorder: (from, to) => (files = moveItem(files, from, to)) }}>
+					<ol
+						class="files"
+						use:sortable={{ onReorder: (from, to) => (files = moveItem(files, from, to)) }}
+					>
 						{#each files as file, index (file.id)}
 							<li data-sortable>
 								<span class="grip" aria-hidden="true"><Icon name="grip" size={18} /></span>
@@ -125,11 +140,19 @@
 								<span class="meta">
 									<strong>{file.name}</strong>
 									<small>
-										{plural(i18n.lang, file.pageCount, i18n.t.common.pages)} · {formatBytes(i18n.lang, file.size)}
+										{plural(i18n.lang, file.pageCount, i18n.t.common.pages)} · {formatBytes(
+											i18n.lang,
+											file.size
+										)}
 									</small>
 								</span>
 								<span class="buttons">
-									<button class="icon-btn" onclick={() => move(index, -1)} disabled={index === 0} aria-label={i18n.t.common.moveUp}>
+									<button
+										class="icon-btn"
+										onclick={() => move(index, -1)}
+										disabled={index === 0}
+										aria-label={i18n.t.common.moveUp}
+									>
 										<Icon name="chevronUp" size={18} />
 									</button>
 									<button
@@ -140,7 +163,11 @@
 									>
 										<Icon name="chevronDown" size={18} />
 									</button>
-									<button class="icon-btn" onclick={() => remove(file.id)} aria-label={`${i18n.t.common.remove} ${file.name}`}>
+									<button
+										class="icon-btn"
+										onclick={() => remove(file.id)}
+										aria-label={`${i18n.t.common.remove} ${file.name}`}
+									>
 										<Icon name="trash" size={18} />
 									</button>
 								</span>
@@ -166,7 +193,11 @@
 					{/if}
 				{/snippet}
 				{#snippet action()}
-					<button class="btn btn-primary btn-lg" onclick={merge} disabled={busy || files.length < 2 || opening > 0}>
+					<button
+						class="btn btn-primary btn-lg"
+						onclick={merge}
+						disabled={busy || files.length < 2 || opening > 0}
+					>
 						<Icon name="merge" size={20} />
 						{i18n.t.merge.action}
 					</button>
@@ -178,11 +209,6 @@
 {/if}
 
 <style>
-	.stack {
-		display: grid;
-		gap: 16px;
-	}
-
 	.hint {
 		margin-bottom: 14px;
 		color: var(--ink-2);
@@ -258,21 +284,6 @@
 		color: var(--ink-2);
 		font-weight: 600;
 		cursor: default;
-	}
-
-	.spinner {
-		width: 18px;
-		height: 18px;
-		border: 3px solid var(--royal-tint);
-		border-top-color: var(--royal);
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
 	}
 
 	.summary {

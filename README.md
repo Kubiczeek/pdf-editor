@@ -11,12 +11,12 @@ makes the site free to operate (it is just static files) and private by construc
 
 ## Features
 
-| Category              | Tools                                                                                     |
-| --------------------- | ----------------------------------------------------------------------------------------- |
-| **Edit & sign**       | Edit PDF (incl. editing existing text), Sign PDF, Fill PDF form, Add watermark, Add page numbers, Redact PDF |
+| Category              | Tools                                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Edit & sign**       | Edit PDF (incl. editing existing text), Sign PDF, Fill PDF form, Add watermark, Add page numbers, Redact PDF       |
 | **Organize pages**    | Merge, Split, Organize (reorder / rotate / delete / duplicate / insert), Rotate, Delete pages, Extract pages, Crop |
-| **Convert**           | PDF → JPG, PDF → PNG, JPG/PNG/WebP → PDF, PDF → text                                      |
-| **Optimize & secure** | Compress, Protect (AES-256 password), Unlock, Flatten forms & annotations, Edit metadata  |
+| **Convert**           | PDF → JPG, PDF → PNG, JPG/PNG/WebP → PDF, PDF → text                                                               |
+| **Optimize & secure** | Compress, Protect (AES-256 password), Unlock, Flatten forms & annotations, Edit metadata                           |
 
 The editor supports: replacing existing text (cover-and-retype with colour sampling),
 adding text in several Unicode fonts (full Czech/Latin-Extended, Greek, Cyrillic), images,
@@ -141,7 +141,7 @@ pre-configured:
 1. **Add New → Project** → import this repo. Vercel detects SvelteKit; `adapter-static` has
    zero-config Vercel support. Node.js 22 is the default.
 2. **Settings → Domains** → add `pdf.jakubjakubek.cz` and create the `CNAME pdf →
-   cname.vercel-dns.com` record it asks for.
+cname.vercel-dns.com` record it asks for.
 
 `vercel.json` mirrors the security and caching headers.
 

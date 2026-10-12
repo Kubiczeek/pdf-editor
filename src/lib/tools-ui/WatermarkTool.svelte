@@ -3,7 +3,12 @@
 	import { useI18n, fmt } from '#lib/i18n/index.ts';
 	import { parsePageSet } from '#lib/pdf/ranges.ts';
 	import { outputName, toBlob, pickFiles } from '#lib/pdf/files.ts';
-	import { cssFontFamily, loadCssFont, ensureFontFaces, type FontFamilyId } from '#lib/pdf/fonts.ts';
+	import {
+		cssFontFamily,
+		loadCssFont,
+		ensureFontFaces,
+		type FontFamilyId
+	} from '#lib/pdf/fonts.ts';
 	import { addWatermark, watermarkCenters, type WatermarkPosition } from '#lib/pdf/ops/stamp.ts';
 	import { prepareImage } from '#lib/pdf/ops/images.ts';
 	import { SinglePdfTool } from './single.svelte.ts';
@@ -30,7 +35,13 @@
 	let behind = $state(false);
 	let scope = $state<'all' | 'some'>('all');
 	let rangeText = $state('');
-	let image = $state<{ bytes: Uint8Array; mime: 'image/png' | 'image/jpeg'; url: string; w: number; h: number } | null>(null);
+	let image = $state<{
+		bytes: Uint8Array;
+		mime: 'image/png' | 'image/jpeg';
+		url: string;
+		w: number;
+		h: number;
+	} | null>(null);
 	let imageScale = $state(0.4);
 	let previewPage = $state(1);
 	let fontReady = $state(0);
@@ -73,8 +84,12 @@
 		try {
 			const prepared = await prepareImage(file);
 			const mime = prepared.kind === 'png' ? 'image/png' : 'image/jpeg';
-			const url = URL.createObjectURL(new Blob([prepared.bytes as Uint8Array<ArrayBuffer>], { type: mime }));
-			const bitmap = await createImageBitmap(new Blob([prepared.bytes as Uint8Array<ArrayBuffer>], { type: mime }));
+			const url = URL.createObjectURL(
+				new Blob([prepared.bytes as Uint8Array<ArrayBuffer>], { type: mime })
+			);
+			const bitmap = await createImageBitmap(
+				new Blob([prepared.bytes as Uint8Array<ArrayBuffer>], { type: mime })
+			);
 			if (image) URL.revokeObjectURL(image.url);
 			image = { bytes: prepared.bytes, mime, url, w: bitmap.width, h: bitmap.height };
 			bitmap.close();
@@ -98,7 +113,8 @@
 	async function submit() {
 		if (kind === 'text' && !text.trim()) return tool.fail(i18n.t.watermark.noText);
 		if (kind === 'image' && !image) return tool.fail(i18n.t.watermark.noImage);
-		if (scope === 'some' && !pages?.length) return tool.fail(fmt(i18n.t.common.rangesInvalid, { n: pageCount }));
+		if (scope === 'some' && !pages?.length)
+			return tool.fail(fmt(i18n.t.common.rangesInvalid, { n: pageCount }));
 		const options = {
 			mark:
 				kind === 'text'
@@ -130,7 +146,7 @@
 									class="mark"
 									style:left={`${cx * geo.scale}px`}
 									style:top={`${cy * geo.scale}px`}
-									style:opacity={opacity}
+									style:opacity
 									style:transform={`translate(-50%, -50%) rotate(${-angle}deg)`}
 								>
 									{#if kind === 'text'}
@@ -139,8 +155,8 @@
 											style:font-family={cssFontFamily(font)}
 											style:font-weight={bold ? 700 : 400}
 											style:font-size={`${size * geo.scale}px`}
-											style:color
-										>{text}</span>
+											style:color>{text}</span
+										>
 									{:else if image}
 										<img src={image.url} alt="" style:width={`${box.width * geo.scale}px`} />
 									{/if}
@@ -151,11 +167,21 @@
 				</PagePreview>
 				{#if pageCount > 1}
 					<div class="pager">
-						<button class="icon-btn" onclick={() => (previewPage = Math.max(1, previewPage - 1))} disabled={previewPage <= 1} aria-label={i18n.t.crop.prev}>
+						<button
+							class="icon-btn"
+							onclick={() => (previewPage = Math.max(1, previewPage - 1))}
+							disabled={previewPage <= 1}
+							aria-label={i18n.t.crop.prev}
+						>
 							<Icon name="chevronLeft" size={18} />
 						</button>
 						<span>{fmt(i18n.t.common.pageOf, { n: previewPage, total: pageCount })}</span>
-						<button class="icon-btn" onclick={() => (previewPage = Math.min(pageCount, previewPage + 1))} disabled={previewPage >= pageCount} aria-label={i18n.t.crop.next}>
+						<button
+							class="icon-btn"
+							onclick={() => (previewPage = Math.min(pageCount, previewPage + 1))}
+							disabled={previewPage >= pageCount}
+							aria-label={i18n.t.crop.next}
+						>
 							<Icon name="chevronRight" size={18} />
 						</button>
 					</div>
@@ -163,8 +189,16 @@
 			{/snippet}
 			{#snippet side()}
 				<div class="segmented full">
-					<label><input type="radio" value="text" bind:group={kind} /><span>{i18n.t.watermark.text}</span></label>
-					<label><input type="radio" value="image" bind:group={kind} /><span>{i18n.t.watermark.image}</span></label>
+					<label
+						><input type="radio" value="text" bind:group={kind} /><span
+							>{i18n.t.watermark.text}</span
+						></label
+					>
+					<label
+						><input type="radio" value="image" bind:group={kind} /><span
+							>{i18n.t.watermark.image}</span
+						></label
+					>
 				</div>
 				{#if kind === 'text'}
 					<label class="field">
@@ -185,7 +219,9 @@
 							<input type="color" bind:value={color} />
 						</label>
 					</div>
-					<label class="check"><input type="checkbox" bind:checked={bold} /><span>{i18n.t.common.bold}</span></label>
+					<label class="check"
+						><input type="checkbox" bind:checked={bold} /><span>{i18n.t.common.bold}</span></label
+					>
 					<label class="field">
 						<span>{i18n.t.common.size} · {size} pt</span>
 						<input type="range" min="8" max="160" step="1" bind:value={size} />
@@ -217,7 +253,11 @@
 						{/each}
 					</div>
 					<label class="check">
-						<input type="checkbox" checked={position === 'tile'} onchange={(e) => (position = e.currentTarget.checked ? 'tile' : 'center')} />
+						<input
+							type="checkbox"
+							checked={position === 'tile'}
+							onchange={(e) => (position = e.currentTarget.checked ? 'tile' : 'center')}
+						/>
 						<span>{i18n.t.watermark.tile}</span>
 					</label>
 				</div>
@@ -231,16 +271,34 @@
 				</label>
 				<label class="check">
 					<input type="checkbox" bind:checked={behind} />
-					<span>{i18n.t.watermark.behind}<small class="muted block">{i18n.t.watermark.behindHint}</small></span>
+					<span
+						>{i18n.t.watermark.behind}<small class="muted block"
+							>{i18n.t.watermark.behindHint}</small
+						></span
+					>
 				</label>
 				<div class="field">
 					<span class="field-label">{i18n.t.common.pagesLabel}</span>
 					<div class="segmented">
-						<label><input type="radio" value="all" bind:group={scope} /><span>{i18n.t.common.allPages}</span></label>
-						<label><input type="radio" value="some" bind:group={scope} /><span>{i18n.t.common.somePages}</span></label>
+						<label
+							><input type="radio" value="all" bind:group={scope} /><span
+								>{i18n.t.common.allPages}</span
+							></label
+						>
+						<label
+							><input type="radio" value="some" bind:group={scope} /><span
+								>{i18n.t.common.somePages}</span
+							></label
+						>
 					</div>
 					{#if scope === 'some'}
-						<input class="input" bind:value={rangeText} placeholder={i18n.t.common.rangesHint} aria-label={i18n.t.common.pageRanges} aria-invalid={!pages} />
+						<input
+							class="input"
+							bind:value={rangeText}
+							placeholder={i18n.t.common.rangesHint}
+							aria-label={i18n.t.common.pageRanges}
+							aria-invalid={!pages}
+						/>
 					{/if}
 				</div>
 			{/snippet}
@@ -249,7 +307,8 @@
 					<Icon name="droplet" size={20} />
 					{i18n.t.watermark.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

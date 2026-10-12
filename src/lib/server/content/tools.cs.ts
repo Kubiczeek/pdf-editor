@@ -7,12 +7,13 @@ export const labelsCs: PageLabels = {
 	faq: 'Časté dotazy',
 	related: 'Související nástroje',
 	breadcrumbHome: 'Všechny nástroje PDF',
-	free: 'Zdarma'
+	free: 'Zdarma',
+	noscript: 'Pro použití nástroje zapněte JavaScript — soubory zpracovává váš vlastní prohlížeč.'
 };
 
 export const toolsCs: Record<ToolId, ToolContent> = {
 	edit: {
-		title: 'Upravit PDF online zdarma – text, obrázky, poznámky',
+		title: 'Upravit PDF online zdarma – text a obrázky',
 		description:
 			'Upravujte PDF přímo v prohlížeči: měňte existující text, přidávejte text, obrázky, tvary, zvýraznění a komentáře. Zdarma, bez registrace a bez nahrávání.',
 		h1: 'Upravit PDF online',
@@ -110,7 +111,7 @@ export const toolsCs: Record<ToolId, ToolContent> = {
 	'fill-form': {
 		title: 'Vyplnit PDF formulář online zdarma',
 		description:
-			'Vyplňte PDF formulář online: pište do polí, zaškrtávejte políčka, vybírejte možnosti a podepište se. Funguje i s nevyplnitelnými formuláři. Zdarma, bez nahrávání.',
+			'Vyplňte PDF formulář online: pište do polí, zaškrtávejte políčka, vybírejte možnosti a podepište se. Funguje i bez polí. Zdarma a bez nahrávání.',
 		h1: 'Vyplnit PDF formulář',
 		lead: 'Pište do formulářových polí, zaškrtávejte políčka a vybírejte možnosti. U formulářů bez polí napíšete text kamkoli na stránku.',
 		stepsTitle: 'Jak vyplnit PDF formulář',
@@ -605,7 +606,7 @@ export const toolsCs: Record<ToolId, ToolContent> = {
 		]
 	},
 	'pdf-to-png': {
-		title: 'PDF do PNG online zdarma – převod ve vysoké kvalitě',
+		title: 'PDF do PNG online zdarma – ostré obrázky',
 		description:
 			'Převeďte stránky PDF na bezeztrátové obrázky PNG s ostrým textem, až 300 DPI. Vyberte stránky, stáhněte obrázky jednotlivě nebo v ZIPu. Zdarma.',
 		h1: 'Převést PDF na PNG',
@@ -728,7 +729,7 @@ export const toolsCs: Record<ToolId, ToolContent> = {
 		]
 	},
 	compress: {
-		title: 'Komprimovat PDF online zdarma – zmenšit velikost PDF',
+		title: 'Komprimovat PDF online zdarma – zmenšit PDF',
 		description:
 			'Zmenšete PDF optimalizací obrázků a odstraněním nepotřebných dat. Zvolte úroveň komprese a uvidíte úsporu. Zdarma, soukromě, bez nahrávání.',
 		h1: 'Komprimovat PDF',
@@ -892,7 +893,7 @@ export const toolsCs: Record<ToolId, ToolContent> = {
 		]
 	},
 	metadata: {
-		title: 'Upravit metadata PDF online – název, autor, klíčová slova',
+		title: 'Upravit metadata PDF online – název a autor',
 		description:
 			'Zobrazte a změňte metadata PDF: název, autora, předmět, klíčová slova a aplikaci — nebo všechna metadata kvůli soukromí odstraňte. Zdarma, bez nahrávání.',
 		h1: 'Upravit metadata PDF',

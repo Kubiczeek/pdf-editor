@@ -19,7 +19,12 @@
 			.map((value) => value.toLowerCase());
 		const wantsCzech = preferred.length > 0 && /^(cs|sk)\b/.test(preferred[0]);
 		if (lang === 'en' && wantsCzech) suggested = 'cs';
-		else if (lang === 'cs' && preferred.length > 0 && !wantsCzech && !preferred.some((l) => /^(cs|sk)\b/.test(l)))
+		else if (
+			lang === 'cs' &&
+			preferred.length > 0 &&
+			!wantsCzech &&
+			!preferred.some((l) => /^(cs|sk)\b/.test(l))
+		)
 			suggested = 'en';
 	});
 
@@ -39,7 +44,9 @@
 			<Icon name="globe" size={18} />
 			<p>
 				{ui[suggested].langSuggest}
-				<a href={alternates[suggested]} hreflang={suggested} onclick={dismiss}>{ui[suggested].langSuggestLink}</a>
+				<a href={alternates[suggested]} hreflang={suggested} onclick={dismiss}
+					>{ui[suggested].langSuggestLink}</a
+				>
 			</p>
 			<button class="icon-btn" onclick={dismiss} aria-label={ui[suggested].nav.close}>
 				<Icon name="x" size={18} />

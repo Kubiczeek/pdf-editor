@@ -39,7 +39,12 @@ async function loadHeaderRules() {
 	for (const line of text.split(/\r?\n/)) {
 		if (!line.trim() || line.trim().startsWith('#')) continue;
 		if (!/^\s/.test(line)) {
-			const pattern = new RegExp(`^${line.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`);
+			const pattern = new RegExp(
+				`^${line
+					.trim()
+					.replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+					.replace(/\*/g, '.*')}$`
+			);
 			current = { pattern, headers: {} };
 			rules.push(current);
 		} else if (current) {

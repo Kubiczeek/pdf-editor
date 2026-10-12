@@ -17,7 +17,17 @@
 		['right', 'alignRight']
 	] as const;
 
-	type Kind = 'text' | 'draw' | 'highlight' | 'shape' | 'line' | 'whiteout' | 'image' | 'symbol' | 'note' | null;
+	type Kind =
+		| 'text'
+		| 'draw'
+		| 'highlight'
+		| 'shape'
+		| 'line'
+		| 'whiteout'
+		| 'image'
+		| 'symbol'
+		| 'note'
+		| null;
 
 	const kind = $derived.by<Kind>(() => {
 		if (sel) {
@@ -37,7 +47,11 @@
 				case 'arrow':
 					return 'line';
 				default:
-					return sel.blend === 'multiply' ? 'highlight' : !sel.stroke && sel.fill ? 'whiteout' : 'shape';
+					return sel.blend === 'multiply'
+						? 'highlight'
+						: !sel.stroke && sel.fill
+							? 'whiteout'
+							: 'shape';
 			}
 		}
 		switch (editor.tool) {
@@ -79,7 +93,11 @@
 	function setFamily(family: FontFamilyId) {
 		const bold = textBold && supportsStyle(family, 'bold');
 		const italic = textItalic && supportsStyle(family, 'italic');
-		apply({ family, bold, italic } as Partial<EditorObject>, { textFamily: family, textBold: bold, textItalic: italic });
+		apply({ family, bold, italic } as Partial<EditorObject>, {
+			textFamily: family,
+			textBold: bold,
+			textItalic: italic
+		});
 	}
 
 	function setSize(value: number) {
@@ -92,7 +110,12 @@
 {#if kind || sel}
 	<div class="props" role="toolbar" aria-label={i18n.t.editor.toolsLabel}>
 		{#if kind === 'text'}
-			<select class="select compact" value={textFamily} onchange={(e) => setFamily(e.currentTarget.value as FontFamilyId)} aria-label={t.font}>
+			<select
+				class="select compact"
+				value={textFamily}
+				onchange={(e) => setFamily(e.currentTarget.value as FontFamilyId)}
+				aria-label={t.font}
+			>
 				{#each FONT_FAMILIES as family (family.id)}
 					<option value={family.id}>{family.label}</option>
 				{/each}
@@ -124,13 +147,18 @@
 				class:on={textItalic}
 				aria-pressed={textItalic}
 				disabled={!supportsStyle(textFamily, 'italic')}
-				onclick={() => apply({ italic: !textItalic } as Partial<EditorObject>, { textItalic: !textItalic })}
+				onclick={() =>
+					apply({ italic: !textItalic } as Partial<EditorObject>, { textItalic: !textItalic })}
 				aria-label={t.italic}
 				title={t.italic}
 			>
 				<Icon name="italic" size={18} />
 			</button>
-			<ColorPick value={textColor} label={t.color} onchange={(c) => c && apply({ color: c } as Partial<EditorObject>, { textColor: c })} />
+			<ColorPick
+				value={textColor}
+				label={t.color}
+				onchange={(c) => c && apply({ color: c } as Partial<EditorObject>, { textColor: c })}
+			/>
 			{#if sel?.type === 'text'}
 				<span class="sep"></span>
 				{#each ALIGNS as [align, key] (align)}
@@ -160,19 +188,26 @@
 					max="12"
 					step="0.5"
 					value={sel?.type === 'ink' ? sel.width : editor.style.drawWidth}
-					onchange={(e) => apply({ width: Number(e.currentTarget.value) } as Partial<EditorObject>, { drawWidth: Number(e.currentTarget.value) })}
+					onchange={(e) =>
+						apply({ width: Number(e.currentTarget.value) } as Partial<EditorObject>, {
+							drawWidth: Number(e.currentTarget.value)
+						})}
 				/>
 			</label>
 		{:else if kind === 'highlight'}
 			<ColorPick
-				value={sel && (sel.type === 'rect' || sel.type === 'ellipse') ? sel.fill : editor.style.highlightColor}
+				value={sel && (sel.type === 'rect' || sel.type === 'ellipse')
+					? sel.fill
+					: editor.style.highlightColor}
 				label={t.color}
 				swatches={['#ffe14d', '#9cf27a', '#7fd8ff', '#ff9ccf', '#ffb36b']}
 				onchange={(c) => c && apply({ fill: c } as Partial<EditorObject>, { highlightColor: c })}
 			/>
 		{:else if kind === 'whiteout'}
 			<ColorPick
-				value={sel && (sel.type === 'rect' || sel.type === 'ellipse') ? sel.fill : editor.style.whiteoutColor}
+				value={sel && (sel.type === 'rect' || sel.type === 'ellipse')
+					? sel.fill
+					: editor.style.whiteoutColor}
 				label={t.fill}
 				onchange={(c) => c && apply({ fill: c } as Partial<EditorObject>, { whiteoutColor: c })}
 			/>
@@ -201,12 +236,17 @@
 					max="16"
 					step="0.5"
 					value={sel && 'strokeWidth' in sel ? sel.strokeWidth : editor.style.strokeWidth}
-					onchange={(e) => apply({ strokeWidth: Number(e.currentTarget.value) } as Partial<EditorObject>, { strokeWidth: Number(e.currentTarget.value) })}
+					onchange={(e) =>
+						apply({ strokeWidth: Number(e.currentTarget.value) } as Partial<EditorObject>, {
+							strokeWidth: Number(e.currentTarget.value)
+						})}
 				/>
 			</label>
 		{:else if kind === 'symbol'}
 			<ColorPick
-				value={sel && (sel.type === 'check' || sel.type === 'cross') ? sel.color : editor.style.symbolColor}
+				value={sel && (sel.type === 'check' || sel.type === 'cross')
+					? sel.color
+					: editor.style.symbolColor}
 				label={t.color}
 				onchange={(c) => c && apply({ color: c } as Partial<EditorObject>, { symbolColor: c })}
 			/>
@@ -232,13 +272,28 @@
 				/>
 			</label>
 			<span class="sep"></span>
-			<button class="icon-btn" onclick={() => editor.bringToFront(sel.id)} aria-label={t.bringFront} title={t.bringFront}>
+			<button
+				class="icon-btn"
+				onclick={() => editor.bringToFront(sel.id)}
+				aria-label={t.bringFront}
+				title={t.bringFront}
+			>
 				<Icon name="front" size={18} />
 			</button>
-			<button class="icon-btn" onclick={() => editor.duplicate(sel.id)} aria-label={t.duplicate} title={t.duplicate}>
+			<button
+				class="icon-btn"
+				onclick={() => editor.duplicate(sel.id)}
+				aria-label={t.duplicate}
+				title={t.duplicate}
+			>
 				<Icon name="copy" size={18} />
 			</button>
-			<button class="icon-btn danger" onclick={() => editor.remove(sel.id)} aria-label={t.delete} title={t.delete}>
+			<button
+				class="icon-btn danger"
+				onclick={() => editor.remove(sel.id)}
+				aria-label={t.delete}
+				title={t.delete}
+			>
 				<Icon name="trash" size={18} />
 			</button>
 		{/if}

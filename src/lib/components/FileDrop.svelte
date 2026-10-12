@@ -92,14 +92,14 @@
 />
 
 {#if compact}
-	<button type="button" class="btn compact" onclick={choose}>
+	<button type="button" class="btn fd-compact" onclick={choose}>
 		<Icon name="plus" size={18} />
 		{buttonLabel ?? i18n.t.common.addMore}
 	</button>
 {:else}
 	<div
-		class="drop"
-		class:over={over || windowOver}
+		class="fd-drop"
+		class:fd-over={over || windowOver}
 		role="presentation"
 		ondragenter={(e) => hasFiles(e) && (over = true)}
 		ondragover={(e) => {
@@ -113,107 +113,21 @@
 		}}
 		ondrop={onDrop}
 	>
-		<div class="sheet-icon" aria-hidden="true">
+		<div class="fd-icon" aria-hidden="true">
 			<Icon name={accepts === 'image' ? 'image' : 'file'} size={34} strokeWidth={1.6} />
 		</div>
-		{#if title}<p class="title">{title}</p>{/if}
+		{#if title}<p class="fd-title">{title}</p>{/if}
 		<button type="button" class="btn btn-primary btn-lg" onclick={choose}>
 			<Icon name="upload" size={20} />
 			{label}
 		</button>
-		<p class="sub">{subtitle ?? (multiple ? i18n.t.common.orDropMany : i18n.t.common.orDrop)}</p>
-		<p class="local"><Icon name="shield" size={16} /> {i18n.t.common.staysLocal}</p>
+		<p class="fd-sub">{subtitle ?? (multiple ? i18n.t.common.orDropMany : i18n.t.common.orDrop)}</p>
+		<p class="fd-local"><Icon name="shield" size={16} /> {i18n.t.common.staysLocal}</p>
 	</div>
 {/if}
 
 {#if windowOver && !compact}
-	<div class="window-overlay" aria-hidden="true">
+	<div class="fd-overlay" aria-hidden="true">
 		<div><Icon name="upload" size={40} /> {i18n.t.common.dropNow}</div>
 	</div>
 {/if}
-
-<style>
-	.drop {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 12px;
-		min-height: 300px;
-		padding: 40px 24px;
-		border: 2px dashed var(--line-strong);
-		border-radius: var(--radius-l);
-		background: var(--paper);
-		text-align: center;
-		transition:
-			background-color 140ms ease,
-			border-color 140ms ease;
-	}
-
-	.drop.over {
-		border-color: #d9b81c;
-		background: var(--highlight-soft);
-	}
-
-	.sheet-icon {
-		display: grid;
-		place-items: center;
-		width: 72px;
-		height: 72px;
-		border-radius: 18px;
-		background: var(--royal-tint);
-		color: var(--royal);
-		margin-bottom: 4px;
-	}
-
-	.title {
-		font-family: var(--font-display);
-		font-size: 1.45rem;
-		font-weight: 700;
-		letter-spacing: -0.01em;
-	}
-
-	.sub {
-		color: var(--ink-2);
-	}
-
-	.local {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		margin-top: 6px;
-		font-size: 0.88rem;
-		color: var(--ink-3);
-	}
-
-	.local :global(svg) {
-		color: var(--ok);
-	}
-
-	.compact {
-		border-style: dashed;
-	}
-
-	.window-overlay {
-		position: fixed;
-		inset: 0;
-		z-index: 200;
-		display: grid;
-		place-items: center;
-		background: rgb(255 243 168 / 0.82);
-		pointer-events: none;
-	}
-
-	.window-overlay div {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-		padding: 22px 32px;
-		border: 2px dashed #b89a0f;
-		border-radius: var(--radius-l);
-		background: var(--paper);
-		font-family: var(--font-display);
-		font-size: 1.5rem;
-		font-weight: 700;
-	}
-</style>

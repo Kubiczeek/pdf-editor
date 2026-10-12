@@ -122,13 +122,7 @@ export interface NoteObject extends BaseObject {
 }
 
 export type EditorObject =
-	| TextObject
-	| ImageObject
-	| InkObject
-	| BoxShapeObject
-	| LineObject
-	| SymbolObject
-	| NoteObject;
+	TextObject | ImageObject | InkObject | BoxShapeObject | LineObject | SymbolObject | NoteObject;
 
 export interface PageModel {
 	key: string;

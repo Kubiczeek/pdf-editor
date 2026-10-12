@@ -124,24 +124,41 @@
 				</PagePreview>
 				{#if pageCount > 1}
 					<div class="pager">
-						<button class="icon-btn" onclick={() => (page = Math.max(1, page - 1))} disabled={page <= 1} aria-label={i18n.t.crop.prev}>
+						<button
+							class="icon-btn"
+							onclick={() => (page = Math.max(1, page - 1))}
+							disabled={page <= 1}
+							aria-label={i18n.t.crop.prev}
+						>
 							<Icon name="chevronLeft" size={18} />
 						</button>
 						<span>{fmt(i18n.t.common.pageOf, { n: page, total: pageCount })}</span>
-						<button class="icon-btn" onclick={() => (page = Math.min(pageCount, page + 1))} disabled={page >= pageCount} aria-label={i18n.t.crop.next}>
+						<button
+							class="icon-btn"
+							onclick={() => (page = Math.min(pageCount, page + 1))}
+							disabled={page >= pageCount}
+							aria-label={i18n.t.crop.next}
+						>
 							<Icon name="chevronRight" size={18} />
 						</button>
 					</div>
 				{/if}
 			{/snippet}
 			{#snippet side()}
-				<p class="count"><Icon name="redact" size={18} /> {plural(i18n.lang, boxes.length, i18n.t.redact.boxes)}</p>
+				<p class="count">
+					<Icon name="redact" size={18} />
+					{plural(i18n.lang, boxes.length, i18n.t.redact.boxes)}
+				</p>
 				<div class="buttons">
 					<button class="btn" onclick={() => (boxes = boxes.slice(0, -1))} disabled={!boxes.length}>
 						<Icon name="undo" size={18} />
 						{i18n.t.redact.undo}
 					</button>
-					<button class="btn btn-ghost" onclick={() => (boxes = boxes.filter((b) => b.page !== page - 1))} disabled={!pageBoxes.length}>
+					<button
+						class="btn btn-ghost"
+						onclick={() => (boxes = boxes.filter((b) => b.page !== page - 1))}
+						disabled={!pageBoxes.length}
+					>
 						<Icon name="trash" size={18} />
 						{i18n.t.redact.clearPage}
 					</button>
@@ -149,17 +166,30 @@
 				<div class="field">
 					<span class="field-label">{i18n.t.redact.color}</span>
 					<div class="segmented">
-						<label><input type="radio" value="#000000" bind:group={fill} /><span>{i18n.t.redact.black}</span></label>
-						<label><input type="radio" value="#ffffff" bind:group={fill} /><span>{i18n.t.redact.white}</span></label>
+						<label
+							><input type="radio" value="#000000" bind:group={fill} /><span
+								>{i18n.t.redact.black}</span
+							></label
+						>
+						<label
+							><input type="radio" value="#ffffff" bind:group={fill} /><span
+								>{i18n.t.redact.white}</span
+							></label
+						>
 					</div>
 				</div>
 			{/snippet}
 			{#snippet action()}
-				<button class="btn btn-primary btn-lg" onclick={submit} disabled={tool.busy || !boxes.length}>
+				<button
+					class="btn btn-primary btn-lg"
+					onclick={submit}
+					disabled={tool.busy || !boxes.length}
+				>
 					<Icon name="redact" size={20} />
 					{i18n.t.redact.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

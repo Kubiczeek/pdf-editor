@@ -63,7 +63,8 @@
 					<Icon name="unlock" size={20} />
 					{i18n.t.unlock.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

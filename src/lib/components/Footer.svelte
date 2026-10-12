@@ -40,7 +40,10 @@
 			</nav>
 		</div>
 		<div class="bottom">
-			<p>© {year} {SITE_NAME} · {i18n.t.footer.madeBy} <a href={SITE_AUTHOR_URL}>{SITE_AUTHOR}</a></p>
+			<p>
+				© {year}
+				{SITE_NAME} · {i18n.t.footer.madeBy} <a href={SITE_AUTHOR_URL}>{SITE_AUTHOR}</a>
+			</p>
 			<p><a href={STATIC_PAGES.privacy[i18n.lang]}>{i18n.t.footer.privacy}</a></p>
 			<p class="fonts">{i18n.t.footer.fonts}</p>
 		</div>

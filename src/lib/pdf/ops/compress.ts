@@ -1,4 +1,9 @@
-import type { PDFDocument, PDFObject, PDFRawStream as PDFRawStreamType, PDFRef } from '@cantoo/pdf-lib';
+import type {
+	PDFDocument,
+	PDFObject,
+	PDFRawStream as PDFRawStreamType,
+	PDFRef
+} from '@cantoo/pdf-lib';
 import { loadDoc, saveDoc, loadPdfLib, createDoc } from '../pdflib.ts';
 import { openPdf, renderPage, closePdf } from '../pdfjs.ts';
 import { yieldToUI } from '../files.ts';
@@ -6,7 +11,10 @@ import type { PdfInput, Progress } from './pages.ts';
 
 export type CompressLevel = 'low' | 'medium' | 'high' | 'extreme';
 
-const PRESETS: Record<Exclude<CompressLevel, 'extreme'>, { maxDim: number; quality: number; flate: boolean }> = {
+const PRESETS: Record<
+	Exclude<CompressLevel, 'extreme'>,
+	{ maxDim: number; quality: number; flate: boolean }
+> = {
 	low: { maxDim: 2600, quality: 0.85, flate: false },
 	medium: { maxDim: 1700, quality: 0.72, flate: true },
 	high: { maxDim: 1100, quality: 0.55, flate: true }
@@ -136,7 +144,8 @@ async function inspectImage(doc: PDFDocument, stream: PDFRawStreamType): Promise
 	let colorSpace = dict.lookup(PDFName.of('ColorSpace'));
 	let components: 1 | 3 | null = null;
 	if (colorSpace === PDFName.of('DeviceRGB') || colorSpace === PDFName.of('CalRGB')) components = 3;
-	else if (colorSpace === PDFName.of('DeviceGray') || colorSpace === PDFName.of('CalGray')) components = 1;
+	else if (colorSpace === PDFName.of('DeviceGray') || colorSpace === PDFName.of('CalGray'))
+		components = 1;
 	else if (colorSpace instanceof PDFArray && colorSpace.size() >= 1) {
 		const family = colorSpace.lookup(0);
 		if (family === PDFName.of('CalRGB')) components = 3;
@@ -246,11 +255,23 @@ async function recompressImages(
 	const { PDFRawStream, PDFName, PDFNumber } = await loadPdfLib();
 	const candidates: Array<[PDFRef, PDFRawStreamType]> = [];
 	for (const [ref, obj] of doc.context.enumerateIndirectObjects()) {
-		if (obj instanceof PDFRawStream && obj.dict.lookup(PDFName.of('Subtype')) === PDFName.of('Image')) {
+		if (
+			obj instanceof PDFRawStream &&
+			obj.dict.lookup(PDFName.of('Subtype')) === PDFName.of('Image')
+		) {
 			candidates.push([ref, obj]);
 		}
 	}
-	const skipKeys = new Set(['Filter', 'DecodeParms', 'Length', 'ColorSpace', 'BitsPerComponent', 'Width', 'Height', 'DL']);
+	const skipKeys = new Set([
+		'Filter',
+		'DecodeParms',
+		'Length',
+		'ColorSpace',
+		'BitsPerComponent',
+		'Width',
+		'Height',
+		'DL'
+	]);
 	for (let i = 0; i < candidates.length; i++) {
 		const [ref, stream] = candidates[i];
 		try {
@@ -258,7 +279,9 @@ async function recompressImages(
 			if (info && (info.filter === 'DCTDecode' || preset.flate)) {
 				const source = await decodeToCanvas(doc, stream, info);
 				if (source) {
-					const scale = info.hasMatte ? 1 : Math.min(1, preset.maxDim / Math.max(info.width, info.height));
+					const scale = info.hasMatte
+						? 1
+						: Math.min(1, preset.maxDim / Math.max(info.width, info.height));
 					const width = Math.max(1, Math.round(info.width * scale));
 					const height = Math.max(1, Math.round(info.height * scale));
 					let target = source;

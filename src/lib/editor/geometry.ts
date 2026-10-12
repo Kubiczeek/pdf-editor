@@ -15,7 +15,9 @@ export interface Rect {
 /** Size of the page container (points) once the editor rotation is applied. */
 export function rotatedSize(page: PageModel): { width: number; height: number } {
 	const swap = page.rotation % 180 !== 0;
-	return swap ? { width: page.height, height: page.width } : { width: page.width, height: page.height };
+	return swap
+		? { width: page.height, height: page.width }
+		: { width: page.width, height: page.height };
 }
 
 /** CSS transform placing the unrotated object layer onto the rotated page container. */
@@ -63,7 +65,13 @@ export function deltaToBase(page: PageModel, dx: number, dy: number): [number, n
 }
 
 /** Pointer position → base display space of the page whose container is `el`. */
-export function clientToBase(page: PageModel, el: Element, zoom: number, clientX: number, clientY: number) {
+export function clientToBase(
+	page: PageModel,
+	el: Element,
+	zoom: number,
+	clientX: number,
+	clientY: number
+) {
 	const rect = el.getBoundingClientRect();
 	return containerToBase(page, (clientX - rect.left) / zoom, (clientY - rect.top) / zoom);
 }
@@ -71,7 +79,7 @@ export function clientToBase(page: PageModel, el: Element, zoom: number, clientX
 /** Content rotation of an object, normalised to 0/90/180/270. */
 export function objectRotation(obj: { rot?: number }): 0 | 90 | 180 | 270 {
 	const rot = obj.rot ?? 0;
-	return (((Math.round(rot / 90) * 90) % 360) + 360) % 360 as 0 | 90 | 180 | 270;
+	return ((((Math.round(rot / 90) * 90) % 360) + 360) % 360) as 0 | 90 | 180 | 270;
 }
 
 /** Rotation that makes new content upright on a page rotated by `pageRotation` in the editor. */
@@ -111,7 +119,10 @@ const SIN: Record<number, number> = { 0: 0, 90: 1, 180: 0, 270: -1 };
  * Maps unrotated content coordinates (y down, origin at the content's
  * top-left, size w × h) of a rotatable object into base space.
  */
-export function contentMatrix(obj: { x: number; y: number; w: number; h: number; rot?: number }, height = obj.h): Matrix {
+export function contentMatrix(
+	obj: { x: number; y: number; w: number; h: number; rot?: number },
+	height = obj.h
+): Matrix {
 	const rot = objectRotation(obj);
 	const swap = rot % 180 !== 0;
 	const bw = swap ? height : obj.w;
@@ -119,13 +130,21 @@ export function contentMatrix(obj: { x: number; y: number; w: number; h: number;
 	const cos = COS[rot];
 	const sin = SIN[rot];
 	// translate(centre) · rotate(rot, clockwise on screen) · translate(-w/2, -h/2)
-	return multiply([1, 0, 0, 1, obj.x + bw / 2, obj.y + bh / 2], multiply([cos, sin, -sin, cos, 0, 0], [1, 0, 0, 1, -obj.w / 2, -height / 2]));
+	return multiply(
+		[1, 0, 0, 1, obj.x + bw / 2, obj.y + bh / 2],
+		multiply([cos, sin, -sin, cos, 0, 0], [1, 0, 0, 1, -obj.w / 2, -height / 2])
+	);
 }
 
 /** Returns the fields to change to move an object by (dx, dy). */
 export function moved(obj: EditorObject, dx: number, dy: number): Partial<EditorObject> {
 	if ('x1' in obj) {
-		return { x1: obj.x1 + dx, y1: obj.y1 + dy, x2: obj.x2 + dx, y2: obj.y2 + dy } as Partial<LineObject>;
+		return {
+			x1: obj.x1 + dx,
+			y1: obj.y1 + dy,
+			x2: obj.x2 + dx,
+			y2: obj.y2 + dy
+		} as Partial<LineObject>;
 	}
 	return { x: obj.x + dx, y: obj.y + dy } as Partial<EditorObject>;
 }
@@ -155,7 +174,8 @@ export function inkPaths(obj: InkObject): string[] {
 	const m = contentMatrix(obj);
 	return obj.strokes.map((stroke) => {
 		const pts: Array<[number, number]> = [];
-		for (let i = 0; i + 1 < stroke.length; i += 2) pts.push(applyMatrix(m, stroke[i] * obj.w, stroke[i + 1] * obj.h));
+		for (let i = 0; i + 1 < stroke.length; i += 2)
+			pts.push(applyMatrix(m, stroke[i] * obj.w, stroke[i + 1] * obj.h));
 		return smoothPath(pts);
 	});
 }

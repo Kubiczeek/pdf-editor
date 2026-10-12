@@ -10,7 +10,18 @@
 		stroke-width="2"
 		stroke-linejoin="round"
 	/>
-	<path d="M18.7 3.5v7.3H26" fill="none" stroke="#1f35c4" stroke-width="2" stroke-linejoin="round" />
+	<path
+		d="M18.7 3.5v7.3H26"
+		fill="none"
+		stroke="#1f35c4"
+		stroke-width="2"
+		stroke-linejoin="round"
+	/>
 	<path d="M9.6 15.2 22.6 14l.5 5.2-13 1.2z" fill="#ffe14d" />
-	<path d="M10.5 17.6h11.6M10.5 23.6h7.4" stroke="#1f35c4" stroke-width="2" stroke-linecap="round" />
+	<path
+		d="M10.5 17.6h11.6M10.5 23.6h7.4"
+		stroke="#1f35c4"
+		stroke-width="2"
+		stroke-linecap="round"
+	/>
 </svg>

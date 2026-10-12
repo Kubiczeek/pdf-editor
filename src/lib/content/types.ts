@@ -29,6 +29,7 @@ export interface PageLabels {
 	related: string;
 	breadcrumbHome: string;
 	free: string;
+	noscript: string;
 }
 
 export interface HomeContent {

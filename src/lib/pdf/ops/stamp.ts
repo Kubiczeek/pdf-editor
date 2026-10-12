@@ -80,7 +80,11 @@ function anchorPoint(
 				? page.width - margin - hw
 				: page.width / 2;
 	const y =
-		vertical === 'top' ? margin + hh : vertical === 'bottom' ? page.height - margin - hh : page.height / 2;
+		vertical === 'top'
+			? margin + hh
+			: vertical === 'bottom'
+				? page.height - margin - hh
+				: page.height / 2;
 	return [x, y];
 }
 
@@ -137,7 +141,8 @@ export async function addWatermark(
 		const metrics = fontFamily(mark.font);
 		baseline = ((metrics.ascent - metrics.descent) * mark.size) / 2;
 	} else {
-		image = mark.mime === 'image/png' ? await doc.embedPng(mark.bytes) : await doc.embedJpg(mark.bytes);
+		image =
+			mark.mime === 'image/png' ? await doc.embedPng(mark.bytes) : await doc.embedJpg(mark.bytes);
 	}
 
 	for (let t = 0; t < targets.length; t++) {
@@ -146,7 +151,9 @@ export async function addWatermark(
 		const frame = await framePdfPage(page);
 		let box: Sized;
 		if (font) {
-			const width = Math.max(...lines.map((line) => font!.widthOfTextAtSize(line, (mark as TextWatermark).size)));
+			const width = Math.max(
+				...lines.map((line) => font!.widthOfTextAtSize(line, (mark as TextWatermark).size))
+			);
 			box = { width, height: lineHeight * lines.length };
 		} else {
 			const width = frame.width * (mark as ImageWatermark).scale;
@@ -194,12 +201,7 @@ export async function addWatermark(
 }
 
 export type NumberPosition =
-	| 'top-left'
-	| 'top-center'
-	| 'top-right'
-	| 'bottom-left'
-	| 'bottom-center'
-	| 'bottom-right';
+	'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
 
 export interface PageNumberOptions {
 	position: NumberPosition;

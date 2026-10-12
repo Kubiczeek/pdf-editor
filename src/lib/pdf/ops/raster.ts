@@ -65,7 +65,12 @@ export async function redactPdf(
 				for (const box of pageBoxes) {
 					const x = Math.floor(box.x * sx);
 					const y = Math.floor(box.y * sy);
-					ctx.fillRect(x, y, Math.ceil((box.x + box.width) * sx) - x, Math.ceil((box.y + box.height) * sy) - y);
+					ctx.fillRect(
+						x,
+						y,
+						Math.ceil((box.x + box.width) * sx) - x,
+						Math.ceil((box.y + box.height) * sy) - y
+					);
 				}
 				const jpeg = await canvasToJpeg(canvas, 0.9);
 				canvas.width = canvas.height = 0;

@@ -46,7 +46,10 @@
 
 	function formatDate(date: Date | null): string {
 		if (!date || Number.isNaN(date.getTime())) return i18n.t.metadata.unknown;
-		return new Intl.DateTimeFormat(BCP47[i18n.lang], { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+		return new Intl.DateTimeFormat(BCP47[i18n.lang], {
+			dateStyle: 'medium',
+			timeStyle: 'short'
+		}).format(date);
 	}
 
 	async function submit(event: SubmitEvent) {
@@ -104,7 +107,11 @@
 					<p class="name"><Icon name="file" size={18} /> {tool.pdf!.name}</p>
 					<label class="option">
 						<input type="checkbox" bind:checked={clearAll} />
-						<span><strong>{i18n.t.metadata.clearAll}</strong><small>{i18n.t.metadata.clearAllHint}</small></span>
+						<span
+							><strong>{i18n.t.metadata.clearAll}</strong><small
+								>{i18n.t.metadata.clearAllHint}</small
+							></span
+						>
 					</label>
 				{/snippet}
 				{#snippet action()}
@@ -112,7 +119,9 @@
 						<Icon name="tag" size={20} />
 						{i18n.t.metadata.action}
 					</button>
-					<button type="button" class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+					<button type="button" class="btn btn-ghost" onclick={() => tool.reset()}
+						>{i18n.t.common.startOver}</button
+					>
 				{/snippet}
 			</Workspace>
 		</form>

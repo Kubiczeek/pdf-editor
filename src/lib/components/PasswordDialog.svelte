@@ -65,7 +65,9 @@
 			</label>
 			<div class="actions">
 				<button type="button" class="btn btn-ghost" onclick={cancel}>{i18n.t.common.cancel}</button>
-				<button type="submit" class="btn btn-primary" disabled={!value}>{i18n.t.password.submit}</button>
+				<button type="submit" class="btn btn-primary" disabled={!value}
+					>{i18n.t.password.submit}</button
+				>
 			</div>
 		</form>
 	{/if}

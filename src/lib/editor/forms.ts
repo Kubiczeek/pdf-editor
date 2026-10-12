@@ -28,7 +28,6 @@ interface WidgetData {
 
 const WIDGET = 20;
 
-
 /** Reads fillable form widgets and their current values for the editor overlay. */
 export async function loadFormFields(
 	doc: PDFDocumentProxy,
@@ -62,7 +61,11 @@ export async function loadFormFields(
 				const raw = data.fieldValue;
 				if (!(name in values)) {
 					if (kind === 'checkbox') {
-						values[name] = typeof raw === 'string' && raw !== 'Off' && raw !== '' && (!data.exportValue || raw === data.exportValue);
+						values[name] =
+							typeof raw === 'string' &&
+							raw !== 'Off' &&
+							raw !== '' &&
+							(!data.exportValue || raw === data.exportValue);
 					} else if (kind === 'radio') {
 						values[name] = typeof raw === 'string' ? raw : 'Off';
 					} else if (Array.isArray(raw)) {
@@ -84,7 +87,10 @@ export async function loadFormFields(
 					readOnly: Boolean(data.readOnly),
 					maxLen: data.maxLen ?? 0,
 					exportValue: kind === 'radio' ? (data.buttonValue ?? '') : (data.exportValue ?? 'Yes'),
-					options: (data.options ?? []).map((o) => ({ value: o.exportValue, label: o.displayValue ?? o.exportValue })),
+					options: (data.options ?? []).map((o) => ({
+						value: o.exportValue,
+						label: o.displayValue ?? o.exportValue
+					})),
 					fontSize: data.defaultAppearanceData?.fontSize ?? 0,
 					comb: Boolean(data.comb),
 					align: data.textAlignment === 1 ? 'center' : data.textAlignment === 2 ? 'right' : 'left'

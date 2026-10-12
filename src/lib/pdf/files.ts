@@ -16,7 +16,13 @@ export function isImageFile(file: File): boolean {
 export function looksLikePdf(bytes: Uint8Array): boolean {
 	const head = bytes.subarray(0, 1024);
 	for (let i = 0; i < head.length - 4; i++) {
-		if (head[i] === 0x25 && head[i + 1] === 0x50 && head[i + 2] === 0x44 && head[i + 3] === 0x46 && head[i + 4] === 0x2d) {
+		if (
+			head[i] === 0x25 &&
+			head[i + 1] === 0x50 &&
+			head[i + 2] === 0x44 &&
+			head[i + 3] === 0x46 &&
+			head[i + 4] === 0x2d
+		) {
 			return true;
 		}
 	}

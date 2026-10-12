@@ -1,6 +1,12 @@
 import type { UiDict } from '#lib/i18n/index.ts';
 import { fmt } from '#lib/i18n/index.ts';
-import { openPdf, closePdf, PasswordRequiredError, InvalidPdfError, type PDFDocumentProxy } from '#lib/pdf/pdfjs.ts';
+import {
+	openPdf,
+	closePdf,
+	PasswordRequiredError,
+	InvalidPdfError,
+	type PDFDocumentProxy
+} from '#lib/pdf/pdfjs.ts';
 import { readBytes, looksLikePdf, isPdfFile, isImageFile, uid } from '#lib/pdf/files.ts';
 import type { PdfInput } from '#lib/pdf/ops/pages.ts';
 import { passwordPrompt } from '#lib/stores/password.svelte.ts';
@@ -31,7 +37,9 @@ export interface LoadedPdf {
 export async function openPdfFile(file: File, t: UiDict): Promise<LoadedPdf> {
 	const bytes = await readBytes(file);
 	if (!looksLikePdf(bytes)) {
-		throw new UserFacingError(fmt(isPdfFile(file) ? t.errors.invalidPdf : t.errors.notPdf, { name: file.name }));
+		throw new UserFacingError(
+			fmt(isPdfFile(file) ? t.errors.invalidPdf : t.errors.notPdf, { name: file.name })
+		);
 	}
 	let password: string | undefined;
 	for (;;) {
@@ -82,7 +90,10 @@ export function describeError(t: UiDict, error: unknown): string {
 }
 
 /** Splits dropped files into accepted and rejected ones for a tool. */
-export function filterFiles(files: File[], accepts: 'pdf' | 'image'): { ok: File[]; rejected: File[] } {
+export function filterFiles(
+	files: File[],
+	accepts: 'pdf' | 'image'
+): { ok: File[]; rejected: File[] } {
 	const ok: File[] = [];
 	const rejected: File[] = [];
 	for (const file of files) {

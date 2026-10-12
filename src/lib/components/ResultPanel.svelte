@@ -39,7 +39,11 @@
 	const nextTools = $derived(
 		next.filter((id) => {
 			const accepts = TOOLS[id].accepts;
-			return files.every((file) => (accepts === 'pdf' ? file.blob.type === 'application/pdf' : file.blob.type.startsWith('image/')));
+			return files.every((file) =>
+				accepts === 'pdf'
+					? file.blob.type === 'application/pdf'
+					: file.blob.type.startsWith('image/')
+			);
 		})
 	);
 
@@ -47,7 +51,10 @@
 		zipping = true;
 		try {
 			const entries = await Promise.all(
-				files.map(async (file) => ({ name: file.name, data: new Uint8Array(await file.blob.arrayBuffer()) }))
+				files.map(async (file) => ({
+					name: file.name,
+					data: new Uint8Array(await file.blob.arrayBuffer())
+				}))
 			);
 			downloadBlob(await makeZip(entries), zipName, 'application/zip');
 		} finally {
@@ -81,9 +88,14 @@
 
 	<div class="actions">
 		{#if files.length === 1}
-			<button class="btn btn-primary btn-lg" onclick={() => downloadBlob(files[0].blob, files[0].name)}>
+			<button
+				class="btn btn-primary btn-lg"
+				onclick={() => downloadBlob(files[0].blob, files[0].name)}
+			>
 				<Icon name="download" size={20} />
-				{files[0].blob.type === 'application/pdf' ? i18n.t.common.downloadPdf : i18n.t.common.download}
+				{files[0].blob.type === 'application/pdf'
+					? i18n.t.common.downloadPdf
+					: i18n.t.common.download}
 			</button>
 		{:else}
 			<button class="btn btn-primary btn-lg" onclick={downloadZip} disabled={zipping}>
@@ -104,7 +116,11 @@
 					<Icon name={file.blob.type === 'application/pdf' ? 'file' : 'image'} size={18} />
 					<span class="name">{file.name}</span>
 					<span class="size">{formatBytes(i18n.lang, file.blob.size)}</span>
-					<button class="icon-btn" onclick={() => downloadBlob(file.blob, file.name)} aria-label={`${i18n.t.common.download} ${file.name}`}>
+					<button
+						class="icon-btn"
+						onclick={() => downloadBlob(file.blob, file.name)}
+						aria-label={`${i18n.t.common.download} ${file.name}`}
+					>
 						<Icon name="download" size={18} />
 					</button>
 				</li>

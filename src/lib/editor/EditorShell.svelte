@@ -8,14 +8,25 @@
 	import type { EditorState } from './state.svelte.ts';
 	import { setEditor, blurActive } from './context.ts';
 	import { saveEdits } from './save.ts';
-	import { clientToBase, rotatedSize, moved, bounds, uprightRotation, LINE_HEIGHT } from './geometry.ts';
+	import {
+		clientToBase,
+		rotatedSize,
+		moved,
+		bounds,
+		uprightRotation,
+		LINE_HEIGHT
+	} from './geometry.ts';
 	import type { SignatureSpec, ToolName, EditorObject } from './types.ts';
 	import EditorPage from './EditorPage.svelte';
 	import PagesPanel from './PagesPanel.svelte';
 	import PropertiesBar from './PropertiesBar.svelte';
 	import SignatureDialog from './SignatureDialog.svelte';
 
-	let { state: editor, toolId, onclose }: { state: EditorState; toolId: ToolId; onclose: () => void } = $props();
+	let {
+		state: editor,
+		toolId,
+		onclose
+	}: { state: EditorState; toolId: ToolId; onclose: () => void } = $props();
 	// svelte-ignore state_referenced_locally
 	setEditor(editor);
 	const i18n = useI18n();
@@ -103,7 +114,10 @@
 			let bestDistance = Infinity;
 			wraps.forEach((wrap) => {
 				const rect = wrap.getBoundingClientRect();
-				const distance = rect.top <= middle && rect.bottom >= middle ? 0 : Math.min(Math.abs(rect.top - middle), Math.abs(rect.bottom - middle));
+				const distance =
+					rect.top <= middle && rect.bottom >= middle
+						? 0
+						: Math.min(Math.abs(rect.top - middle), Math.abs(rect.bottom - middle));
 				if (distance < bestDistance) {
 					bestDistance = distance;
 					best = Number(wrap.dataset.pageIndex);
@@ -143,7 +157,9 @@
 		return { w: w * scale, h: h * scale };
 	}
 
-	function placeObject(build: (pageKey: string, x: number, y: number, pageW: number, pageH: number) => EditorObject) {
+	function placeObject(
+		build: (pageKey: string, x: number, y: number, pageW: number, pageH: number) => EditorObject
+	) {
 		const { page, x, y } = placementPoint();
 		const model = editor.pages[page];
 		const obj = build(model.key, x, y, model.width, model.height);
@@ -179,7 +195,17 @@
 			bitmap.close();
 			placeObject((page, x, y, pw, ph) => {
 				const size = fitInto(natural.w, natural.h, pw * 0.6, ph * 0.6);
-				return { id: uid('obj'), type: 'image', page, x: x - size.w / 2, y: y - size.h / 2, w: size.w, h: size.h, asset: assetId, opacity: 1 };
+				return {
+					id: uid('obj'),
+					type: 'image',
+					page,
+					x: x - size.w / 2,
+					y: y - size.h / 2,
+					w: size.w,
+					h: size.h,
+					asset: assetId,
+					opacity: 1
+				};
 			});
 		} catch {
 			notify(t.imageError);
@@ -190,7 +216,7 @@
 		placeObject((page, x, y, pw) => {
 			const maxW = Math.min(200, pw * 0.4);
 			if (spec.kind === 'text' && spec.text && spec.family) {
-				const size = Math.max(12, Math.min(32, (maxW / Math.max(0.5, spec.aspect)) / LINE_HEIGHT));
+				const size = Math.max(12, Math.min(32, maxW / Math.max(0.5, spec.aspect) / LINE_HEIGHT));
 				const h = size * LINE_HEIGHT;
 				const w = h * spec.aspect;
 				return {
@@ -218,7 +244,17 @@
 				w = h * spec.aspect;
 			}
 			if (spec.kind === 'image' && spec.asset) {
-				return { id: uid('obj'), type: 'image', page, x: x - w / 2, y: y - h / 2, w, h, asset: spec.asset, opacity: 1 };
+				return {
+					id: uid('obj'),
+					type: 'image',
+					page,
+					x: x - w / 2,
+					y: y - h / 2,
+					w,
+					h,
+					asset: spec.asset,
+					opacity: 1
+				};
 			}
 			return {
 				id: uid('obj'),
@@ -239,7 +275,9 @@
 
 	// ---------- Saving ----------
 
-	const suffix = $derived(toolId === 'sign' ? 'signed' : toolId === 'fill-form' ? 'filled' : 'edited');
+	const suffix = $derived(
+		toolId === 'sign' ? 'signed' : toolId === 'fill-form' ? 'filled' : 'edited'
+	);
 
 	async function save() {
 		if (saving) return;
@@ -317,7 +355,9 @@
 
 	function onPaste(event: ClipboardEvent) {
 		if (isTyping(event.target)) return;
-		const file = Array.from(event.clipboardData?.files ?? []).find((f) => f.type.startsWith('image/'));
+		const file = Array.from(event.clipboardData?.files ?? []).find((f) =>
+			f.type.startsWith('image/')
+		);
 		if (file) {
 			event.preventDefault();
 			void insertImage(file);
@@ -339,7 +379,11 @@
 		editor.zoom = Math.min(fitZoom(), window.innerWidth < 900 ? 4 : 1.5);
 		if (toolId === 'sign') signatureOpen = true;
 		if (toolId === 'fill-form') {
-			notify(editor.fields.length ? plural(i18n.lang, new Set(editor.fields.map((f) => f.name)).size, t.formsFound) : t.noForms);
+			notify(
+				editor.fields.length
+					? plural(i18n.lang, new Set(editor.fields.map((f) => f.name)).size, t.formsFound)
+					: t.noForms
+			);
 		}
 		return () => {
 			root.style.overflow = previous;
@@ -379,7 +423,14 @@
 		<button class="icon-btn" onclick={requestClose} aria-label={t.close} title={t.close}>
 			<Icon name="x" size={22} />
 		</button>
-		<button class="icon-btn panel-toggle" class:on={showPanel} onclick={() => (showPanel = !showPanel)} aria-label={t.pagesPanel} title={t.pagesPanel} aria-pressed={showPanel}>
+		<button
+			class="icon-btn panel-toggle"
+			class:on={showPanel}
+			onclick={() => (showPanel = !showPanel)}
+			aria-label={t.pagesPanel}
+			title={t.pagesPanel}
+			aria-pressed={showPanel}
+		>
 			<Icon name="sidebar" size={20} />
 		</button>
 		<div class="file">
@@ -388,22 +439,49 @@
 			{#if editor.dirty}<span class="dot" title={t.unsaved}></span>{/if}
 		</div>
 		<div class="group">
-			<button class="icon-btn" onclick={() => editor.undo()} disabled={!editor.canUndo} aria-label={t.undo} title={`${t.undo} (Ctrl+Z)`}>
+			<button
+				class="icon-btn"
+				onclick={() => editor.undo()}
+				disabled={!editor.canUndo}
+				aria-label={t.undo}
+				title={`${t.undo} (Ctrl+Z)`}
+			>
 				<Icon name="undo" size={20} />
 			</button>
-			<button class="icon-btn" onclick={() => editor.redo()} disabled={!editor.canRedo} aria-label={t.redo} title={`${t.redo} (Ctrl+Y)`}>
+			<button
+				class="icon-btn"
+				onclick={() => editor.redo()}
+				disabled={!editor.canRedo}
+				aria-label={t.redo}
+				title={`${t.redo} (Ctrl+Y)`}
+			>
 				<Icon name="redo" size={20} />
 			</button>
 		</div>
 		<div class="group zoom">
-			<button class="icon-btn" onclick={() => setZoom(editor.zoom / 1.2)} aria-label={t.zoomOut} title={t.zoomOut}>
+			<button
+				class="icon-btn"
+				onclick={() => setZoom(editor.zoom / 1.2)}
+				aria-label={t.zoomOut}
+				title={t.zoomOut}
+			>
 				<Icon name="zoomOut" size={20} />
 			</button>
 			<span class="pct">{formatNumber(i18n.lang, Math.round(editor.zoom * 100))} %</span>
-			<button class="icon-btn" onclick={() => setZoom(editor.zoom * 1.2)} aria-label={t.zoomIn} title={t.zoomIn}>
+			<button
+				class="icon-btn"
+				onclick={() => setZoom(editor.zoom * 1.2)}
+				aria-label={t.zoomIn}
+				title={t.zoomIn}
+			>
 				<Icon name="zoomIn" size={20} />
 			</button>
-			<button class="icon-btn fit-btn" onclick={() => setZoom(fitZoom())} aria-label={t.fitWidth} title={t.fitWidth}>
+			<button
+				class="icon-btn fit-btn"
+				onclick={() => setZoom(fitZoom())}
+				aria-label={t.fitWidth}
+				title={t.fitWidth}
+			>
 				<Icon name="fit" size={20} />
 			</button>
 		</div>
@@ -415,21 +493,47 @@
 
 	<nav class="toolbar" aria-label={t.toolsLabel}>
 		{#each tools.slice(0, 3) as item (item.tool)}
-			<button class="tool" class:active={editor.tool === item.tool} aria-pressed={editor.tool === item.tool} onclick={() => chooseTool(item.tool)} title={t.hints[item.tool]}>
+			<button
+				class="tool"
+				class:active={editor.tool === item.tool}
+				aria-pressed={editor.tool === item.tool}
+				onclick={() => chooseTool(item.tool)}
+				title={t.hints[item.tool]}
+			>
 				<Icon name={item.icon} size={20} />
 				<span>{t.tools[item.tool]}</span>
 			</button>
 		{/each}
-		<button class="tool" onclick={() => { chooseTool('select'); signatureOpen = true; }} title={t.hints.signature}>
+		<button
+			class="tool"
+			onclick={() => {
+				chooseTool('select');
+				signatureOpen = true;
+			}}
+			title={t.hints.signature}
+		>
 			<Icon name="signature" size={20} />
 			<span>{t.tools.signature}</span>
 		</button>
-		<button class="tool" onclick={() => { chooseTool('select'); void insertImage(); }} title={t.hints.image}>
+		<button
+			class="tool"
+			onclick={() => {
+				chooseTool('select');
+				void insertImage();
+			}}
+			title={t.hints.image}
+		>
 			<Icon name="image" size={20} />
 			<span>{t.tools.image}</span>
 		</button>
 		{#each tools.slice(3) as item (item.tool)}
-			<button class="tool" class:active={editor.tool === item.tool} aria-pressed={editor.tool === item.tool} onclick={() => chooseTool(item.tool)} title={t.hints[item.tool]}>
+			<button
+				class="tool"
+				class:active={editor.tool === item.tool}
+				aria-pressed={editor.tool === item.tool}
+				onclick={() => chooseTool(item.tool)}
+				title={t.hints[item.tool]}
+			>
 				<Icon name={item.icon} size={20} />
 				<span>{t.tools[item.tool]}</span>
 			</button>
@@ -450,9 +554,18 @@
 				<Icon name="chevronDown" size={14} />
 			</button>
 			{#if shapesOpen}
-				<div class="menu" role="menu" style:left={`${menuPos.left}px`} style:top={`${menuPos.top}px`}>
+				<div
+					class="menu"
+					role="menu"
+					style:left={`${menuPos.left}px`}
+					style:top={`${menuPos.top}px`}
+				>
 					{#each SHAPES as item (item.tool)}
-						<button role="menuitem" class:active={editor.tool === item.tool} onclick={() => chooseTool(item.tool)}>
+						<button
+							role="menuitem"
+							class:active={editor.tool === item.tool}
+							onclick={() => chooseTool(item.tool)}
+						>
 							<Icon name={item.icon} size={18} />
 							{t.tools[item.tool]}
 						</button>

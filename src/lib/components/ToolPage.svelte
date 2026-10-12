@@ -103,6 +103,7 @@
 	</header>
 
 	<section class="wrap stage" aria-label={i18n.t.tools[toolId].name}>
+		<noscript><p class="notice error noscript">{labels.noscript}</p></noscript>
 		<ToolComponent {toolId} />
 	</section>
 
@@ -120,7 +121,9 @@
 			<ul>
 				{#each content.features as feature, index (index)}
 					<li>
-						<span class="feature-icon"><Icon name={featureIcons[index % featureIcons.length]} size={20} /></span>
+						<span class="feature-icon"
+							><Icon name={featureIcons[index % featureIcons.length]} size={20} /></span
+						>
 						<div>
 							<h3>{feature.title}</h3>
 							<p>{feature.text}</p>
@@ -214,6 +217,10 @@
 
 	.stage {
 		margin-bottom: 72px;
+	}
+
+	.noscript {
+		margin-bottom: 16px;
 	}
 
 	.info {

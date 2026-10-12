@@ -25,7 +25,9 @@
 	let allowAnnotating = $state(true);
 	let touched = $state(false);
 
-	const problem = $derived(!password ? i18n.t.protect.empty : password !== confirm ? i18n.t.protect.mismatch : null);
+	const problem = $derived(
+		!password ? i18n.t.protect.empty : password !== confirm ? i18n.t.protect.mismatch : null
+	);
 
 	async function submit(event: SubmitEvent) {
 		event.preventDefault();
@@ -66,7 +68,12 @@
 				{#snippet side()}
 					<label class="field">
 						<span>{i18n.t.protect.password}</span>
-						<input class="input" type={reveal ? 'text' : 'password'} bind:value={password} autocomplete="new-password" />
+						<input
+							class="input"
+							type={reveal ? 'text' : 'password'}
+							bind:value={password}
+							autocomplete="new-password"
+						/>
 					</label>
 					<label class="field">
 						<span>{i18n.t.protect.confirm}</span>
@@ -85,14 +92,35 @@
 					</label>
 					<fieldset class="perms">
 						<legend class="field-label">{i18n.t.protect.permissions}</legend>
-						<label class="check"><input type="checkbox" bind:checked={allowPrinting} /><span>{i18n.t.protect.printing}</span></label>
-						<label class="check"><input type="checkbox" bind:checked={allowCopying} /><span>{i18n.t.protect.copying}</span></label>
-						<label class="check"><input type="checkbox" bind:checked={allowModifying} /><span>{i18n.t.protect.modifying}</span></label>
-						<label class="check"><input type="checkbox" bind:checked={allowAnnotating} /><span>{i18n.t.protect.annotating}</span></label>
+						<label class="check"
+							><input type="checkbox" bind:checked={allowPrinting} /><span
+								>{i18n.t.protect.printing}</span
+							></label
+						>
+						<label class="check"
+							><input type="checkbox" bind:checked={allowCopying} /><span
+								>{i18n.t.protect.copying}</span
+							></label
+						>
+						<label class="check"
+							><input type="checkbox" bind:checked={allowModifying} /><span
+								>{i18n.t.protect.modifying}</span
+							></label
+						>
+						<label class="check"
+							><input type="checkbox" bind:checked={allowAnnotating} /><span
+								>{i18n.t.protect.annotating}</span
+							></label
+						>
 					</fieldset>
 					<label class="field">
 						<span>{i18n.t.protect.owner}</span>
-						<input class="input" type={reveal ? 'text' : 'password'} bind:value={owner} autocomplete="new-password" />
+						<input
+							class="input"
+							type={reveal ? 'text' : 'password'}
+							bind:value={owner}
+							autocomplete="new-password"
+						/>
 						<small class="muted">{i18n.t.protect.ownerHint}</small>
 					</label>
 				{/snippet}
@@ -101,7 +129,9 @@
 						<Icon name="lock" size={20} />
 						{i18n.t.protect.action}
 					</button>
-					<button type="button" class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+					<button type="button" class="btn btn-ghost" onclick={() => tool.reset()}
+						>{i18n.t.common.startOver}</button
+					>
 				{/snippet}
 			</Workspace>
 		</form>

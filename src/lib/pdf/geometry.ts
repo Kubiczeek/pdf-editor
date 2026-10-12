@@ -20,7 +20,7 @@ export function normalizeBox(box: readonly number[]): Box {
 
 export function normalizeRotation(rotation: number): 0 | 90 | 180 | 270 {
 	if (!Number.isFinite(rotation) || rotation % 90 !== 0) return 0;
-	return ((((rotation % 360) + 360) % 360) as 0 | 90 | 180 | 270);
+	return (((rotation % 360) + 360) % 360) as 0 | 90 | 180 | 270;
 }
 
 /** Visible box of a page, mirroring pdf.js: CropBox ∩ MediaBox, falling back to MediaBox. */

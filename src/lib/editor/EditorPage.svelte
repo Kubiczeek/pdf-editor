@@ -257,7 +257,8 @@
 		const target = event.currentTarget as HTMLElement;
 		target.setPointerCapture(event.pointerId);
 		if (tool === 'draw') draft = { kind: 'stroke', points: [[x, y]] };
-		else if (tool === 'line' || tool === 'arrow') draft = { kind: 'line', x0: x, y0: y, x1: x, y1: y };
+		else if (tool === 'line' || tool === 'arrow')
+			draft = { kind: 'line', x0: x, y0: y, x1: x, y1: y };
 		else draft = { kind: 'box', x0: x, y0: y, x1: x, y1: y };
 	}
 
@@ -320,9 +321,35 @@
 			const h = Math.abs(current.y1 - current.y0);
 			if (w < 3 || h < 3) return;
 			if (tool === 'highlight') {
-				obj = { id: uid('obj'), type: 'rect', page: page.key, x, y, w, h, stroke: null, fill: s.highlightColor, strokeWidth: 0, blend: 'multiply', opacity: 1 };
+				obj = {
+					id: uid('obj'),
+					type: 'rect',
+					page: page.key,
+					x,
+					y,
+					w,
+					h,
+					stroke: null,
+					fill: s.highlightColor,
+					strokeWidth: 0,
+					blend: 'multiply',
+					opacity: 1
+				};
 			} else if (tool === 'whiteout') {
-				obj = { id: uid('obj'), type: 'rect', page: page.key, x, y, w, h, stroke: null, fill: s.whiteoutColor, strokeWidth: 0, blend: 'normal', opacity: 1 };
+				obj = {
+					id: uid('obj'),
+					type: 'rect',
+					page: page.key,
+					x,
+					y,
+					w,
+					h,
+					stroke: null,
+					fill: s.whiteoutColor,
+					strokeWidth: 0,
+					blend: 'normal',
+					opacity: 1
+				};
 			} else {
 				obj = {
 					id: uid('obj'),
@@ -377,7 +404,12 @@
 			case 'whiteout':
 				return { stroke: '#aeb8c8', width: 0.5, fill: s.whiteoutColor, blend: false };
 			default:
-				return { stroke: s.strokeColor, width: s.strokeWidth, fill: s.fillColor ?? 'none', blend: false };
+				return {
+					stroke: s.strokeColor,
+					width: s.strokeWidth,
+					fill: s.fillColor ?? 'none',
+					blend: false
+				};
 		}
 	});
 </script>

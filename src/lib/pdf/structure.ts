@@ -28,7 +28,10 @@ export async function framePdfPage(page: PDFPage): Promise<PageFrame> {
 	const doc = page.doc;
 	const media = numberArray(lib, page.node.MediaBox(), doc) ?? [0, 0, 612, 792];
 	const crop = numberArray(lib, page.node.CropBox(), doc);
-	const box = visibleBox(media.length === 4 ? media : [0, 0, 612, 792], crop && crop.length === 4 ? crop : null);
+	const box = visibleBox(
+		media.length === 4 ? media : [0, 0, 612, 792],
+		crop && crop.length === 4 ? crop : null
+	);
 	return pageFrame(box, page.getRotation().angle);
 }
 
@@ -127,7 +130,10 @@ export interface FlattenOptions {
  * Draws annotation appearance streams into page content and removes the
  * annotations, following the appearance-mapping algorithm of ISO 32000 §12.5.5.
  */
-export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptions): Promise<number> {
+export async function flattenAnnotations(
+	doc: PDFDocument,
+	options: FlattenOptions
+): Promise<number> {
 	const lib = await loadPdfLib();
 	const { PDFName, PDFDict, PDFRef, PDFStream, PDFNumber } = lib;
 	const { context } = doc;
@@ -164,9 +170,7 @@ export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptio
 		if (!rectValues || rectValues.length !== 4 || !bboxValues || bboxValues.length !== 4) return;
 		const matrixValues = numberArray(lib, stream.dict.get(PDFName.of('Matrix')), doc);
 		const m: Matrix =
-			matrixValues && matrixValues.length === 6
-				? (matrixValues as Matrix)
-				: [1, 0, 0, 1, 0, 0];
+			matrixValues && matrixValues.length === 6 ? (matrixValues as Matrix) : [1, 0, 0, 1, 0, 0];
 		const rect = normalizeBox(rectValues);
 		const bbox = normalizeBox(bboxValues);
 		const corners = [
@@ -186,8 +190,10 @@ export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptio
 		if (tw <= 0 || th <= 0 || rw <= 0 || rh <= 0) return;
 		const sx = rw / tw;
 		const sy = rh / th;
-		if (!stream.dict.has(PDFName.of('Subtype'))) stream.dict.set(PDFName.of('Subtype'), PDFName.of('Form'));
-		if (!stream.dict.has(PDFName.of('Type'))) stream.dict.set(PDFName.of('Type'), PDFName.of('XObject'));
+		if (!stream.dict.has(PDFName.of('Subtype')))
+			stream.dict.set(PDFName.of('Subtype'), PDFName.of('Form'));
+		if (!stream.dict.has(PDFName.of('Type')))
+			stream.dict.set(PDFName.of('Type'), PDFName.of('XObject'));
 		const name = page.node.newXObject('FlatAnnot', apRef);
 		page.pushOperators(
 			lib.pushGraphicsState(),
@@ -215,7 +221,8 @@ export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptio
 			}
 			const subtype = dict.lookup(PDFName.of('Subtype'));
 			const isWidget = subtype === PDFName.of('Widget');
-			const isOther = !isWidget && subtype !== PDFName.of('Link') && subtype !== PDFName.of('Popup');
+			const isOther =
+				!isWidget && subtype !== PDFName.of('Link') && subtype !== PDFName.of('Popup');
 			if (!((isWidget && options.forms) || (isOther && options.annotations))) {
 				keep.push(entry);
 				continue;
@@ -248,10 +255,7 @@ export async function flattenAnnotations(doc: PDFDocument, options: FlattenOptio
 }
 
 /** Generates missing appearance streams for form fields using an embedded Unicode font. */
-export async function refreshFormAppearances(
-	doc: PDFDocument,
-	font: PDFFont
-): Promise<void> {
+export async function refreshFormAppearances(doc: PDFDocument, font: PDFFont): Promise<void> {
 	const lib = await loadPdfLib();
 	try {
 		const form = doc.getForm();

@@ -24,7 +24,12 @@
 	async function start(pdf: LoadedPdf) {
 		initializing = true;
 		try {
-			const state = new EditorState({ doc: pdf.doc, bytes: pdf.bytes, password: pdf.password, fileName: pdf.name });
+			const state = new EditorState({
+				doc: pdf.doc,
+				bytes: pdf.bytes,
+				password: pdf.password,
+				fileName: pdf.name
+			});
 			const pages: PageModel[] = await Promise.all(
 				Array.from({ length: pdf.pageCount }, async (_, index) => {
 					const page = await pdf.doc.getPage(index + 1);
@@ -95,41 +100,3 @@
 		{/if}
 	</div>
 {/if}
-
-<style>
-	.stack {
-		display: grid;
-		gap: 16px;
-	}
-
-	.opening {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 14px;
-		min-height: 300px;
-		border-radius: var(--radius-l);
-		background: var(--paper);
-		box-shadow: var(--shadow-sheet);
-		font-weight: 650;
-		padding: 24px;
-		text-align: center;
-		overflow-wrap: anywhere;
-	}
-
-	.spinner {
-		flex: none;
-		width: 22px;
-		height: 22px;
-		border: 3px solid var(--royal-tint);
-		border-top-color: var(--royal);
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-</style>

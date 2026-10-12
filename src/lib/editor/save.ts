@@ -30,7 +30,9 @@ import {
 type Lib = Awaited<ReturnType<typeof loadPdfLib>>;
 
 async function applyFormValues(lib: Lib, doc: PDFDocument, state: EditorState): Promise<void> {
-	const changed = Object.entries(state.formValues).filter(([name, value]) => state.initialValues[name] !== value);
+	const changed = Object.entries(state.formValues).filter(
+		([name, value]) => state.initialValues[name] !== value
+	);
 	if (!changed.length) return;
 	let form;
 	try {
@@ -43,7 +45,11 @@ async function applyFormValues(lib: Lib, doc: PDFDocument, state: EditorState): 
 			const field = form.getFieldMaybe(name);
 			if (!field) continue;
 			// Use a size that fits Noto's metrics (pdf-lib's automatic size clips descenders).
-			if (field instanceof lib.PDFTextField || field instanceof lib.PDFDropdown || field instanceof lib.PDFOptionList) {
+			if (
+				field instanceof lib.PDFTextField ||
+				field instanceof lib.PDFDropdown ||
+				field instanceof lib.PDFOptionList
+			) {
 				const requested = daFontSize(field.acroField.getDefaultAppearance());
 				const height = field.acroField.getWidgets()[0]?.getRectangle().height ?? 20;
 				const multiline = field instanceof lib.PDFTextField && field.isMultiline();
@@ -85,7 +91,13 @@ function color(lib: Lib, hex: string) {
 	return lib.rgb(...hexToRgb01(hex));
 }
 
-async function drawText(lib: Lib, doc: PDFDocument, page: PDFPage, frame: PageFrame, obj: TextObject) {
+async function drawText(
+	lib: Lib,
+	doc: PDFDocument,
+	page: PDFPage,
+	frame: PageFrame,
+	obj: TextObject
+) {
 	const lines = obj.text.replace(/\t/g, '    ').split('\n');
 	const font = await embedFont(doc, { family: obj.family, bold: obj.bold, italic: obj.italic });
 	const lineHeight = obj.size * LINE_HEIGHT;
@@ -94,11 +106,19 @@ async function drawText(lib: Lib, doc: PDFDocument, page: PDFPage, frame: PageFr
 	const height = lines.length * lineHeight;
 	const baseline = baselineOffset(obj.family, obj.size, lineHeight);
 	// Local y-up frame of the (possibly rotated) text block.
-	const matrix = multiply(frame.toPdf, multiply(contentMatrix(obj, height), [1, 0, 0, -1, 0, height]));
+	const matrix = multiply(
+		frame.toPdf,
+		multiply(contentMatrix(obj, height), [1, 0, 0, -1, 0, height])
+	);
 	await withMatrix(page, matrix, () => {
 		lines.forEach((line, i) => {
 			if (!line.trim()) return;
-			const x = obj.align === 'center' ? (width - widths[i]) / 2 : obj.align === 'right' ? width - widths[i] : 0;
+			const x =
+				obj.align === 'center'
+					? (width - widths[i]) / 2
+					: obj.align === 'right'
+						? width - widths[i]
+						: 0;
 			page.drawText(line, {
 				x,
 				y: height - (i * lineHeight + baseline),
@@ -143,8 +163,19 @@ async function drawPath(
 	});
 }
 
-async function addNote(lib: Lib, doc: PDFDocument, page: PDFPage, frame: PageFrame, obj: Extract<EditorObject, { type: 'note' }>) {
-	const [x0, y0, x1, y1] = displayRectToPdfBox(frame, { x: obj.x, y: obj.y, width: NOTE_SIZE, height: NOTE_SIZE });
+async function addNote(
+	lib: Lib,
+	doc: PDFDocument,
+	page: PDFPage,
+	frame: PageFrame,
+	obj: Extract<EditorObject, { type: 'note' }>
+) {
+	const [x0, y0, x1, y1] = displayRectToPdfBox(frame, {
+		x: obj.x,
+		y: obj.y,
+		width: NOTE_SIZE,
+		height: NOTE_SIZE
+	});
 	const annot = doc.context.obj({
 		Type: 'Annot',
 		Subtype: 'Text',
@@ -188,10 +219,16 @@ export async function saveEdits(state: EditorState): Promise<Uint8Array> {
 			switch (obj.type) {
 				case 'text':
 					if (obj.cover) {
-						await drawPath(lib, page, frame, [rectPath(obj.cover.x, obj.cover.y, obj.cover.w, obj.cover.h)], {
-							fill: obj.cover.color,
-							opacity: 1
-						});
+						await drawPath(
+							lib,
+							page,
+							frame,
+							[rectPath(obj.cover.x, obj.cover.y, obj.cover.w, obj.cover.h)],
+							{
+								fill: obj.cover.color,
+								opacity: 1
+							}
+						);
 					}
 					if (obj.text.trim()) await drawText(lib, doc, page, frame, obj);
 					break;
@@ -200,13 +237,25 @@ export async function saveEdits(state: EditorState): Promise<Uint8Array> {
 					if (!asset) break;
 					let image = images.get(obj.asset);
 					if (!image) {
-						image = asset.mime === 'image/png' ? await doc.embedPng(asset.bytes) : await doc.embedJpg(asset.bytes);
+						image =
+							asset.mime === 'image/png'
+								? await doc.embedPng(asset.bytes)
+								: await doc.embedJpg(asset.bytes);
 						images.set(obj.asset, image);
 					}
 					const embedded = image;
-					const matrix = multiply(frame.toPdf, multiply(contentMatrix(obj), [1, 0, 0, -1, 0, obj.h]));
+					const matrix = multiply(
+						frame.toPdf,
+						multiply(contentMatrix(obj), [1, 0, 0, -1, 0, obj.h])
+					);
 					await withMatrix(page, matrix, () => {
-						page.drawImage(embedded, { x: 0, y: 0, width: obj.w, height: obj.h, opacity: obj.opacity });
+						page.drawImage(embedded, {
+							x: 0,
+							y: 0,
+							width: obj.w,
+							height: obj.h,
+							opacity: obj.opacity
+						});
 					});
 					break;
 				}
@@ -219,7 +268,10 @@ export async function saveEdits(state: EditorState): Promise<Uint8Array> {
 					break;
 				case 'rect':
 				case 'ellipse': {
-					const d = obj.type === 'rect' ? rectPath(obj.x, obj.y, obj.w, obj.h) : ellipsePath(obj.x, obj.y, obj.w, obj.h);
+					const d =
+						obj.type === 'rect'
+							? rectPath(obj.x, obj.y, obj.w, obj.h)
+							: ellipsePath(obj.x, obj.y, obj.w, obj.h);
 					await drawPath(lib, page, frame, [d], {
 						stroke: obj.stroke,
 						strokeWidth: obj.strokeWidth,

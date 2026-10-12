@@ -14,7 +14,11 @@ export interface RenderedImage {
 
 function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob> {
 	return new Promise((resolve, reject) =>
-		canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('Encoding failed'))), type, quality)
+		canvas.toBlob(
+			(blob) => (blob ? resolve(blob) : reject(new Error('Encoding failed'))),
+			type,
+			quality
+		)
 	);
 }
 
@@ -38,7 +42,11 @@ export async function pdfToImages(
 				background: options.format === 'png' ? 'rgb(255,255,255)' : undefined
 			});
 			const type = options.format === 'png' ? 'image/png' : 'image/jpeg';
-			const blob = await canvasToBlob(canvas, type, options.format === 'jpeg' ? options.quality : undefined);
+			const blob = await canvasToBlob(
+				canvas,
+				type,
+				options.format === 'jpeg' ? options.quality : undefined
+			);
 			await onImage({ page: pages[i], blob, width: canvas.width, height: canvas.height });
 			canvas.width = canvas.height = 0;
 			page.cleanup();
@@ -76,11 +84,15 @@ export function jpegOrientation(bytes: Uint8Array): number {
 		if (marker === 0xe1 && length >= 8) {
 			const start = offset + 4;
 			const isExif =
-				bytes[start] === 0x45 && bytes[start + 1] === 0x78 && bytes[start + 2] === 0x69 && bytes[start + 3] === 0x66;
+				bytes[start] === 0x45 &&
+				bytes[start + 1] === 0x78 &&
+				bytes[start + 2] === 0x69 &&
+				bytes[start + 3] === 0x66;
 			if (isExif) {
 				const tiff = start + 6;
 				const little = bytes[tiff] === 0x49;
-				const read16 = (p: number) => (little ? bytes[p] | (bytes[p + 1] << 8) : (bytes[p] << 8) | bytes[p + 1]);
+				const read16 = (p: number) =>
+					little ? bytes[p] | (bytes[p + 1] << 8) : (bytes[p] << 8) | bytes[p + 1];
 				const read32 = (p: number) =>
 					little
 						? (bytes[p] | (bytes[p + 1] << 8) | (bytes[p + 2] << 16) | (bytes[p + 3] << 24)) >>> 0
@@ -119,7 +131,9 @@ interface PreparedImage {
 }
 
 async function decodeToCanvas(file: Blob): Promise<HTMLCanvasElement> {
-	const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' } as ImageBitmapOptions);
+	const bitmap = await createImageBitmap(file, {
+		imageOrientation: 'from-image'
+	} as ImageBitmapOptions);
 	const canvas = document.createElement('canvas');
 	canvas.width = bitmap.width;
 	canvas.height = bitmap.height;
@@ -163,7 +177,10 @@ export async function imagesToPdf(
 	const doc = await createDoc();
 	for (let i = 0; i < files.length; i++) {
 		const prepared = await prepareImage(files[i]);
-		const image = prepared.kind === 'jpg' ? await doc.embedJpg(prepared.bytes) : await doc.embedPng(prepared.bytes);
+		const image =
+			prepared.kind === 'jpg'
+				? await doc.embedJpg(prepared.bytes)
+				: await doc.embedPng(prepared.bytes);
 		// Image size in points, assuming 96 DPI screen pixels for "fit" pages.
 		const imgW = (image.width * 72) / 96;
 		const imgH = (image.height * 72) / 96;
@@ -175,7 +192,8 @@ export async function imagesToPdf(
 		} else {
 			[pageW, pageH] = SIZES[options.pageSize];
 			const landscape =
-				options.orientation === 'landscape' || (options.orientation === 'auto' && image.width > image.height);
+				options.orientation === 'landscape' ||
+				(options.orientation === 'auto' && image.width > image.height);
 			if (landscape) [pageW, pageH] = [pageH, pageW];
 		}
 		const page = doc.addPage([pageW, pageH]);

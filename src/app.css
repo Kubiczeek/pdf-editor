@@ -39,7 +39,8 @@
 	--shadow-pop: 0 4px 10px rgb(22 33 58 / 0.08), 0 24px 48px -16px rgb(22 33 58 / 0.35);
 
 	--font-display: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
-	--font-ui: 'Atkinson Hyperlegible Next Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+	--font-ui:
+		'Atkinson Hyperlegible Next Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
 		Roboto, sans-serif;
 
 	--content: 1160px;
@@ -434,6 +435,129 @@ input[type='color'] {
 
 .notice.success svg {
 	color: var(--ok);
+}
+
+/* ---------- File drop zone and loading states ----------
+   Global (not component-scoped) so prerendered tool pages are styled before
+   the tool's own code and CSS have loaded. */
+.fd-drop {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	min-height: 300px;
+	padding: 40px 24px;
+	border: 2px dashed var(--line-strong);
+	border-radius: var(--radius-l);
+	background: var(--paper);
+	text-align: center;
+	transition:
+		background-color 140ms ease,
+		border-color 140ms ease;
+}
+
+.fd-drop.fd-over {
+	border-color: #d9b81c;
+	background: var(--highlight-soft);
+}
+
+.fd-icon {
+	display: grid;
+	place-items: center;
+	width: 72px;
+	height: 72px;
+	border-radius: 18px;
+	background: var(--royal-tint);
+	color: var(--royal);
+	margin-bottom: 4px;
+}
+
+.fd-title {
+	font-family: var(--font-display);
+	font-size: 1.45rem;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+.fd-sub {
+	color: var(--ink-2);
+}
+
+.fd-local {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 6px;
+	font-size: 0.88rem;
+	color: var(--ink-3);
+}
+
+.fd-local svg {
+	color: var(--ok);
+}
+
+.fd-compact {
+	border-style: dashed;
+}
+
+.fd-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: grid;
+	place-items: center;
+	background: rgb(255 243 168 / 0.82);
+	pointer-events: none;
+}
+
+.fd-overlay div {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 22px 32px;
+	border: 2px dashed #b89a0f;
+	border-radius: var(--radius-l);
+	background: var(--paper);
+	font-family: var(--font-display);
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+
+.stack {
+	display: grid;
+	gap: 16px;
+}
+
+.opening {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	min-height: 300px;
+	padding: 24px;
+	border-radius: var(--radius-l);
+	background: var(--paper);
+	box-shadow: var(--shadow-sheet);
+	font-weight: 650;
+	text-align: center;
+	overflow-wrap: anywhere;
+}
+
+.spinner {
+	flex: none;
+	width: 22px;
+	height: 22px;
+	border: 3px solid var(--royal-tint);
+	border-top-color: var(--royal);
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

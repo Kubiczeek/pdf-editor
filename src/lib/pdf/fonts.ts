@@ -230,7 +230,8 @@ export function baselineOffset(family: FontFamilyId, fontSize: number, lineHeigh
 export function fieldFontSize(height: number, multiline: boolean, requested: number): number {
 	const inner = Math.max(4, height - 4);
 	const fit = Math.max(4, Math.floor(inner * 0.6 * 2) / 2);
-	const wanted = requested > 0 ? requested : multiline ? 10 : Math.min(12, Math.round(height * 0.55 * 2) / 2);
+	const wanted =
+		requested > 0 ? requested : multiline ? 10 : Math.min(12, Math.round(height * 0.55 * 2) / 2);
 	return Math.max(4, Math.min(wanted, fit));
 }
 

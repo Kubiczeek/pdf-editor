@@ -1,8 +1,10 @@
 import type { PageLoad } from './$types';
-import { TOOLS } from '#lib/tools/registry.ts';
 
-/** Loads only the interactive component of this tool (each tool is its own chunk). */
+/**
+ * Loads only the interactive component of this tool. The extra dynamic hop
+ * keeps every tool's CSS out of the eagerly linked stylesheets of other pages.
+ */
 export const load: PageLoad = async ({ data }) => {
-	const module = await TOOLS[data.toolId].load();
-	return { ...data, component: module.default };
+	const { loadToolComponent } = await import('#lib/tools/loaders.ts');
+	return { ...data, component: await loadToolComponent(data.toolId) };
 };

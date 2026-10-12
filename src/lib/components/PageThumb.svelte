@@ -48,9 +48,12 @@
 
 	$effect(() => {
 		if (!box) return;
-		const observer = new IntersectionObserver((entries) => {
-			visible = entries.some((entry) => entry.isIntersecting);
-		}, { rootMargin: '400px' });
+		const observer = new IntersectionObserver(
+			(entries) => {
+				visible = entries.some((entry) => entry.isIntersecting);
+			},
+			{ rootMargin: '400px' }
+		);
 		observer.observe(box);
 		return () => observer.disconnect();
 	});
@@ -84,7 +87,8 @@
 </script>
 
 <span class="thumb" class:ready bind:this={box} style:aspect-ratio={`1 / ${ratio}`}>
-	<canvas bind:this={canvas} aria-label={label || undefined} role={label ? 'img' : undefined}></canvas>
+	<canvas bind:this={canvas} aria-label={label || undefined} role={label ? 'img' : undefined}
+	></canvas>
 </span>
 
 <style>

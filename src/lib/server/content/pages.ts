@@ -3,12 +3,16 @@ import type { HomeContent, PrivacyContent } from '#lib/content/types.ts';
 
 export const home: Record<Lang, HomeContent> = {
 	en: {
-		title: 'Free PDF Editor Online – Edit, Sign, Merge & Compress PDFs',
+		title: 'Free Online PDF Editor – Edit, Sign & Merge PDFs',
 		description:
-			'Free online PDF tools that run in your browser: edit, sign, merge, split, compress, convert and protect PDFs. No sign-up, no limits, and files never leave your device.',
+			'Free PDF tools that run in your browser: edit, sign, merge, split, compress, convert and protect PDFs. No sign-up, and files never leave your device.',
 		h1: 'Edit, sign and fix PDFs right in your browser',
 		lead: 'Twenty-two free PDF tools that work on your own device. Nothing is uploaded, so your documents stay private.',
-		points: ['No sign-up or watermarks', 'Files never leave your device', 'Works on phone and desktop'],
+		points: [
+			'No sign-up or watermarks',
+			'Files never leave your device',
+			'Works on phone and desktop'
+		],
 		toolsTitle: 'Every PDF tool you need',
 		privacyTitle: 'Private by design, not by promise',
 		privacy: [
@@ -50,12 +54,16 @@ export const home: Record<Lang, HomeContent> = {
 		]
 	},
 	cs: {
-		title: 'PDF editor online zdarma – upravit, podepsat, spojit a zmenšit PDF',
+		title: 'PDF editor online zdarma – úpravy, podpis, spojení',
 		description:
-			'Bezplatné online nástroje pro PDF, které běží ve vašem prohlížeči: upravte, podepište, spojte, rozdělte, komprimujte, převeďte a zaheslujte PDF. Bez registrace a bez nahrávání.',
+			'Bezplatné nástroje pro PDF v prohlížeči: upravte, podepište, spojte, rozdělte, zmenšete a převeďte PDF. Bez registrace, soubory se nikam nenahrávají.',
 		h1: 'Upravujte, podepisujte a opravujte PDF přímo v prohlížeči',
 		lead: 'Dvaadvacet bezplatných nástrojů pro PDF, které pracují ve vašem zařízení. Nic se nenahrává, takže dokumenty zůstanou soukromé.',
-		points: ['Bez registrace a vodoznaků', 'Soubory neopustí vaše zařízení', 'Funguje na mobilu i počítači'],
+		points: [
+			'Bez registrace a vodoznaků',
+			'Soubory neopustí vaše zařízení',
+			'Funguje na mobilu i počítači'
+		],
 		toolsTitle: 'Všechny nástroje pro PDF, které potřebujete',
 		privacyTitle: 'Soukromí díky konstrukci, ne díky slibům',
 		privacy: [

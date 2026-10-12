@@ -25,7 +25,9 @@
 
 	const pageCount = $derived(tool.pdf?.pageCount ?? 0);
 	const pages = $derived(
-		scope === 'all' ? Array.from({ length: pageCount }, (_, i) => i) : [...selected].sort((a, b) => a - b)
+		scope === 'all'
+			? Array.from({ length: pageCount }, (_, i) => i)
+			: [...selected].sort((a, b) => a - b)
 	);
 
 	$effect(() => {
@@ -66,7 +68,11 @@
 	}
 </script>
 
-<ToolShell {tool} next={['jpg-to-pdf']} zipName={`${baseName(tool.pdf?.name ?? 'document')}-${format === 'png' ? 'png' : 'jpg'}.zip`}>
+<ToolShell
+	{tool}
+	next={['jpg-to-pdf']}
+	zipName={`${baseName(tool.pdf?.name ?? 'document')}-${format === 'png' ? 'png' : 'jpg'}.zip`}
+>
 	{#if tool.pdf}
 		<Workspace busy={tool.busy} progress={tool.progress}>
 			{#snippet main()}
@@ -83,8 +89,16 @@
 				<div class="field">
 					<span class="field-label">{i18n.t.common.pagesLabel}</span>
 					<div class="segmented">
-						<label><input type="radio" value="all" bind:group={scope} /><span>{i18n.t.common.allPages}</span></label>
-						<label><input type="radio" value="some" bind:group={scope} /><span>{i18n.t.common.somePages}</span></label>
+						<label
+							><input type="radio" value="all" bind:group={scope} /><span
+								>{i18n.t.common.allPages}</span
+							></label
+						>
+						<label
+							><input type="radio" value="some" bind:group={scope} /><span
+								>{i18n.t.common.somePages}</span
+							></label
+						>
 					</div>
 					{#if scope === 'some'}
 						<input
@@ -116,7 +130,11 @@
 				{/if}
 			{/snippet}
 			{#snippet action()}
-				<button class="btn btn-primary btn-lg" onclick={submit} disabled={tool.busy || !pages.length}>
+				<button
+					class="btn btn-primary btn-lg"
+					onclick={submit}
+					disabled={tool.busy || !pages.length}
+				>
 					<Icon name="image" size={20} />
 					{fmt(i18n.t.toImage.action, { format: formatLabel })}
 				</button>

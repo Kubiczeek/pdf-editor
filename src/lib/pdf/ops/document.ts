@@ -24,7 +24,10 @@ function randomPassword(): string {
 export async function protectPdf(input: PdfInput, options: ProtectOptions): Promise<Uint8Array> {
 	const doc = await loadDoc(input.bytes, input.password);
 	const restricted =
-		!options.allowPrinting || !options.allowCopying || !options.allowModifying || !options.allowAnnotating;
+		!options.allowPrinting ||
+		!options.allowCopying ||
+		!options.allowModifying ||
+		!options.allowAnnotating;
 	// Without a distinct owner password anyone with the open password could lift the restrictions.
 	const ownerPassword =
 		options.ownerPassword || (restricted ? randomPassword() : options.userPassword);

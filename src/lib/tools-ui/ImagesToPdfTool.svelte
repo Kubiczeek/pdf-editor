@@ -60,7 +60,9 @@
 	/** Applies manual rotation by redrawing the image; untouched images are passed through. */
 	async function rotated(entry: Entry): Promise<File> {
 		if (!entry.rotation) return entry.file;
-		const bitmap = await createImageBitmap(entry.file, { imageOrientation: 'from-image' } as ImageBitmapOptions);
+		const bitmap = await createImageBitmap(entry.file, {
+			imageOrientation: 'from-image'
+		} as ImageBitmapOptions);
 		const swap = entry.rotation % 180 !== 0;
 		const canvas = document.createElement('canvas');
 		canvas.width = swap ? bitmap.height : bitmap.width;
@@ -87,7 +89,11 @@
 		try {
 			const files: File[] = [];
 			for (const entry of entries) files.push(await rotated(entry));
-			const bytes = await imagesToPdf(files, { pageSize, orientation, margin }, (f) => (progress = f));
+			const bytes = await imagesToPdf(
+				files,
+				{ pageSize, orientation, margin },
+				(f) => (progress = f)
+			);
 			const name = entries.length === 1 ? `${baseName(entries[0].file.name)}.pdf` : 'images.pdf';
 			result = [{ name, blob: toBlob(bytes) }];
 		} catch (error) {
@@ -123,31 +129,58 @@
 {:else}
 	<div class="stack">
 		{#each errors as error, index (index)}
-			<Notice kind="error" ondismiss={() => (errors = errors.filter((_, i) => i !== index))}>{error}</Notice>
+			<Notice kind="error" ondismiss={() => (errors = errors.filter((_, i) => i !== index))}
+				>{error}</Notice
+			>
 		{/each}
 		{#if !entries.length}
 			<FileDrop accepts="image" multiple onfiles={add} />
 		{:else}
 			<Workspace {busy} {progress}>
 				{#snippet toolbar()}
-					<FileDrop accepts="image" multiple compact onfiles={add} buttonLabel={i18n.t.fromImages.addImages} />
+					<FileDrop
+						accepts="image"
+						multiple
+						compact
+						onfiles={add}
+						buttonLabel={i18n.t.fromImages.addImages}
+					/>
 					<span class="count">{plural(i18n.lang, entries.length, i18n.t.common.pages)}</span>
 				{/snippet}
 				{#snippet main()}
 					<p class="hint">{i18n.t.fromImages.hint}</p>
-					<ul class="grid" use:sortable={{ onReorder: (from, to) => (entries = moveItem(entries, from, to)) }}>
+					<ul
+						class="grid"
+						use:sortable={{ onReorder: (from, to) => (entries = moveItem(entries, from, to)) }}
+					>
 						{#each entries as entry, index (entry.id)}
 							<li data-sortable>
-								<div class="frame" class:landscape={pageSize !== 'fit' && orientation === 'landscape'}>
-									<img src={entry.url} alt={entry.file.name} style:transform={`rotate(${entry.rotation}deg)`} draggable="false" />
+								<div
+									class="frame"
+									class:landscape={pageSize !== 'fit' && orientation === 'landscape'}
+								>
+									<img
+										src={entry.url}
+										alt={entry.file.name}
+										style:transform={`rotate(${entry.rotation}deg)`}
+										draggable="false"
+									/>
 								</div>
 								<div class="row">
 									<span class="num">{index + 1}</span>
 									<span class="name" title={entry.file.name}>{entry.file.name}</span>
-									<button class="icon-btn" onclick={() => rotate(entry.id)} aria-label={i18n.t.common.rotateRight}>
+									<button
+										class="icon-btn"
+										onclick={() => rotate(entry.id)}
+										aria-label={i18n.t.common.rotateRight}
+									>
 										<Icon name="rotateRight" size={16} />
 									</button>
-									<button class="icon-btn" onclick={() => remove(entry.id)} aria-label={i18n.t.common.remove}>
+									<button
+										class="icon-btn"
+										onclick={() => remove(entry.id)}
+										aria-label={i18n.t.common.remove}
+									>
 										<Icon name="trash" size={16} />
 									</button>
 								</div>
@@ -168,18 +201,42 @@
 						<div class="field">
 							<span class="field-label">{i18n.t.fromImages.orientation}</span>
 							<div class="segmented">
-								<label><input type="radio" value="auto" bind:group={orientation} /><span>{i18n.t.fromImages.auto}</span></label>
-								<label><input type="radio" value="portrait" bind:group={orientation} /><span>{i18n.t.fromImages.portrait}</span></label>
-								<label><input type="radio" value="landscape" bind:group={orientation} /><span>{i18n.t.fromImages.landscape}</span></label>
+								<label
+									><input type="radio" value="auto" bind:group={orientation} /><span
+										>{i18n.t.fromImages.auto}</span
+									></label
+								>
+								<label
+									><input type="radio" value="portrait" bind:group={orientation} /><span
+										>{i18n.t.fromImages.portrait}</span
+									></label
+								>
+								<label
+									><input type="radio" value="landscape" bind:group={orientation} /><span
+										>{i18n.t.fromImages.landscape}</span
+									></label
+								>
 							</div>
 						</div>
 					{/if}
 					<div class="field">
 						<span class="field-label">{i18n.t.fromImages.margin}</span>
 						<div class="segmented">
-							<label><input type="radio" value={0} bind:group={margin} /><span>{i18n.t.fromImages.marginNone}</span></label>
-							<label><input type="radio" value={20} bind:group={margin} /><span>{i18n.t.fromImages.marginSmall}</span></label>
-							<label><input type="radio" value={50} bind:group={margin} /><span>{i18n.t.fromImages.marginLarge}</span></label>
+							<label
+								><input type="radio" value={0} bind:group={margin} /><span
+									>{i18n.t.fromImages.marginNone}</span
+								></label
+							>
+							<label
+								><input type="radio" value={20} bind:group={margin} /><span
+									>{i18n.t.fromImages.marginSmall}</span
+								></label
+							>
+							<label
+								><input type="radio" value={50} bind:group={margin} /><span
+									>{i18n.t.fromImages.marginLarge}</span
+								></label
+							>
 						</div>
 					</div>
 				{/snippet}
@@ -196,11 +253,6 @@
 {/if}
 
 <style>
-	.stack {
-		display: grid;
-		gap: 16px;
-	}
-
 	.count {
 		margin-left: auto;
 		color: var(--ink-2);

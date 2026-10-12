@@ -2,7 +2,13 @@ import type { UiDict } from '#lib/i18n/index.ts';
 import { closePdf } from '#lib/pdf/pdfjs.ts';
 import { takeHandoff } from '#lib/stores/handoff.ts';
 import type { ResultFile } from '#lib/components/ResultPanel.svelte';
-import { openPdfFile, describeError, filterFiles, UserFacingError, type LoadedPdf } from './shared.ts';
+import {
+	openPdfFile,
+	describeError,
+	filterFiles,
+	UserFacingError,
+	type LoadedPdf
+} from './shared.ts';
 import { fmt } from '#lib/i18n/index.ts';
 
 /** Shared state machine for tools that work on one PDF: pick → configure → process → download. */
@@ -51,7 +57,9 @@ export class SinglePdfTool {
 	}
 
 	/** Runs the tool's processing step with progress and error handling. */
-	async run(task: (pdf: LoadedPdf, onProgress: (fraction: number) => void) => Promise<ResultFile[] | void>) {
+	async run(
+		task: (pdf: LoadedPdf, onProgress: (fraction: number) => void) => Promise<ResultFile[] | void>
+	) {
 		if (!this.pdf || this.busy) return;
 		this.busy = true;
 		this.progress = null;

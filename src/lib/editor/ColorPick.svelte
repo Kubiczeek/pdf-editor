@@ -40,7 +40,17 @@
 		<div class="pop" role="dialog" aria-label={label}>
 			<div class="swatches">
 				{#if allowNone}
-					<button type="button" class="sw none" class:active={!value} title={noneLabel} aria-label={noneLabel} onclick={() => { onchange(null); open = false; }}></button>
+					<button
+						type="button"
+						class="sw none"
+						class:active={!value}
+						title={noneLabel}
+						aria-label={noneLabel}
+						onclick={() => {
+							onchange(null);
+							open = false;
+						}}
+					></button>
 				{/if}
 				{#each swatches as color (color)}
 					<button
@@ -56,7 +66,12 @@
 					></button>
 				{/each}
 			</div>
-			<input type="color" value={value ?? '#000000'} oninput={(e) => onchange(e.currentTarget.value)} aria-label={label} />
+			<input
+				type="color"
+				value={value ?? '#000000'}
+				oninput={(e) => onchange(e.currentTarget.value)}
+				aria-label={label}
+			/>
 		</div>
 	{/if}
 </div>
@@ -87,7 +102,8 @@
 
 	.chip.none,
 	.sw.none {
-		background: linear-gradient(135deg, transparent 45%, var(--stamp) 45% 55%, transparent 55%), #fff !important;
+		background:
+			linear-gradient(135deg, transparent 45%, var(--stamp) 45% 55%, transparent 55%), #fff !important;
 	}
 
 	.pop {

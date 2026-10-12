@@ -42,13 +42,27 @@
 	}
 
 	type Handle = 'move' | 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
-	let drag: { handle: Handle; x: number; y: number; w: number; h: number; start: CropMargins } | null = null;
+	let drag: {
+		handle: Handle;
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		start: CropMargins;
+	} | null = null;
 
 	function begin(event: PointerEvent, handle: Handle, geoWidth: number, geoHeight: number) {
 		event.preventDefault();
 		event.stopPropagation();
 		(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
-		drag = { handle, x: event.clientX, y: event.clientY, w: geoWidth, h: geoHeight, start: { ...current } };
+		drag = {
+			handle,
+			x: event.clientX,
+			y: event.clientY,
+			w: geoWidth,
+			h: geoHeight,
+			start: { ...current }
+		};
 	}
 
 	function onMove(event: PointerEvent) {
@@ -156,7 +170,11 @@
 								role="presentation"
 							>
 								{#each handles as handle (handle)}
-									<span class="handle {handle}" onpointerdown={(e) => begin(e, handle, w, h)} role="presentation"></span>
+									<span
+										class="handle {handle}"
+										onpointerdown={(e) => begin(e, handle, w, h)}
+										role="presentation"
+									></span>
 								{/each}
 							</div>
 						</div>
@@ -164,11 +182,21 @@
 				</PagePreview>
 				{#if pageCount > 1}
 					<div class="pager">
-						<button class="icon-btn" onclick={() => (page = Math.max(1, page - 1))} disabled={page <= 1} aria-label={i18n.t.crop.prev}>
+						<button
+							class="icon-btn"
+							onclick={() => (page = Math.max(1, page - 1))}
+							disabled={page <= 1}
+							aria-label={i18n.t.crop.prev}
+						>
 							<Icon name="chevronLeft" size={18} />
 						</button>
 						<span>{fmt(i18n.t.common.pageOf, { n: page, total: pageCount })}</span>
-						<button class="icon-btn" onclick={() => (page = Math.min(pageCount, page + 1))} disabled={page >= pageCount} aria-label={i18n.t.crop.next}>
+						<button
+							class="icon-btn"
+							onclick={() => (page = Math.min(pageCount, page + 1))}
+							disabled={page >= pageCount}
+							aria-label={i18n.t.crop.next}
+						>
 							<Icon name="chevronRight" size={18} />
 						</button>
 					</div>
@@ -176,8 +204,15 @@
 			{/snippet}
 			{#snippet side()}
 				<div class="segmented full">
-					<label><input type="radio" value="all" bind:group={scope} /><span>{i18n.t.crop.applyAll}</span></label>
-					<label><input type="radio" value="this" bind:group={scope} /><span>{i18n.t.crop.applyThis}</span></label>
+					<label
+						><input type="radio" value="all" bind:group={scope} /><span>{i18n.t.crop.applyAll}</span
+						></label
+					>
+					<label
+						><input type="radio" value="this" bind:group={scope} /><span
+							>{i18n.t.crop.applyThis}</span
+						></label
+					>
 				</div>
 				<button class="btn" onclick={detect} disabled={detecting}>
 					<Icon name="sparkle" size={18} />
@@ -198,7 +233,8 @@
 					<Icon name="crop" size={20} />
 					{i18n.t.crop.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

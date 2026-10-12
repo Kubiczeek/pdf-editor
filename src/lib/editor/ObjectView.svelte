@@ -56,17 +56,37 @@
 	const vector = $derived.by(() => {
 		switch (obj.type) {
 			case 'ink':
-				return { paths: inkPaths(obj), stroke: obj.color, width: inkWidth(obj), fill: null as string | null };
+				return {
+					paths: inkPaths(obj),
+					stroke: obj.color,
+					width: inkWidth(obj),
+					fill: null as string | null
+				};
 			case 'rect':
-				return { paths: [rectPath(obj.x, obj.y, obj.w, obj.h)], stroke: obj.stroke, width: obj.strokeWidth, fill: obj.fill };
+				return {
+					paths: [rectPath(obj.x, obj.y, obj.w, obj.h)],
+					stroke: obj.stroke,
+					width: obj.strokeWidth,
+					fill: obj.fill
+				};
 			case 'ellipse':
-				return { paths: [ellipsePath(obj.x, obj.y, obj.w, obj.h)], stroke: obj.stroke, width: obj.strokeWidth, fill: obj.fill };
+				return {
+					paths: [ellipsePath(obj.x, obj.y, obj.w, obj.h)],
+					stroke: obj.stroke,
+					width: obj.strokeWidth,
+					fill: obj.fill
+				};
 			case 'line':
 			case 'arrow':
 				return { paths: linePaths(obj), stroke: obj.stroke, width: obj.strokeWidth, fill: null };
 			case 'check':
 			case 'cross':
-				return { paths: [symbolPath(obj)], stroke: obj.color, width: symbolStroke(obj), fill: null };
+				return {
+					paths: [symbolPath(obj)],
+					stroke: obj.color,
+					width: symbolStroke(obj),
+					fill: null
+				};
 			default:
 				return null;
 		}
@@ -82,7 +102,11 @@
 			const w = el.offsetWidth / zoom;
 			const h = el.offsetHeight / zoom;
 			const current = editor.objects.find((o) => o.id === id);
-			if (current && current.type === 'text' && (Math.abs(current.w - w) > 0.01 || Math.abs(current.h - h) > 0.01)) {
+			if (
+				current &&
+				current.type === 'text' &&
+				(Math.abs(current.w - w) > 0.01 || Math.abs(current.h - h) > 0.01)
+			) {
 				// Keep the start of the text (its unrotated top-left) fixed on the page while it grows.
 				const dw = w - current.w;
 				const dh = h - current.h;
@@ -205,13 +229,24 @@
 				} else if (start.type === 'text') {
 					const width = Math.max(1, bounds(start).w);
 					const scale = Math.max(0.1, (width + dx) / width);
-					editor.patch(obj.id, { size: Math.min(300, Math.max(4, Math.round(start.size * scale * 10) / 10)) });
+					editor.patch(obj.id, {
+						size: Math.min(300, Math.max(4, Math.round(start.size * scale * 10) / 10))
+					});
 				} else if (start.type !== 'note') {
-					const rotatable = start.type === 'image' || start.type === 'ink' || start.type === 'check' || start.type === 'cross';
+					const rotatable =
+						start.type === 'image' ||
+						start.type === 'ink' ||
+						start.type === 'check' ||
+						start.type === 'cross';
 					const next = resizeBox(bounds(start), handle, dx, dy, rotatable !== e.shiftKey);
 					// The box is in page space; rotated content stores its unrotated size.
 					const swap = rotatable && objectRotation(start) % 180 !== 0;
-					editor.patch(obj.id, { x: next.x, y: next.y, w: swap ? next.h : next.w, h: swap ? next.w : next.h });
+					editor.patch(obj.id, {
+						x: next.x,
+						y: next.y,
+						w: swap ? next.h : next.w,
+						h: swap ? next.w : next.h
+					});
 				}
 			}
 		});
@@ -322,7 +357,13 @@
 		role="presentation"
 	>
 		<svg viewBox="0 0 24 24" aria-hidden="true">
-			<path d="M3 3h18v14H11l-5 4v-4H3z" fill="var(--note)" stroke="#5c4a00" stroke-width="1.2" stroke-linejoin="round" />
+			<path
+				d="M3 3h18v14H11l-5 4v-4H3z"
+				fill="var(--note)"
+				stroke="#5c4a00"
+				stroke-width="1.2"
+				stroke-linejoin="round"
+			/>
 			<path d="M7 8h10M7 12h7" stroke="#5c4a00" stroke-width="1.4" stroke-linecap="round" />
 		</svg>
 		{#if selected}
@@ -334,8 +375,7 @@
 					value={obj.text}
 					onfocus={() => beginEdit()}
 					oninput={(e) => editor.patch(obj.id, { text: e.currentTarget.value })}
-					onblur={() => editor.editingId === obj.id && (editor.editingId = null)}
-				></textarea>
+					onblur={() => editor.editingId === obj.id && (editor.editingId = null)}></textarea>
 			</div>
 		{/if}
 	</div>
@@ -343,7 +383,9 @@
 	<svg
 		class="vec"
 		class:interactive
-		class:multiply={obj.type === 'rect' || obj.type === 'ellipse' ? obj.blend === 'multiply' : false}
+		class:multiply={obj.type === 'rect' || obj.type === 'ellipse'
+			? obj.blend === 'multiply'
+			: false}
 		viewBox={`0 0 ${page.width} ${page.height}`}
 		width={page.width * z}
 		height={page.height * z}
@@ -374,8 +416,20 @@
 
 {#if selected && obj.type !== 'text' && obj.type !== 'note'}
 	{#if obj.type === 'line' || obj.type === 'arrow'}
-		<span class="handle point" style:left={`${obj.x1 * z}px`} style:top={`${obj.y1 * z}px`} onpointerdown={(e) => onHandle(e, 'p1')} role="presentation"></span>
-		<span class="handle point" style:left={`${obj.x2 * z}px`} style:top={`${obj.y2 * z}px`} onpointerdown={(e) => onHandle(e, 'p2')} role="presentation"></span>
+		<span
+			class="handle point"
+			style:left={`${obj.x1 * z}px`}
+			style:top={`${obj.y1 * z}px`}
+			onpointerdown={(e) => onHandle(e, 'p1')}
+			role="presentation"
+		></span>
+		<span
+			class="handle point"
+			style:left={`${obj.x2 * z}px`}
+			style:top={`${obj.y2 * z}px`}
+			onpointerdown={(e) => onHandle(e, 'p2')}
+			role="presentation"
+		></span>
 	{:else}
 		<div
 			class="frame"
@@ -385,7 +439,8 @@
 			style:height={`${box.h * z}px`}
 		>
 			{#each CORNERS as handle (handle)}
-				<span class="handle {handle}" onpointerdown={(e) => onHandle(e, handle)} role="presentation"></span>
+				<span class="handle {handle}" onpointerdown={(e) => onHandle(e, handle)} role="presentation"
+				></span>
 			{/each}
 		</div>
 	{/if}

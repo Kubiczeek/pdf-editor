@@ -91,7 +91,8 @@ export async function rotatePages(
 	const pages = doc.getPages();
 	for (const [index, delta] of rotations) {
 		const page = pages[index];
-		if (page && delta % 360 !== 0) await setAbsoluteRotation(page, page.getRotation().angle + delta);
+		if (page && delta % 360 !== 0)
+			await setAbsoluteRotation(page, page.getRotation().angle + delta);
 	}
 	return saveDoc(doc);
 }
@@ -127,7 +128,10 @@ export async function extractGroups(
 }
 
 /** Concatenates whole documents. */
-export async function mergeDocuments(inputs: PdfInput[], onProgress?: Progress): Promise<Uint8Array> {
+export async function mergeDocuments(
+	inputs: PdfInput[],
+	onProgress?: Progress
+): Promise<Uint8Array> {
 	const out = await createDoc();
 	for (let i = 0; i < inputs.length; i++) {
 		const source = await loadDoc(inputs[i].bytes, inputs[i].password);

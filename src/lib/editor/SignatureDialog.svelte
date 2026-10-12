@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { useI18n } from '#lib/i18n/index.ts';
 	import { uid, pickFiles, readBytes } from '#lib/pdf/files.ts';
-	import { cssFontFamily, loadCssFont, ensureFontFaces, type FontFamilyId } from '#lib/pdf/fonts.ts';
+	import {
+		cssFontFamily,
+		loadCssFont,
+		ensureFontFaces,
+		type FontFamilyId
+	} from '#lib/pdf/fonts.ts';
 	import { smoothPath, pointsBounds, normaliseStroke } from './geometry.ts';
 	import { useEditor } from './context.ts';
 	import type { SignatureSpec } from './types.ts';
 	import Icon from '#lib/components/Icon.svelte';
 
-	let { open = $bindable(false), onuse }: { open?: boolean; onuse: (spec: SignatureSpec) => void } = $props();
+	let { open = $bindable(false), onuse }: { open?: boolean; onuse: (spec: SignatureSpec) => void } =
+		$props();
 
 	const editor = useEditor();
 	const i18n = useI18n();
@@ -33,7 +39,9 @@
 	let handFont = $state<FontFamilyId>('dancing');
 
 	// Upload
-	let upload = $state<{ url: string; bytes: Uint8Array; width: number; height: number } | null>(null);
+	let upload = $state<{ url: string; bytes: Uint8Array; width: number; height: number } | null>(
+		null
+	);
 	let removeBg = $state(true);
 	let uploadSource = $state<ImageBitmap | null>(null);
 
@@ -96,7 +104,9 @@
 		if (!file) return;
 		try {
 			uploadSource?.close();
-			uploadSource = await createImageBitmap(file, { imageOrientation: 'from-image' } as ImageBitmapOptions);
+			uploadSource = await createImageBitmap(file, {
+				imageOrientation: 'from-image'
+			} as ImageBitmapOptions);
 			await processUpload();
 		} catch {
 			uploadSource = null;
@@ -159,10 +169,17 @@
 		canvas.width = canvas.height = 0;
 		if (!blob) return;
 		if (upload) URL.revokeObjectURL(upload.url);
-		upload = { url: URL.createObjectURL(blob), bytes: await readBytes(blob), width: crop.w, height: crop.h };
+		upload = {
+			url: URL.createObjectURL(blob),
+			bytes: await readBytes(blob),
+			width: crop.w,
+			height: crop.h
+		};
 	}
 
-	function renderPreview(draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void): string {
+	function renderPreview(
+		draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void
+	): string {
 		const canvas = document.createElement('canvas');
 		canvas.width = 240;
 		canvas.height = 80;
@@ -200,7 +217,8 @@
 					ctx.lineWidth = PEN;
 					ctx.lineCap = 'round';
 					ctx.lineJoin = 'round';
-					for (const stroke of strokes) ctx.stroke(new Path2D(smoothPath(stroke.map(([x, y]) => [x - box.x, y - box.y]))));
+					for (const stroke of strokes)
+						ctx.stroke(new Path2D(smoothPath(stroke.map(([x, y]) => [x - box.x, y - box.y]))));
 				})
 			};
 		} else if (tab === 'type' && name.trim()) {
@@ -258,7 +276,12 @@
 	}
 </script>
 
-<dialog bind:this={dialog} class="dialog" oncancel={() => (open = false)} aria-labelledby="sig-title">
+<dialog
+	bind:this={dialog}
+	class="dialog"
+	oncancel={() => (open = false)}
+	aria-labelledby="sig-title"
+>
 	<div class="body">
 		<div class="head">
 			<h2 id="sig-title">{i18n.t.signature.title}</h2>
@@ -269,7 +292,12 @@
 
 		<div class="tabs" role="tablist">
 			{#each TABS as item (item.id)}
-				<button role="tab" aria-selected={tab === item.id} class:active={tab === item.id} onclick={() => (tab = item.id)}>
+				<button
+					role="tab"
+					aria-selected={tab === item.id}
+					class:active={tab === item.id}
+					onclick={() => (tab = item.id)}
+				>
 					<Icon name={item.icon} size={18} />
 					{i18n.t.signature[item.label]}
 				</button>
@@ -304,19 +332,34 @@
 					onpointercancel={padUp}
 				></canvas>
 				<span class="baseline" aria-hidden="true"></span>
-				<button class="btn btn-ghost clear" onclick={() => (strokes = [])} disabled={!strokes.length}>
+				<button
+					class="btn btn-ghost clear"
+					onclick={() => (strokes = [])}
+					disabled={!strokes.length}
+				>
 					{i18n.t.signature.clear}
 				</button>
 			</div>
 		{:else if tab === 'type'}
 			<label class="field">
 				<span>{i18n.t.signature.typeLabel}</span>
-				<input class="input" bind:value={name} placeholder={i18n.t.signature.typePlaceholder} autocomplete="name" />
+				<input
+					class="input"
+					bind:value={name}
+					placeholder={i18n.t.signature.typePlaceholder}
+					autocomplete="name"
+				/>
 			</label>
 			<div class="fonts">
 				{#each HAND_FONTS as family (family)}
-					<button class="font-choice" class:active={handFont === family} onclick={() => (handFont = family)}>
-						<span style:font-family={cssFontFamily(family)} style:color={ink}>{name.trim() || 'Jan Novák'}</span>
+					<button
+						class="font-choice"
+						class:active={handFont === family}
+						onclick={() => (handFont = family)}
+					>
+						<span style:font-family={cssFontFamily(family)} style:color={ink}
+							>{name.trim() || 'Jan Novák'}</span
+						>
 					</button>
 				{/each}
 			</div>

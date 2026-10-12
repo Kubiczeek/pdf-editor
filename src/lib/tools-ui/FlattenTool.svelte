@@ -22,7 +22,9 @@
 		const options = { forms, annotations };
 		await tool.run(async (pdf) => {
 			const { bytes, count } = await flattenPdf(toInput(pdf), options);
-			tool.resultNote = count ? plural(i18n.lang, count, i18n.t.flatten.result) : i18n.t.flatten.nothing;
+			tool.resultNote = count
+				? plural(i18n.lang, count, i18n.t.flatten.result)
+				: i18n.t.flatten.nothing;
 			return [{ name: outputName(pdf.name, 'flattened'), blob: toBlob(bytes) }];
 		});
 	}
@@ -43,19 +45,30 @@
 			{#snippet side()}
 				<label class="option">
 					<input type="checkbox" bind:checked={forms} />
-					<span><strong>{i18n.t.flatten.forms}</strong><small>{i18n.t.flatten.formsHint}</small></span>
+					<span
+						><strong>{i18n.t.flatten.forms}</strong><small>{i18n.t.flatten.formsHint}</small></span
+					>
 				</label>
 				<label class="option">
 					<input type="checkbox" bind:checked={annotations} />
-					<span><strong>{i18n.t.flatten.annotations}</strong><small>{i18n.t.flatten.annotationsHint}</small></span>
+					<span
+						><strong>{i18n.t.flatten.annotations}</strong><small
+							>{i18n.t.flatten.annotationsHint}</small
+						></span
+					>
 				</label>
 			{/snippet}
 			{#snippet action()}
-				<button class="btn btn-primary btn-lg" onclick={submit} disabled={tool.busy || (!forms && !annotations)}>
+				<button
+					class="btn btn-primary btn-lg"
+					onclick={submit}
+					disabled={tool.busy || (!forms && !annotations)}
+				>
 					<Icon name="layers" size={20} />
 					{i18n.t.flatten.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

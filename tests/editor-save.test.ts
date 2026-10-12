@@ -133,7 +133,8 @@ describe('editor save', () => {
 	it('reorders, rotates, deletes and inserts pages', async () => {
 		const src = await PDFDocument.create();
 		const font = await src.embedFont(StandardFonts.Helvetica);
-		for (const label of ['A', 'B', 'C']) src.addPage([400, 600]).drawText(label, { x: 50, y: 500, size: 30, font });
+		for (const label of ['A', 'B', 'C'])
+			src.addPage([400, 600]).drawText(label, { x: 50, y: 500, size: 30, font });
 		const bytes = await src.save();
 		const { state, doc } = await editorFor(bytes);
 		state.movePage(2, 0); // C A B

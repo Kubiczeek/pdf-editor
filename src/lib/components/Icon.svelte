@@ -10,7 +10,13 @@
 		label,
 		class: className = '',
 		strokeWidth = 1.8
-	}: { name: IconName; size?: number; label?: string; class?: string; strokeWidth?: number } = $props();
+	}: {
+		name: IconName;
+		size?: number;
+		label?: string;
+		class?: string;
+		strokeWidth?: number;
+	} = $props();
 </script>
 
 <svg

@@ -22,7 +22,9 @@
 	} = $props();
 
 	const i18n = useI18n();
-	const percent = $derived(progress === null ? null : Math.round(Math.min(1, Math.max(0, progress)) * 100));
+	const percent = $derived(
+		progress === null ? null : Math.round(Math.min(1, Math.max(0, progress)) * 100)
+	);
 </script>
 
 <div class="workspace" class:has-side={Boolean(side || action)} aria-busy={busy}>
@@ -43,7 +45,9 @@
 			<div class="busy-card">
 				<p>
 					{busyLabel ??
-						(percent === null ? i18n.t.common.working : fmt(i18n.t.common.workingPct, { p: percent }))}
+						(percent === null
+							? i18n.t.common.working
+							: fmt(i18n.t.common.workingPct, { p: percent }))}
 				</p>
 				<div class="bar" class:indeterminate={percent === null}>
 					<span style:width={percent === null ? undefined : `${percent}%`}></span>

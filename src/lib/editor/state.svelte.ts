@@ -62,7 +62,12 @@ export class EditorState {
 	#past = $state<Snapshot[]>([]);
 	#future = $state<Snapshot[]>([]);
 
-	constructor(init: { doc: PDFDocumentProxy; bytes: Uint8Array; password?: string; fileName: string }) {
+	constructor(init: {
+		doc: PDFDocumentProxy;
+		bytes: Uint8Array;
+		password?: string;
+		fileName: string;
+	}) {
 		this.doc = init.doc;
 		this.bytes = init.bytes;
 		this.password = init.password;
@@ -124,7 +129,8 @@ export class EditorState {
 		this.pages = snapshot.pages;
 		this.objects = snapshot.objects;
 		this.formValues = snapshot.formValues;
-		if (this.selectedId && !this.objects.some((o) => o.id === this.selectedId)) this.selectedId = null;
+		if (this.selectedId && !this.objects.some((o) => o.id === this.selectedId))
+			this.selectedId = null;
 		this.editingId = null;
 		this.dirty = true;
 	}
@@ -194,7 +200,8 @@ export class EditorState {
 		this.checkpoint();
 		this.pages = this.pages.filter((p) => p.key !== key);
 		this.objects = this.objects.filter((o) => o.page !== key);
-		if (this.selectedId && !this.objects.some((o) => o.id === this.selectedId)) this.selectedId = null;
+		if (this.selectedId && !this.objects.some((o) => o.id === this.selectedId))
+			this.selectedId = null;
 		this.currentPage = Math.min(this.currentPage, this.pages.length - 1);
 		return true;
 	}
@@ -231,7 +238,9 @@ export class EditorState {
 
 	/** Whether the document structure (order, rotation, added/removed pages) changed. */
 	get pagesChanged(): boolean {
-		return this.pages.some((p, i) => p.kind !== 'doc' || p.index !== i || p.rotation !== 0) ||
-			this.pages.length !== this.doc.numPages;
+		return (
+			this.pages.some((p, i) => p.kind !== 'doc' || p.index !== i || p.rotation !== 0) ||
+			this.pages.length !== this.doc.numPages
+		);
 	}
 }

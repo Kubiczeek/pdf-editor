@@ -28,22 +28,39 @@
 		const chosen = level;
 		await tool.run(async (pdf, onProgress) => {
 			const result = await compressPdf(toInput(pdf), chosen, onProgress);
-			stats = { before: result.originalSize, after: result.bytes.length, unchanged: result.unchanged };
+			stats = {
+				before: result.originalSize,
+				after: result.bytes.length,
+				unchanged: result.unchanged
+			};
 			tool.resultNote = result.unchanged ? i18n.t.compress.unchanged : undefined;
 			return [{ name: outputName(pdf.name, 'compressed'), blob: toBlob(result.bytes) }];
 		});
 	}
 
-	const saved = $derived(stats && !stats.unchanged ? Math.max(0, (1 - stats.after / stats.before) * 100) : 0);
+	const saved = $derived(
+		stats && !stats.unchanged ? Math.max(0, (1 - stats.after / stats.before) * 100) : 0
+	);
 </script>
 
 <ToolShell {tool} next={['merge', 'protect', 'split']}>
 	{#snippet resultExtra()}
 		{#if stats && !stats.unchanged}
 			<div class="saving">
-				<span class="sizes">{fmt(i18n.t.common.sizeChange, { before: formatBytes(i18n.lang, stats.before), after: formatBytes(i18n.lang, stats.after) })}</span>
-				<span class="pct">{fmt(i18n.t.compress.saved, { p: formatNumber(i18n.lang, saved, saved < 10 ? 1 : 0) })}</span>
-				<span class="meter" aria-hidden="true"><span style:width={`${Math.max(2, 100 - saved)}%`}></span></span>
+				<span class="sizes"
+					>{fmt(i18n.t.common.sizeChange, {
+						before: formatBytes(i18n.lang, stats.before),
+						after: formatBytes(i18n.lang, stats.after)
+					})}</span
+				>
+				<span class="pct"
+					>{fmt(i18n.t.compress.saved, {
+						p: formatNumber(i18n.lang, saved, saved < 10 ? 1 : 0)
+					})}</span
+				>
+				<span class="meter" aria-hidden="true"
+					><span style:width={`${Math.max(2, 100 - saved)}%`}></span></span
+				>
 			</div>
 		{/if}
 	{/snippet}
@@ -55,7 +72,10 @@
 					<div>
 						<p class="name">{tool.pdf!.name}</p>
 						<p class="muted">
-							{plural(i18n.lang, tool.pdf!.pageCount, i18n.t.common.pages)} · {formatBytes(i18n.lang, tool.pdf!.size)}
+							{plural(i18n.lang, tool.pdf!.pageCount, i18n.t.common.pages)} · {formatBytes(
+								i18n.lang,
+								tool.pdf!.size
+							)}
 						</p>
 					</div>
 				</div>
@@ -81,7 +101,8 @@
 					<Icon name="compress" size={20} />
 					{i18n.t.compress.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

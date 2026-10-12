@@ -7,7 +7,14 @@
 	import { assemblePages, type PageSpec } from '#lib/pdf/ops/pages.ts';
 	import { takeHandoff } from '#lib/stores/handoff.ts';
 	import { sortable, moveItem } from '#lib/actions/sortable.ts';
-	import { openPdfFile, describeError, filterFiles, toInput, ACCEPT, type LoadedPdf } from './shared.ts';
+	import {
+		openPdfFile,
+		describeError,
+		filterFiles,
+		toInput,
+		ACCEPT,
+		type LoadedPdf
+	} from './shared.ts';
 	import type { ResultFile } from '#lib/components/ResultPanel.svelte';
 	import FileDrop from '#lib/components/FileDrop.svelte';
 	import Workspace from '#lib/components/Workspace.svelte';
@@ -90,7 +97,9 @@
 	function rotate(delta: number, key?: string) {
 		const keys = targets(key);
 		items = items.map((item) =>
-			keys.has(item.key) ? { ...item, rotation: (((item.rotation + delta) % 360) + 360) % 360 } : item
+			keys.has(item.key)
+				? { ...item, rotation: (((item.rotation + delta) % 360) + 360) % 360 }
+				: item
 		);
 	}
 
@@ -132,7 +141,15 @@
 			width = viewport.width;
 			height = viewport.height;
 		}
-		const blank: Item = { key: uid('blank'), kind: 'blank', source: -1, index: -1, rotation: 0, width, height };
+		const blank: Item = {
+			key: uid('blank'),
+			kind: 'blank',
+			source: -1,
+			index: -1,
+			rotation: 0,
+			width,
+			height
+		};
 		const copy = items.slice();
 		copy.splice(anchorIndex + 1, 0, blank);
 		items = copy;
@@ -205,7 +222,8 @@
 						<Icon name="rotateLeft" size={18} /><span class="lbl">{i18n.t.common.rotateLeft}</span>
 					</button>
 					<button class="btn" onclick={() => rotate(90)} title={i18n.t.common.rotateRight}>
-						<Icon name="rotateRight" size={18} /><span class="lbl">{i18n.t.common.rotateRight}</span>
+						<Icon name="rotateRight" size={18} /><span class="lbl">{i18n.t.common.rotateRight}</span
+						>
 					</button>
 					<button class="btn" onclick={duplicate} disabled={!selected.size}>
 						<Icon name="copy" size={18} /><span class="lbl">{i18n.t.common.duplicate}</span>
@@ -229,14 +247,22 @@
 						<p class="hint">{i18n.t.organize.hint}</p>
 						{#if selected.size}
 							<span class="count">{fmt(i18n.t.common.selected, { n: selected.size })}</span>
-							<button class="btn btn-ghost" onclick={() => (selected = new Set())}>{i18n.t.common.selectNone}</button>
+							<button class="btn btn-ghost" onclick={() => (selected = new Set())}
+								>{i18n.t.common.selectNone}</button
+							>
 						{:else}
-							<button class="btn btn-ghost" onclick={() => (selected = new Set(items.map((i) => i.key)))}>
+							<button
+								class="btn btn-ghost"
+								onclick={() => (selected = new Set(items.map((i) => i.key)))}
+							>
 								{i18n.t.common.selectAll}
 							</button>
 						{/if}
 					</div>
-					<ul class="grid" use:sortable={{ onReorder: (from, to) => (items = moveItem(items, from, to)) }}>
+					<ul
+						class="grid"
+						use:sortable={{ onReorder: (from, to) => (items = moveItem(items, from, to)) }}
+					>
 						{#each items as item, position (item.key)}
 							<li data-sortable class:selected={selected.has(item.key)}>
 								<button
@@ -246,7 +272,12 @@
 									onclick={() => toggle(item.key)}
 								>
 									{#if item.kind === 'page'}
-										<PageThumb doc={sources[item.source].doc} pageNumber={item.index + 1} rotation={item.rotation} width={150} />
+										<PageThumb
+											doc={sources[item.source].doc}
+											pageNumber={item.index + 1}
+											rotation={item.rotation}
+											width={150}
+										/>
 									{:else}
 										<span
 											class="blank"
@@ -261,14 +292,24 @@
 								<span class="num">
 									{position + 1}
 									{#if sources.length > 1 && item.kind === 'page'}
-										<span class="src" title={sources[item.source].name}>{String.fromCharCode(65 + (item.source % 26))}</span>
+										<span class="src" title={sources[item.source].name}
+											>{String.fromCharCode(65 + (item.source % 26))}</span
+										>
 									{/if}
 								</span>
 								<span class="quick">
-									<button class="icon-btn" onclick={() => rotate(90, item.key)} aria-label={i18n.t.common.rotateRight}>
+									<button
+										class="icon-btn"
+										onclick={() => rotate(90, item.key)}
+										aria-label={i18n.t.common.rotateRight}
+									>
 										<Icon name="rotateRight" size={16} />
 									</button>
-									<button class="icon-btn" onclick={() => remove(item.key)} aria-label={i18n.t.common.delete}>
+									<button
+										class="icon-btn"
+										onclick={() => remove(item.key)}
+										aria-label={i18n.t.common.delete}
+									>
 										<Icon name="trash" size={16} />
 									</button>
 								</span>
@@ -283,7 +324,9 @@
 					<div class="sources">
 						{#each sources as source, index (source.id)}
 							<p>
-								{#if sources.length > 1}<span class="src">{String.fromCharCode(65 + (index % 26))}</span>{/if}
+								{#if sources.length > 1}<span class="src"
+										>{String.fromCharCode(65 + (index % 26))}</span
+									>{/if}
 								<span class="sname">{source.name}</span>
 							</p>
 						{/each}
@@ -303,20 +346,6 @@
 {/if}
 
 <style>
-	.stack {
-		display: grid;
-		gap: 16px;
-	}
-
-	.opening {
-		display: grid;
-		place-items: center;
-		min-height: 300px;
-		background: var(--paper);
-		border-radius: var(--radius-l);
-		font-weight: 650;
-	}
-
 	.sep {
 		width: 1px;
 		align-self: stretch;

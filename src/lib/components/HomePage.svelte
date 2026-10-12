@@ -108,7 +108,9 @@
 		<div class="privacy-grid">
 			{#each content.privacy as item, index (index)}
 				<div>
-					<span class="p-icon"><Icon name={privacyIcons[index % privacyIcons.length]} size={22} /></span>
+					<span class="p-icon"
+						><Icon name={privacyIcons[index % privacyIcons.length]} size={22} /></span
+					>
 					<h3>{item.title}</h3>
 					<p>{item.text}</p>
 				</div>

@@ -2,7 +2,13 @@
 	import type { ToolProps } from '#lib/tools/registry.ts';
 	import { useI18n, fmt } from '#lib/i18n/index.ts';
 	import { outputName, toBlob } from '#lib/pdf/files.ts';
-	import { cssFontFamily, loadCssFont, ensureFontFaces, fontFamily, type FontFamilyId } from '#lib/pdf/fonts.ts';
+	import {
+		cssFontFamily,
+		loadCssFont,
+		ensureFontFaces,
+		fontFamily,
+		type FontFamilyId
+	} from '#lib/pdf/fonts.ts';
 	import { addPageNumbers, type NumberPosition } from '#lib/pdf/ops/stamp.ts';
 	import { SinglePdfTool } from './single.svelte.ts';
 	import { toInput } from './shared.ts';
@@ -49,7 +55,9 @@
 	function labelFor(page: number): string | null {
 		if (page < first || page > last) return null;
 		const total = last - first + start;
-		return template.replaceAll('{n}', String(start + page - first)).replaceAll('{total}', String(total));
+		return template
+			.replaceAll('{n}', String(start + page - first))
+			.replaceAll('{total}', String(total));
 	}
 
 	function measure(text: string): number {
@@ -61,7 +69,14 @@
 	}
 
 	const formatKeys = ['formatPlain', 'formatPage', 'formatOf', 'formatPageOf'] as const;
-	const positions: NumberPosition[] = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
+	const positions: NumberPosition[] = [
+		'top-left',
+		'top-center',
+		'top-right',
+		'bottom-left',
+		'bottom-center',
+		'bottom-right'
+	];
 
 	async function submit() {
 		const options = {
@@ -94,8 +109,16 @@
 							{@const width = measure(label)}
 							{@const metrics = fontFamily(font)}
 							{@const [vertical, horizontal] = position.split('-')}
-							{@const x = horizontal === 'left' ? margin : horizontal === 'right' ? geo.width - margin - width : (geo.width - width) / 2}
-							{@const baseline = vertical === 'top' ? margin + metrics.ascent * size : geo.height - margin - metrics.descent * size}
+							{@const x =
+								horizontal === 'left'
+									? margin
+									: horizontal === 'right'
+										? geo.width - margin - width
+										: (geo.width - width) / 2}
+							{@const baseline =
+								vertical === 'top'
+									? margin + metrics.ascent * size
+									: geo.height - margin - metrics.descent * size}
 							<span
 								class="num"
 								style:left={`${x * geo.scale}px`}
@@ -104,18 +127,28 @@
 								style:font-weight={bold ? 700 : 400}
 								style:font-size={`${size * geo.scale}px`}
 								style:line-height={metrics.ascent + metrics.descent}
-								style:color
-							>{label}</span>
+								style:color>{label}</span
+							>
 						{/if}
 					{/snippet}
 				</PagePreview>
 				{#if pageCount > 1}
 					<div class="pager">
-						<button class="icon-btn" onclick={() => (previewPage = Math.max(1, previewPage - 1))} disabled={previewPage <= 1} aria-label={i18n.t.crop.prev}>
+						<button
+							class="icon-btn"
+							onclick={() => (previewPage = Math.max(1, previewPage - 1))}
+							disabled={previewPage <= 1}
+							aria-label={i18n.t.crop.prev}
+						>
 							<Icon name="chevronLeft" size={18} />
 						</button>
 						<span>{fmt(i18n.t.common.pageOf, { n: previewPage, total: pageCount })}</span>
-						<button class="icon-btn" onclick={() => (previewPage = Math.min(pageCount, previewPage + 1))} disabled={previewPage >= pageCount} aria-label={i18n.t.crop.next}>
+						<button
+							class="icon-btn"
+							onclick={() => (previewPage = Math.min(pageCount, previewPage + 1))}
+							disabled={previewPage >= pageCount}
+							aria-label={i18n.t.crop.next}
+						>
 							<Icon name="chevronRight" size={18} />
 						</button>
 					</div>
@@ -126,8 +159,18 @@
 					<span class="field-label">{i18n.t.common.position}</span>
 					<div class="positions">
 						{#each positions as value (value)}
-							<label class="pos" class:bottom={value.startsWith('bottom')} title={i18n.t.pageNumbers.positions[value]}>
-								<input type="radio" name="pn-pos" {value} bind:group={position} aria-label={i18n.t.pageNumbers.positions[value]} />
+							<label
+								class="pos"
+								class:bottom={value.startsWith('bottom')}
+								title={i18n.t.pageNumbers.positions[value]}
+							>
+								<input
+									type="radio"
+									name="pn-pos"
+									{value}
+									bind:group={position}
+									aria-label={i18n.t.pageNumbers.positions[value]}
+								/>
 								<span></span>
 							</label>
 						{/each}
@@ -137,7 +180,11 @@
 					<span>{i18n.t.pageNumbers.format}</span>
 					<select class="select" bind:value={formatKey}>
 						{#each formatKeys as key (key)}
-							<option value={key}>{i18n.t.pageNumbers[key].replace('{n}', '1').replace('{total}', String(pageCount))}</option>
+							<option value={key}
+								>{i18n.t.pageNumbers[key]
+									.replace('{n}', '1')
+									.replace('{total}', String(pageCount))}</option
+							>
 						{/each}
 					</select>
 				</label>
@@ -169,7 +216,9 @@
 						<input type="color" bind:value={color} />
 					</label>
 				</div>
-				<label class="check"><input type="checkbox" bind:checked={bold} /><span>{i18n.t.common.bold}</span></label>
+				<label class="check"
+					><input type="checkbox" bind:checked={bold} /><span>{i18n.t.common.bold}</span></label
+				>
 				<label class="field">
 					<span>{i18n.t.common.size} · {size} pt</span>
 					<input type="range" min="6" max="36" step="1" bind:value={size} />
@@ -184,7 +233,8 @@
 					<Icon name="hash" size={20} />
 					{i18n.t.pageNumbers.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

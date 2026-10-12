@@ -42,7 +42,16 @@
 	});
 
 	/** Colour band per output file, shown under each page. */
-	const PALETTE = ['#1f35c4', '#c2185b', '#2e7d32', '#e0a100', '#6a5acd', '#00838f', '#d84315', '#455a64'];
+	const PALETTE = [
+		'#1f35c4',
+		'#c2185b',
+		'#2e7d32',
+		'#e0a100',
+		'#6a5acd',
+		'#00838f',
+		'#d84315',
+		'#455a64'
+	];
 	const groupOfPage = $derived.by(() => {
 		const map = new Map<number, number>();
 		groups?.forEach((group, g) => group.forEach((page) => !map.has(page) && map.set(page, g)));
@@ -57,21 +66,30 @@
 			return outputs.map((bytes, g) => {
 				const pages = current[g];
 				const label =
-					pages.length === 1 ? `page-${pages[0] + 1}` : `pages-${formatPageSet(pages).replace(/,\s*/g, '_')}`;
+					pages.length === 1
+						? `page-${pages[0] + 1}`
+						: `pages-${formatPageSet(pages).replace(/,\s*/g, '_')}`;
 				return { name: outputName(pdf.name, label), blob: toBlob(bytes) };
 			});
 		});
 	}
 </script>
 
-<ToolShell {tool} next={['merge', 'compress']} zipName={`${baseName(tool.pdf?.name ?? 'document')}-split.zip`}>
+<ToolShell
+	{tool}
+	next={['merge', 'compress']}
+	zipName={`${baseName(tool.pdf?.name ?? 'document')}-split.zip`}
+>
 	{#if tool.pdf}
 		<Workspace busy={tool.busy} progress={tool.progress}>
 			{#snippet main()}
 				<PagePicker doc={tool.pdf!.doc} {pageCount} selectable={false} size={130}>
 					{#snippet badge(index)}
 						{#if groupOfPage.has(index)}
-							<span class="band" style:background={PALETTE[groupOfPage.get(index)! % PALETTE.length]}>
+							<span
+								class="band"
+								style:background={PALETTE[groupOfPage.get(index)! % PALETTE.length]}
+							>
 								{groupOfPage.get(index)! + 1}
 							</span>
 						{/if}
@@ -93,7 +111,12 @@
 				{#if mode === 'ranges'}
 					<label class="field">
 						<span>{i18n.t.common.pageRanges}</span>
-						<input class="input" bind:value={rangesText} aria-invalid={!groups} placeholder="1-3, 4-6" />
+						<input
+							class="input"
+							bind:value={rangesText}
+							aria-invalid={!groups}
+							placeholder="1-3, 4-6"
+						/>
 						<small class="muted">{i18n.t.split.rangesHint}</small>
 						{#if !groups && rangesText.trim()}
 							<small class="error">{fmt(i18n.t.common.rangesInvalid, { n: pageCount })}</small>
@@ -113,11 +136,16 @@
 				{/if}
 			{/snippet}
 			{#snippet action()}
-				<button class="btn btn-primary btn-lg" onclick={submit} disabled={tool.busy || !groups?.length}>
+				<button
+					class="btn btn-primary btn-lg"
+					onclick={submit}
+					disabled={tool.busy || !groups?.length}
+				>
 					<Icon name="scissors" size={20} />
 					{i18n.t.split.action}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

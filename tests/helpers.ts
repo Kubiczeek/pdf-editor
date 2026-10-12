@@ -61,7 +61,10 @@ export async function pageTextItems(bytes: Uint8Array, pageNumber: number, passw
 	const viewport = page.getViewport({ scale: 1 });
 	const content = await page.getTextContent();
 	const items = content.items
-		.filter((item): item is Extract<typeof item, { str: string }> => 'str' in item && item.str.trim() !== '')
+		.filter(
+			(item): item is Extract<typeof item, { str: string }> =>
+				'str' in item && item.str.trim() !== ''
+		)
 		.map((item) => {
 			const [a, b, c, d, e, f] = pdfjs.Util.transform(viewport.transform, item.transform);
 			// Direction of the baseline on screen: upright text has b ≈ 0 and a > 0.

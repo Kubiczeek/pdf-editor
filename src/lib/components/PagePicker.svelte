@@ -73,7 +73,9 @@
 						</span>
 					{/if}
 					{#if isSelected && mark === 'select'}
-						<span class="tick" aria-hidden="true"><Icon name="check" size={16} strokeWidth={3} /></span>
+						<span class="tick" aria-hidden="true"
+							><Icon name="check" size={16} strokeWidth={3} /></span
+						>
 					{/if}
 				</span>
 				<span class="label">

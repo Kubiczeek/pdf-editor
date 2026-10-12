@@ -189,7 +189,8 @@ const en = {
 		extremeDesc: 'Every page becomes an image. Text can no longer be selected or searched.',
 		action: 'Compress PDF',
 		saved: '{p} % smaller',
-		unchanged: 'This PDF is already well optimised — it couldn’t be made smaller at this level. Try a stronger level.'
+		unchanged:
+			'This PDF is already well optimised — it couldn’t be made smaller at this level. Try a stronger level.'
 	},
 	organize: {
 		hint: 'Drag pages to reorder them. Click to select, then rotate or delete.',
@@ -368,7 +369,8 @@ const en = {
 		copy: 'Copy text',
 		copied: 'Copied',
 		downloadTxt: 'Download .txt',
-		empty: 'No text was found. The PDF probably contains scanned images, and text inside images can’t be extracted without OCR.',
+		empty:
+			'No text was found. The PDF probably contains scanned images, and text inside images can’t be extracted without OCR.',
 		chars: '{n} characters'
 	},
 	home: {
@@ -445,7 +447,10 @@ const en = {
 		},
 		textPlaceholder: 'Type here',
 		notePlaceholder: 'Write a comment…',
-		formsFound: { one: 'This PDF has {n} fillable field.', other: 'This PDF has {n} fillable fields.' } as Plural,
+		formsFound: {
+			one: 'This PDF has {n} fillable field.',
+			other: 'This PDF has {n} fillable fields.'
+		} as Plural,
 		noForms: 'This PDF has no fillable fields. Use “Add text” to type anywhere on the page.',
 		addBlankPage: 'Add blank page',
 		deletePage: 'Delete page',
@@ -567,7 +572,8 @@ const cs: UiDict = {
 	},
 	errors: {
 		notPdf: '„{name}“ není soubor PDF.',
-		notImage: '„{name}“ není obrázek, který tento prohlížeč umí přečíst. Použijte JPG, PNG, WebP nebo GIF.',
+		notImage:
+			'„{name}“ není obrázek, který tento prohlížeč umí přečíst. Použijte JPG, PNG, WebP nebo GIF.',
 		invalidPdf: '„{name}“ nejde otevřít. Soubor může být poškozený nebo to není skutečné PDF.',
 		passwordCancelled: '„{name}“ je chráněný heslem. Pro použití zadejte heslo.',
 		generic: 'Něco se nepovedlo: {message}',
@@ -612,7 +618,8 @@ const cs: UiDict = {
 		extremeDesc: 'Každá stránka se převede na obrázek. Text pak nepůjde označit ani vyhledat.',
 		action: 'Komprimovat PDF',
 		saved: 'o {p} % menší',
-		unchanged: 'Toto PDF už je dobře optimalizované — na této úrovni ho nejde zmenšit. Zkuste silnější úroveň.'
+		unchanged:
+			'Toto PDF už je dobře optimalizované — na této úrovni ho nejde zmenšit. Zkuste silnější úroveň.'
 	},
 	organize: {
 		hint: 'Stránky přeskládáte přetažením. Kliknutím je vyberete a pak otočíte nebo smažete.',
@@ -640,7 +647,11 @@ const cs: UiDict = {
 		hint: 'Klikněte na stránky, které chcete zachovat, nebo napište jejich čísla.',
 		input: 'Stránky k vyjmutí',
 		separate: 'Uložit každou stránku jako samostatné PDF',
-		action: { one: 'Vyjmout {n} stránku', few: 'Vyjmout {n} stránky', other: 'Vyjmout {n} stránek' },
+		action: {
+			one: 'Vyjmout {n} stránku',
+			few: 'Vyjmout {n} stránky',
+			other: 'Vyjmout {n} stránek'
+		},
 		none: 'Vyberte alespoň jednu stránku.'
 	},
 	crop: {
@@ -730,7 +741,11 @@ const cs: UiDict = {
 	},
 	redact: {
 		hint: 'Tažením označte vše, co chcete skrýt. Stránky se začerněním se převedou na obrázky, takže obsah pod nimi trvale zmizí.',
-		boxes: { one: 'Označena {n} oblast', few: 'Označeny {n} oblasti', other: 'Označeno {n} oblastí' },
+		boxes: {
+			one: 'Označena {n} oblast',
+			few: 'Označeny {n} oblasti',
+			other: 'Označeno {n} oblastí'
+		},
 		clearPage: 'Vymazat tuto stránku',
 		undo: 'Vrátit poslední',
 		color: 'Barva výplně',
@@ -767,7 +782,11 @@ const cs: UiDict = {
 		annotations: 'Komentáře a značky',
 		annotationsHint: 'Zvýraznění, poznámky, razítka a kresby. Odkazy budou dál fungovat.',
 		action: 'Zploštit PDF',
-		result: { one: 'Zploštěna {n} položka.', few: 'Zploštěny {n} položky.', other: 'Zploštěno {n} položek.' },
+		result: {
+			one: 'Zploštěna {n} položka.',
+			few: 'Zploštěny {n} položky.',
+			other: 'Zploštěno {n} položek.'
+		},
 		nothing: 'Toto PDF nemělo žádná pole formuláře ani anotace ke zploštění.',
 		pickOne: 'Zvolte alespoň jednu možnost.'
 	},
@@ -791,7 +810,8 @@ const cs: UiDict = {
 		copy: 'Kopírovat text',
 		copied: 'Zkopírováno',
 		downloadTxt: 'Stáhnout .txt',
-		empty: 'Nenašel se žádný text. PDF nejspíš obsahuje naskenované obrázky a text v obrázcích bez OCR získat nejde.',
+		empty:
+			'Nenašel se žádný text. PDF nejspíš obsahuje naskenované obrázky a text v obrázcích bez OCR získat nejde.',
 		chars: 'Znaků: {n}'
 	},
 	home: {

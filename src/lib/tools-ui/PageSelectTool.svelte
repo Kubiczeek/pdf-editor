@@ -14,7 +14,9 @@
 	let { toolId }: ToolProps = $props();
 	const i18n = useI18n();
 	const tool = new SinglePdfTool(() => i18n.t);
-	const mode = $derived(toolId === 'rotate' ? 'rotate' : toolId === 'delete-pages' ? 'delete' : 'extract');
+	const mode = $derived(
+		toolId === 'rotate' ? 'rotate' : toolId === 'delete-pages' ? 'delete' : 'extract'
+	);
 
 	let selected = $state(new Set<number>());
 	let rotations = $state<Record<number, number>>({});
@@ -49,7 +51,7 @@
 	function rotate(delta: number) {
 		const targets = selected.size ? [...selected] : Array.from({ length: pageCount }, (_, i) => i);
 		const next = { ...rotations };
-		for (const index of targets) next[index] = (((next[index] ?? 0) + delta) % 360 + 360) % 360;
+		for (const index of targets) next[index] = ((((next[index] ?? 0) + delta) % 360) + 360) % 360;
 		rotations = next;
 	}
 
@@ -85,7 +87,11 @@
 			}
 			const indices = [...selected].sort((a, b) => a - b);
 			if (separate) {
-				const outputs = await extractGroups(input, indices.map((i) => [i]), onProgress);
+				const outputs = await extractGroups(
+					input,
+					indices.map((i) => [i]),
+					onProgress
+				);
 				return outputs.map((bytes, k) => ({
 					name: outputName(pdf.name, `page-${indices[k] + 1}`),
 					blob: toBlob(bytes)
@@ -118,14 +124,20 @@
 				<span class="spacer"></span>
 				{#if selected.size}
 					<span class="count">{fmt(i18n.t.common.selected, { n: selected.size })}</span>
-					<button class="btn btn-ghost" onclick={() => (selected = new Set())}>{i18n.t.common.selectNone}</button>
+					<button class="btn btn-ghost" onclick={() => (selected = new Set())}
+						>{i18n.t.common.selectNone}</button
+					>
 				{:else}
 					<button class="btn btn-ghost" onclick={selectAll}>{i18n.t.common.selectAll}</button>
 				{/if}
 			{/snippet}
 			{#snippet main()}
 				<p class="hint">
-					{mode === 'rotate' ? i18n.t.rotate.hint : mode === 'delete' ? i18n.t.deletePages.hint : i18n.t.extract.hint}
+					{mode === 'rotate'
+						? i18n.t.rotate.hint
+						: mode === 'delete'
+							? i18n.t.deletePages.hint
+							: i18n.t.extract.hint}
 				</p>
 				<PagePicker
 					doc={tool.pdf!.doc}
@@ -181,7 +193,8 @@
 				>
 					{actionLabel}
 				</button>
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

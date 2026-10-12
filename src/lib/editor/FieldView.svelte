@@ -37,8 +37,7 @@
 				style:text-align={field.align}
 				oninput={(e) => (textDraft = e.currentTarget.value)}
 				onchange={(e) => commitText(e.currentTarget.value)}
-				aria-label={field.name}
-			></textarea>
+				aria-label={field.name}></textarea>
 		{:else}
 			<input
 				type="text"
@@ -48,7 +47,9 @@
 				class:comb={field.comb && field.maxLen > 0}
 				style:font-size={`${fontSize}px`}
 				style:text-align={field.align}
-				style:letter-spacing={field.comb && field.maxLen > 0 ? `${(field.w * z) / field.maxLen - fontSize * 0.6}px` : undefined}
+				style:letter-spacing={field.comb && field.maxLen > 0
+					? `${(field.w * z) / field.maxLen - fontSize * 0.6}px`
+					: undefined}
 				oninput={(e) => (textDraft = e.currentTarget.value)}
 				onchange={(e) => commitText(e.currentTarget.value)}
 				aria-label={field.name}
@@ -65,7 +66,16 @@
 			onclick={() => editor.setField(field.name, value !== true)}
 		>
 			{#if value === true}
-				<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5 8.2 14.5 16 5.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+				<svg viewBox="0 0 20 20" aria-hidden="true"
+					><path
+						d="M4 10.5 8.2 14.5 16 5.5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.6"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/></svg
+				>
 			{/if}
 		</button>
 	{:else if field.kind === 'radio'}

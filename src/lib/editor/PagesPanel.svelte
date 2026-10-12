@@ -5,7 +5,10 @@
 	import Icon from '#lib/components/Icon.svelte';
 	import { useEditor } from './context.ts';
 
-	let { onjump, onnotice }: { onjump: (index: number) => void; onnotice: (message: string) => void } = $props();
+	let {
+		onjump,
+		onnotice
+	}: { onjump: (index: number) => void; onnotice: (message: string) => void } = $props();
 	const editor = useEditor();
 	const i18n = useI18n();
 </script>
@@ -21,17 +24,29 @@
 					aria-current={index === editor.currentPage ? 'page' : undefined}
 				>
 					{#if page.kind === 'doc'}
-						<PageThumb doc={editor.doc} pageNumber={page.index + 1} rotation={page.rotation} width={120} />
+						<PageThumb
+							doc={editor.doc}
+							pageNumber={page.index + 1}
+							rotation={page.rotation}
+							width={120}
+						/>
 					{:else}
 						<span
 							class="blank"
-							style:aspect-ratio={page.rotation % 180 ? `${page.height} / ${page.width}` : `${page.width} / ${page.height}`}
+							style:aspect-ratio={page.rotation % 180
+								? `${page.height} / ${page.width}`
+								: `${page.width} / ${page.height}`}
 						></span>
 					{/if}
 				</button>
 				<div class="row">
 					<span class="num">{index + 1}</span>
-					<button class="icon-btn" onclick={() => editor.rotatePage(page.key, 90)} aria-label={i18n.t.editor.rotatePage} title={i18n.t.editor.rotatePage}>
+					<button
+						class="icon-btn"
+						onclick={() => editor.rotatePage(page.key, 90)}
+						aria-label={i18n.t.editor.rotatePage}
+						title={i18n.t.editor.rotatePage}
+					>
 						<Icon name="rotateRight" size={16} />
 					</button>
 					<button

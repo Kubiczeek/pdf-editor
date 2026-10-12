@@ -37,7 +37,9 @@ function textPath(font, text, size, x, y, fill) {
 		if (d) {
 			const gx = x + (cursor + pos.xOffset) * scale;
 			const gy = y - pos.yOffset * scale;
-			parts.push(`<path transform="translate(${gx.toFixed(2)} ${gy.toFixed(2)}) scale(${scale.toFixed(5)} ${(-scale).toFixed(5)})" d="${d}"/>`);
+			parts.push(
+				`<path transform="translate(${gx.toFixed(2)} ${gy.toFixed(2)}) scale(${scale.toFixed(5)} ${(-scale).toFixed(5)})" d="${d}"/>`
+			);
 		}
 		cursor += pos.xAdvance;
 	});
@@ -155,8 +157,14 @@ const FOOTER = {
 	cs: 'pdf.jakubjakubek.cz  ·  Zdarma  ·  Bez nahrávání  ·  Bez registrace'
 };
 const HOME = {
-	en: { title: 'Free PDF editor in your browser', subtitle: 'Edit, sign, merge, compress and convert PDFs. Files never leave your device.' },
-	cs: { title: 'PDF editor zdarma v prohlížeči', subtitle: 'Upravujte, podepisujte, spojujte a zmenšujte PDF. Soubory neopustí vaše zařízení.' }
+	en: {
+		title: 'Free PDF editor in your browser',
+		subtitle: 'Edit, sign, merge, compress and convert PDFs. Files never leave your device.'
+	},
+	cs: {
+		title: 'PDF editor zdarma v prohlížeči',
+		subtitle: 'Upravujte, podepisujte, spojujte a zmenšujte PDF. Soubory neopustí vaše zařízení.'
+	}
 };
 
 for (const lang of ['en', 'cs']) {
@@ -167,14 +175,23 @@ for (const lang of ['en', 'cs']) {
 	for (const id of TOOL_IDS) {
 		const names = ui[lang].tools[id];
 		await png(
-			card({ title: names.name, subtitle: names.short, icon: ICONS[TOOL_ICONS[id]], color: TOOLS[id].color, footer: FOOTER[lang] }),
+			card({
+				title: names.name,
+				subtitle: names.short,
+				icon: ICONS[TOOL_ICONS[id]],
+				color: TOOLS[id].color,
+				footer: FOOTER[lang]
+			}),
 			out('og', `${id}-${lang}.png`)
 		);
 	}
 }
 
 // App icons: the logo on white, with breathing room for maskable icons.
-const iconSvg = (padding, background) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+const iconSvg = (
+	padding,
+	background
+) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 	<rect width="32" height="32" rx="${background === '#ffffff' ? 7 : 0}" fill="${background}"/>
 	<g transform="translate(${padding} ${padding}) scale(${(32 - padding * 2) / 32})">${LOGO}</g>
 </svg>`;

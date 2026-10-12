@@ -33,8 +33,10 @@ interface Run {
 function guessFamily(cssFamily: string, fontName: string): FontFamilyId {
 	const name = `${cssFamily} ${fontName}`.toLowerCase();
 	if (/mono|courier|consol|menlo/.test(name)) return 'mono';
-	if (/serif/.test(cssFamily.toLowerCase()) && !/sans/.test(cssFamily.toLowerCase())) return 'serif';
-	if (/times|georgia|garamond|cambria|book|minion|palatino|serif/.test(name) && !/sans/.test(name)) return 'serif';
+	if (/serif/.test(cssFamily.toLowerCase()) && !/sans/.test(cssFamily.toLowerCase()))
+		return 'serif';
+	if (/times|georgia|garamond|cambria|book|minion|palatino|serif/.test(name) && !/sans/.test(name))
+		return 'serif';
 	return 'sans';
 }
 
@@ -54,7 +56,11 @@ export async function extractTextLines(page: PDFPageProxy, idPrefix: string): Pr
 		if (Math.abs(tx[1]) > 0.01 * Math.abs(tx[0]) || tx[0] <= 0) continue;
 		const size = Math.hypot(tx[2], tx[3]);
 		if (!size || size < 2) continue;
-		const style = content.styles[item.fontName] ?? { ascent: 0.8, descent: -0.2, fontFamily: 'sans-serif' };
+		const style = content.styles[item.fontName] ?? {
+			ascent: 0.8,
+			descent: -0.2,
+			fontFamily: 'sans-serif'
+		};
 		const ascent = style.ascent && style.ascent > 0 ? style.ascent : 0.8;
 		const descent = style.descent && style.descent < 0 ? -style.descent : 0.2;
 		runs.push({
@@ -99,7 +105,9 @@ export async function extractTextLines(page: PDFPageProxy, idPrefix: string): Pr
 			baseline: first.baseline,
 			size,
 			family: guessFamily(first.family, fontObj?.name ?? first.fontName),
-			bold: Boolean(fontObj?.bold || fontObj?.black) || /bold|black|heavy|semibold/i.test(fontObj?.name ?? ''),
+			bold:
+				Boolean(fontObj?.bold || fontObj?.black) ||
+				/bold|black|heavy|semibold/i.test(fontObj?.name ?? ''),
 			italic: Boolean(fontObj?.italic) || /italic|oblique/i.test(fontObj?.name ?? '')
 		});
 		current = [];
@@ -128,7 +136,9 @@ interface FontInfo {
 
 function commonFont(page: PDFPageProxy, fontName: string): FontInfo | null {
 	try {
-		const objs = (page as unknown as { commonObjs: { has(id: string): boolean; get(id: string): FontInfo } }).commonObjs;
+		const objs = (
+			page as unknown as { commonObjs: { has(id: string): boolean; get(id: string): FontInfo } }
+		).commonObjs;
 		return objs.has(fontName) ? objs.get(fontName) : null;
 	} catch {
 		return null;
@@ -198,7 +208,8 @@ export function sampleColors(
 	// Text: average of the pixels furthest from the background.
 	const pixels: Array<{ d: number; i: number }> = [];
 	for (let i = 0; i < data.length; i += 4) {
-		const d = Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]);
+		const d =
+			Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]);
 		if (d > 60) pixels.push({ d, i });
 	}
 	let text = fallback.text;

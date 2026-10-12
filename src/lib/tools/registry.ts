@@ -1,4 +1,3 @@
-import type { Component } from 'svelte';
 import type { Lang } from '#lib/i18n/index.ts';
 
 export const TOOL_IDS = [
@@ -44,10 +43,7 @@ export interface ToolDef {
 	accepts: 'pdf' | 'image';
 	/** Accent colour of the tool icon. */
 	color: string;
-	load: () => Promise<{ default: Component<ToolProps> }>;
 }
-
-const editor = () => import('#lib/editor/Editor.svelte');
 
 export const TOOLS: Record<ToolId, ToolDef> = {
 	edit: {
@@ -55,176 +51,154 @@ export const TOOLS: Record<ToolId, ToolDef> = {
 		category: 'edit',
 		slugs: { en: 'edit-pdf', cs: 'upravit-pdf' },
 		accepts: 'pdf',
-		color: '#1f35c4',
-		load: editor
+		color: '#1f35c4'
 	},
 	sign: {
 		id: 'sign',
 		category: 'edit',
 		slugs: { en: 'sign-pdf', cs: 'podepsat-pdf' },
 		accepts: 'pdf',
-		color: '#0f7b6c',
-		load: editor
+		color: '#0f7b6c'
 	},
 	'fill-form': {
 		id: 'fill-form',
 		category: 'edit',
 		slugs: { en: 'fill-pdf-form', cs: 'vyplnit-pdf-formular' },
 		accepts: 'pdf',
-		color: '#7a4dd8',
-		load: editor
+		color: '#7a4dd8'
 	},
 	watermark: {
 		id: 'watermark',
 		category: 'edit',
 		slugs: { en: 'watermark-pdf', cs: 'vodoznak-pdf' },
 		accepts: 'pdf',
-		color: '#2a7ab8',
-		load: () => import('#lib/tools-ui/WatermarkTool.svelte')
+		color: '#2a7ab8'
 	},
 	'page-numbers': {
 		id: 'page-numbers',
 		category: 'edit',
 		slugs: { en: 'add-page-numbers-to-pdf', cs: 'cislovani-stranek-pdf' },
 		accepts: 'pdf',
-		color: '#b8590f',
-		load: () => import('#lib/tools-ui/PageNumbersTool.svelte')
+		color: '#b8590f'
 	},
 	redact: {
 		id: 'redact',
 		category: 'edit',
 		slugs: { en: 'redact-pdf', cs: 'zacernit-pdf' },
 		accepts: 'pdf',
-		color: '#26282e',
-		load: () => import('#lib/tools-ui/RedactTool.svelte')
+		color: '#26282e'
 	},
 	merge: {
 		id: 'merge',
 		category: 'organize',
 		slugs: { en: 'merge-pdf', cs: 'spojit-pdf' },
 		accepts: 'pdf',
-		color: '#c2185b',
-		load: () => import('#lib/tools-ui/MergeTool.svelte')
+		color: '#c2185b'
 	},
 	split: {
 		id: 'split',
 		category: 'organize',
 		slugs: { en: 'split-pdf', cs: 'rozdelit-pdf' },
 		accepts: 'pdf',
-		color: '#d84315',
-		load: () => import('#lib/tools-ui/SplitTool.svelte')
+		color: '#d84315'
 	},
 	organize: {
 		id: 'organize',
 		category: 'organize',
 		slugs: { en: 'organize-pdf', cs: 'usporadat-pdf' },
 		accepts: 'pdf',
-		color: '#6a5acd',
-		load: () => import('#lib/tools-ui/OrganizeTool.svelte')
+		color: '#6a5acd'
 	},
 	rotate: {
 		id: 'rotate',
 		category: 'organize',
 		slugs: { en: 'rotate-pdf', cs: 'otocit-pdf' },
 		accepts: 'pdf',
-		color: '#00838f',
-		load: () => import('#lib/tools-ui/PageSelectTool.svelte')
+		color: '#00838f'
 	},
 	'delete-pages': {
 		id: 'delete-pages',
 		category: 'organize',
 		slugs: { en: 'delete-pdf-pages', cs: 'odstranit-stranky-pdf' },
 		accepts: 'pdf',
-		color: '#c62828',
-		load: () => import('#lib/tools-ui/PageSelectTool.svelte')
+		color: '#c62828'
 	},
 	'extract-pages': {
 		id: 'extract-pages',
 		category: 'organize',
 		slugs: { en: 'extract-pdf-pages', cs: 'extrahovat-stranky-pdf' },
 		accepts: 'pdf',
-		color: '#2e7d32',
-		load: () => import('#lib/tools-ui/PageSelectTool.svelte')
+		color: '#2e7d32'
 	},
 	crop: {
 		id: 'crop',
 		category: 'organize',
 		slugs: { en: 'crop-pdf', cs: 'orezat-pdf' },
 		accepts: 'pdf',
-		color: '#5d6b00',
-		load: () => import('#lib/tools-ui/CropTool.svelte')
+		color: '#5d6b00'
 	},
 	'pdf-to-jpg': {
 		id: 'pdf-to-jpg',
 		category: 'convert',
 		slugs: { en: 'pdf-to-jpg', cs: 'pdf-do-jpg' },
 		accepts: 'pdf',
-		color: '#e0a100',
-		load: () => import('#lib/tools-ui/PdfToImageTool.svelte')
+		color: '#e0a100'
 	},
 	'pdf-to-png': {
 		id: 'pdf-to-png',
 		category: 'convert',
 		slugs: { en: 'pdf-to-png', cs: 'pdf-do-png' },
 		accepts: 'pdf',
-		color: '#0277bd',
-		load: () => import('#lib/tools-ui/PdfToImageTool.svelte')
+		color: '#0277bd'
 	},
 	'jpg-to-pdf': {
 		id: 'jpg-to-pdf',
 		category: 'convert',
 		slugs: { en: 'jpg-to-pdf', cs: 'jpg-do-pdf' },
 		accepts: 'image',
-		color: '#ef6c00',
-		load: () => import('#lib/tools-ui/ImagesToPdfTool.svelte')
+		color: '#ef6c00'
 	},
 	'pdf-to-text': {
 		id: 'pdf-to-text',
 		category: 'convert',
 		slugs: { en: 'pdf-to-text', cs: 'pdf-na-text' },
 		accepts: 'pdf',
-		color: '#455a64',
-		load: () => import('#lib/tools-ui/PdfToTextTool.svelte')
+		color: '#455a64'
 	},
 	compress: {
 		id: 'compress',
 		category: 'secure',
 		slugs: { en: 'compress-pdf', cs: 'komprimovat-pdf' },
 		accepts: 'pdf',
-		color: '#388e3c',
-		load: () => import('#lib/tools-ui/CompressTool.svelte')
+		color: '#388e3c'
 	},
 	protect: {
 		id: 'protect',
 		category: 'secure',
 		slugs: { en: 'protect-pdf', cs: 'zaheslovat-pdf' },
 		accepts: 'pdf',
-		color: '#283593',
-		load: () => import('#lib/tools-ui/ProtectTool.svelte')
+		color: '#283593'
 	},
 	unlock: {
 		id: 'unlock',
 		category: 'secure',
 		slugs: { en: 'unlock-pdf', cs: 'odemknout-pdf' },
 		accepts: 'pdf',
-		color: '#8e24aa',
-		load: () => import('#lib/tools-ui/UnlockTool.svelte')
+		color: '#8e24aa'
 	},
 	flatten: {
 		id: 'flatten',
 		category: 'secure',
 		slugs: { en: 'flatten-pdf', cs: 'zplostit-pdf' },
 		accepts: 'pdf',
-		color: '#546e7a',
-		load: () => import('#lib/tools-ui/FlattenTool.svelte')
+		color: '#546e7a'
 	},
 	metadata: {
 		id: 'metadata',
 		category: 'secure',
 		slugs: { en: 'edit-pdf-metadata', cs: 'upravit-metadata-pdf' },
 		accepts: 'pdf',
-		color: '#6d4c41',
-		load: () => import('#lib/tools-ui/MetadataTool.svelte')
+		color: '#6d4c41'
 	}
 };
 

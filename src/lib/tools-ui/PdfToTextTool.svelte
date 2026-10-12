@@ -26,7 +26,9 @@
 		await tool.run(async (pdf, onProgress) => {
 			const pages = await extractText(toInput(pdf), onProgress);
 			text = pages
-				.map((page, i) => (pages.length > 1 ? `— ${fmt(i18n.t.common.page, { n: i + 1 })} —\n${page}` : page))
+				.map((page, i) =>
+					pages.length > 1 ? `— ${fmt(i18n.t.common.page, { n: i + 1 })} —\n${page}` : page
+				)
 				.join('\n\n')
 				.trim();
 		});
@@ -47,7 +49,11 @@
 
 	function download() {
 		if (!text || !tool.pdf) return;
-		downloadBlob(new Blob([text], { type: 'text/plain;charset=utf-8' }), outputName(tool.pdf.name, '', 'txt'), 'text/plain');
+		downloadBlob(
+			new Blob([text], { type: 'text/plain;charset=utf-8' }),
+			outputName(tool.pdf.name, '', 'txt'),
+			'text/plain'
+		);
 	}
 </script>
 
@@ -65,7 +71,9 @@
 					<Notice>{i18n.t.toText.empty}</Notice>
 				{:else}
 					<textarea id="extracted-text" class="textarea output" readonly value={text}></textarea>
-					<p class="muted">{fmt(i18n.t.toText.chars, { n: formatNumber(i18n.lang, text.length) })}</p>
+					<p class="muted">
+						{fmt(i18n.t.toText.chars, { n: formatNumber(i18n.lang, text.length) })}
+					</p>
 				{/if}
 			{/snippet}
 			{#snippet action()}
@@ -79,12 +87,17 @@
 						{i18n.t.toText.downloadTxt}
 					</button>
 				{:else}
-					<button class="btn btn-primary btn-lg" onclick={extract} disabled={tool.busy || text !== null}>
+					<button
+						class="btn btn-primary btn-lg"
+						onclick={extract}
+						disabled={tool.busy || text !== null}
+					>
 						<Icon name="fileText" size={20} />
 						{i18n.t.toText.action}
 					</button>
 				{/if}
-				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button>
+				<button class="btn btn-ghost" onclick={() => tool.reset()}>{i18n.t.common.startOver}</button
+				>
 			{/snippet}
 		</Workspace>
 	{/if}

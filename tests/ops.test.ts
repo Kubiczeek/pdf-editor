@@ -46,7 +46,12 @@ async function labels(bytes: Uint8Array) {
 	for (let i = 1; i <= doc.numPages; i++) {
 		const page = await doc.getPage(i);
 		const content = await page.getTextContent();
-		out.push(content.items.map((item) => ('str' in item ? item.str : '')).join('').trim());
+		out.push(
+			content.items
+				.map((item) => ('str' in item ? item.str : ''))
+				.join('')
+				.trim()
+		);
 	}
 	await doc.loadingTask.destroy();
 	return out;
@@ -164,7 +169,13 @@ describe('page operations', () => {
 			{ size: A4, label: 'P1', rotate: 90 },
 			{ size: A4, label: 'P2' }
 		]);
-		const out = await rotatePages(input(a), new Map([[0, 90], [1, -90]]));
+		const out = await rotatePages(
+			input(a),
+			new Map([
+				[0, 90],
+				[1, -90]
+			])
+		);
 		const doc = await openWithPdfjs(out);
 		expect((await doc.getPage(1)).rotate).toBe(180);
 		expect((await doc.getPage(2)).rotate).toBe(270);
@@ -177,7 +188,14 @@ describe('stamping', () => {
 		for (const rotate of [0, 90, 180, 270]) {
 			const a = await makeFixture([{ size: A4, label: 'P1', rotate }]);
 			const out = await addWatermark(input(a), {
-				mark: { kind: 'text', text: 'Důvěrné – Příliš žluťoučký kůň', font: 'sans', bold: true, size: 30, color: '#ff0000' },
+				mark: {
+					kind: 'text',
+					text: 'Důvěrné – Příliš žluťoučký kůň',
+					font: 'sans',
+					bold: true,
+					size: 30,
+					color: '#ff0000'
+				},
 				position: 'center',
 				angle: 0,
 				opacity: 0.5,
@@ -332,7 +350,15 @@ describe('png predictor', () => {
 		expect(Array.from(out1!)).toEqual(raw.flat());
 		// Paeth on first row equals sub; average on the second row.
 		const paeth = [4, 1, 2, 3, 3, 3, 3];
-		const avg = [3, 7 - 0, 8 - 1, 9 - 1, 10 - Math.floor((7 + 4) / 2), 11 - Math.floor((8 + 5) / 2), 12 - Math.floor((9 + 6) / 2)];
+		const avg = [
+			3,
+			7 - 0,
+			8 - 1,
+			9 - 1,
+			10 - Math.floor((7 + 4) / 2),
+			11 - Math.floor((8 + 5) / 2),
+			12 - Math.floor((9 + 6) / 2)
+		];
 		const out2 = unpredictPng(new Uint8Array([...paeth, ...avg]), 2, 3, 8);
 		expect(Array.from(out2!)).toEqual(raw.flat());
 	});

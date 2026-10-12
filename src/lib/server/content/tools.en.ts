@@ -7,14 +7,15 @@ export const labelsEn: PageLabels = {
 	faq: 'Frequently asked questions',
 	related: 'Related tools',
 	breadcrumbHome: 'All PDF tools',
-	free: 'Free'
+	free: 'Free',
+	noscript: 'Turn on JavaScript to use this tool — your files are processed by your own browser.'
 };
 
 export const toolsEn: Record<ToolId, ToolContent> = {
 	edit: {
 		title: 'Edit PDF Online Free – Change Text & Add Images',
 		description:
-			'Edit PDF files in your browser: change existing text, add text, images, shapes, highlights and comments. Free, no sign-up, and your file never leaves your device.',
+			'Edit PDF files in your browser: change existing text, add text, images, shapes, highlights and comments. Free, no sign-up, and files stay on your device.',
 		h1: 'Edit PDF online',
 		lead: 'Change existing text, add new text, images, signatures, shapes, highlights and comments — right in your browser, without uploading the file anywhere.',
 		stepsTitle: 'How to edit a PDF',
