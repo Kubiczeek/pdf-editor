@@ -376,6 +376,11 @@
 	.obj.interactive {
 		pointer-events: auto;
 		cursor: move;
+		touch-action: none;
+	}
+
+	.text.editing {
+		touch-action: auto;
 	}
 
 	.cover {
@@ -480,9 +485,9 @@
 	}
 
 	.vec.interactive .hit {
-		pointer-events: visiblePainted;
 		pointer-events: auto;
 		cursor: move;
+		touch-action: none;
 	}
 
 	.frame {

@@ -140,8 +140,8 @@
 	}
 
 	h1 {
-		font-size: clamp(2.3rem, 1.2rem + 3.6vw, 4rem);
-		max-width: 14ch;
+		font-size: clamp(2.2rem, 1.2rem + 3.2vw, 3.7rem);
+		max-width: 17ch;
 	}
 
 	.lead {

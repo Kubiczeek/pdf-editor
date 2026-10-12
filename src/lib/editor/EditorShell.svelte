@@ -47,12 +47,21 @@
 		toastTimer = setTimeout(() => (toast = null), 4000);
 	}
 
+	// The tool hint shows briefly whenever the tool changes, then gets out of the way.
+	let hintVisible = $state(true);
+	$effect(() => {
+		void editor.tool;
+		hintVisible = true;
+		const timer = setTimeout(() => (hintVisible = false), 4500);
+		return () => clearTimeout(timer);
+	});
+
 	// ---------- Zoom ----------
 
 	function fitZoom(): number {
 		if (!scroller) return 1;
 		const widest = Math.max(...editor.pages.map((p) => rotatedSize(p).width));
-		const available = scroller.clientWidth - (scroller.clientWidth < 600 ? 20 : 56);
+		const available = scroller.clientWidth - (scroller.clientWidth < 600 ? 28 : 56);
 		return Math.min(4, Math.max(0.25, available / widest));
 	}
 
@@ -392,7 +401,7 @@
 			<button class="icon-btn" onclick={() => setZoom(editor.zoom * 1.2)} aria-label={t.zoomIn} title={t.zoomIn}>
 				<Icon name="zoomIn" size={20} />
 			</button>
-			<button class="icon-btn" onclick={() => setZoom(fitZoom())} aria-label={t.fitWidth} title={t.fitWidth}>
+			<button class="icon-btn fit-btn" onclick={() => setZoom(fitZoom())} aria-label={t.fitWidth} title={t.fitWidth}>
 				<Icon name="fit" size={20} />
 			</button>
 		</div>
@@ -457,7 +466,7 @@
 		{/if}
 		<div class="scroller" bind:this={scroller} onscroll={onScroll} onwheel={onWheel}>
 			<div class="float">
-				<p class="hint">{t.hints[editor.tool]}</p>
+				<p class="hint" class:hidden={!hintVisible} aria-live="polite">{t.hints[editor.tool]}</p>
 				<PropertiesBar />
 			</div>
 			<div class="pages">
@@ -675,6 +684,7 @@
 	}
 
 	.hint {
+		transition: opacity 300ms ease;
 		padding: 4px 12px;
 		border-radius: 99px;
 		background: rgb(22 33 58 / 0.78);
@@ -683,6 +693,11 @@
 		font-weight: 600;
 		max-width: min(92vw, 640px);
 		text-align: center;
+	}
+
+	.hint.hidden {
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.pages {
@@ -765,8 +780,20 @@
 
 	@media (max-width: 640px) {
 		.zoom .pct,
+		.zoom .fit-btn,
+		.file .name,
+		.file .dot,
 		.save span {
 			display: none;
+		}
+
+		.save {
+			min-height: 38px;
+			padding: 0.4em 0.7em;
+		}
+
+		.hint {
+			font-size: 0.75rem;
 		}
 
 		.top {

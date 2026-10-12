@@ -65,7 +65,13 @@
 	<div class="head">
 		<span class="ok"><Icon name="check" size={26} strokeWidth={2.4} /></span>
 		<div>
-			<h2>{files.length === 1 ? i18n.t.common.readyOne : i18n.t.common.readyMany}</h2>
+			<h2>
+				{files.length > 1
+					? i18n.t.common.readyMany
+					: files[0].blob.type === 'application/pdf'
+						? i18n.t.common.readyOne
+						: i18n.t.common.readyFile}
+			</h2>
 			<p class="meta">{i18n.t.common.processedLocally} · {formatBytes(i18n.lang, total)}</p>
 		</div>
 	</div>
